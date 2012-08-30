@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="ByoBaby.Models">
+  <logicalClassDesignerModelMoniker Id="79250fbc-cd32-4134-8ee1-aef1534ff60d" />
+  <nestedChildShapes>
+    <classShape Id="09f9d367-4b90-486e-8009-c7d44d58656b" absoluteBounds="1.75, 1.375, 1.5, 0.90234373509883881" hideQualifiedName="false" increaseHeight="0" customColor="181, 193, 223">
+      <classMoniker Id="77c26af0-61ea-44b9-a0f5-fa5cd2fbf4af" LastKnownName="Class1" />
+      <nestedChildShapes>
+        <AttributeElementListCompartment Id="e6bdec41-46e8-4704-bd6d-8301e5aaffd5" absoluteBounds="1.765, 1.7650000000000001, 1.4700000000000002, 0.2011718675494194" name="AttributesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <OperationElementListCompartment Id="65f5bc00-fc0e-428d-8f9a-b6b0c89e6a44" absoluteBounds="1.765, 1.9761718675494193, 1.4700000000000002, 0.2011718675494194" name="OperationsCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</logicalClassDesignerDiagram>

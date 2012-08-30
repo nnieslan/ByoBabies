@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="79250fbc-cd32-4134-8ee1-aef1534ff60d" name="ByoBaby.Models" linkedPackageId="738cd8b6-e00e-4524-a4f1-73d887b8f98c" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <profileInstances>
+    <packageHasProfileInstances Id="84ab5dd9-21b8-495e-ae0b-3af7400cd03b">
+      <profileInstance Id="cb2a9f85-cb0d-4e23-addf-5919777ce086" name="StandardProfileL2">
+        <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+      </profileInstance>
+      <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+    </packageHasProfileInstances>
+    <packageHasProfileInstances Id="7497eba0-41e4-4a57-97ff-a98e09582ee5">
+      <profileInstance Id="57b0cbb2-5144-456f-ada7-29db32d9cc90" name="StandardProfileL3">
+        <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+      </profileInstance>
+      <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="77c26af0-61ea-44b9-a0f5-fa5cd2fbf4af" name="Class1" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="6ee994af-aadc-4de5-b35d-bbeebc558066" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+  </packagedElements>
+  <package Id="738cd8b6-e00e-4524-a4f1-73d887b8f98c" name="ByoBaby.Modeling">
+    <elementDefinition Id="289c8fc9-ccce-4f6f-8c41-4b7d53e4fd64" />
+  </package>
+</logicalClassDesignerModel>

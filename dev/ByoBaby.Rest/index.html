@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>ByoBabies™</title>
+    <link rel="stylesheet" href="content/byobabies-mobile-1.1.1.min.css" />
+    <link rel="stylesheet" href="content/jquery.mobile.structure-1.1.1.min.css" />
+    <link rel="stylesheet" href="content/byobabies.css" type="text/css" media="screen" />
+
+    <!-- iPad/iPhone specific css below, add after your main css 
+    <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="views/flowpay-ipad.css" type="text/css" />
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="views/flowpay-iphone.css" type="text/css" />
+    -->
+
+    <script type="text/javascript" charset="utf-8" src="scripts/cordova-1.7.0.js"></script>
+    <script type="text/javascript" src="scripts/knockout-2.1.0.js"></script>
+    <script type="text/javascript" src="scripts/knockout.extensions.js"></script>
+    <!--script type="text/javascript" src="lib/weinre.js"></script-->
+    <script type="text/javascript" src="scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.mobile-1.1.1.min.js"></script>
+    <!--script type="text/javascript" src="lib/jquery.watermark-3.1.3/jquery.watermark.min.js"></script-->
+    <script type="text/javascript" src="scripts/viewModels/ApplicationViewModel.js"></script>
+    <script type="text/javascript" src="scripts/viewModels/LogonViewModel.js"></script>
+    <script type="text/javascript" src="scripts/viewModels/ConversationsViewModel.js"></script>
+    <script type="text/javascript" src="scripts/viewModels/ConversationViewModel.js"></script>
+    <script type="text/javascript" src="scripts/viewModels/TasksViewModel.js"></script>
+    <script type="text/javascript" src="scripts/helpers.js"></script>
+    <script type="text/javascript" src="scripts/app.js"></script>
+    <script type="text/javascript" charset="utf-8">
+    </script>
+</head>
+<body>
+     <!-- The welcome page - contains the user login form and logo -->
+    <script type="text/x-jquery-tmpl" charset="utf-8" id="welcomeView">
+        <!-- ko with: logonViewModel -->
+        <div id="welcomeView-content" data-bind="visible: loggedOut" style="vertical-align: middle;">
+            <form id="logonForm" action="">
+            <img src="images/logo.png" class="welcome-img"/>
+            <p data-bind="css: { error: !valid() && user.hasError() }">
+                <input type="text" id="username" data-bind="value: user, valueUpdate: 'afterkeydown'" ></input>
+                <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'> </span>
+            </p>
+            <p data-bind="css: { error: !valid() && password.hasError()  }">
+                <input type="password" id="pw" data-bind="value: password, valueUpdate: 'afterkeydown'" ></input>
+                <span data-bind='visible: !valid() && password.hasError(), text: password.validationMessage'> </span>
+            </p>
+            <div class="containing-element rightAlign">
+                <label class="rememberMe">Remember username?</label>
+                <select name="remember" id="remember" data-role="slider" data-track-theme="b" data-bind="options: rememberOptions, selectedOptions: remember">
+                </select> 
+            </div>
+            <br />
+            <a id="loginUser" data-bind="click: login" data-role="button" data-theme="b">Login</a>
+            </form>
+        </div>
+        <!-- /ko -->
+     </script>
+
+    <!-- The home page - displays the application user actions -->  
+    <script type="text/x-jquery-tmpl" charset="utf-8" id="homeView">
+        <div id="homeView-content">
+        </div>
+    </script>
+
+    <!-- The conversations list page - displays a list of conversation threads-->  
+    <script type="text/x-jquery-tmpl" charset="utf-8" id="conversationsView">
+        <div id="conversationsView-content">
+        </div>
+    </script>
+
+    <!-- The conversation detail page - displays a conversation thread-->  
+    <script type="text/x-jquery-tmpl" charset="utf-8" id="conversationView">
+        <div id="conversationView-content">
+        </div>
+    </script>
+
+
+    <div id="contentPage" data-role="page">
+        <div id="header" data-role="header" data-position="fixed">
+            <!--
+            <div data-role="header" data-theme="b" data-bind="fadeVisible: logonViewModel().loggedIn">
+                <label>FlowPay™</label>
+            </div>
+            
+            <div data-role="header" data-theme="a" data-bind="slideVisible: logonViewModel().loggedIn">
+                <a data-role="button" data-theme="b" data-icon="back"
+                    data-bind="click: back,
+                    fadeVisible: backButtonRequired">Back</a>
+                <div id="profileView" class="centerAlign">
+                    <span class="centerAlign">Welcome!</span>
+                    <br />
+                    <span class="centerAlign" data-bind="text: logonViewModel().fullname"></span>
+                </div>
+                <a data-role="button" data-theme="b" data-icon="delete"
+                    data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired">Logout</a>
+            </div>
+            -->
+        </div>
+
+        <!-- progress bar -->
+        <div class="centerPageFill" data-title="Processing..." data-bind="fadeVisible: isProcessing">
+            <div id="busyIndicator" style="display: block">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div id="ui-content" class="centerPageFill" data-bind="visible: !isProcessing()" data-role="content">
+            <div style="vertical-align: middle;"
+                data-bind="template: {name: templateSelector, data: currentViewModel, afterRender: afterViewRender}">
+            </div>
+        </div>
+
+         <div id="footer" data-role="footer" data-position="fixed">
+           
+        </div>
+    </div>
+
+</body>
+</html>
