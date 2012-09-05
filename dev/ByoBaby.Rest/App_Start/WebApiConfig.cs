@@ -9,11 +9,29 @@ namespace ByoBaby.Rest
     {
         public static void Register(HttpConfiguration config)
         {
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
+
+            config.Routes.MapHttpRoute(
+               name: "LoginLogoutApi",
+               routeTemplate: "api/{controller}/{action}",
+               defaults: new { controller = "account", action = "get" },
+               constraints: new { controller = "account" });
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
+                routeTemplate: "api/{user}/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional, user = RouteParameter.Optional });
+
+            config.Routes.MapHttpRoute(
+                name: "ConversationsApi",
+                routeTemplate: "api/{user}/conversation/{conversationId}/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional, user = RouteParameter.Optional, controller = "blurb" },
+                constraints: new { controller = "blurb" });
+
         }
     }
 }

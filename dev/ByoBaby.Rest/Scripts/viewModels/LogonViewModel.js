@@ -179,5 +179,3 @@ function LogonViewModel(svcUrl, id) {
         });
     };
 };
-
-};

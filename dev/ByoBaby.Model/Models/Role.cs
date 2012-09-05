@@ -11,23 +11,20 @@ using System.Threading.Tasks;
 namespace ByoBaby.Model
 {
     [DataContract]
-    [Serializable()]
-    public class Blurb
+    public class Role
     {
         [DataMember]
-        public long ConversationId { get; set; }
-        
-        [DataMember]
         [Key]
-        public long Id { get; set; }
-        
+        public virtual Guid RoleId { get; set; }
+
         [DataMember]
-        public string Content { get; set; }
-        
+        [Required]
+        public virtual string RoleName { get; set; }
+
         [DataMember]
-        public Person WrittenBy { get; set; }
-        
+        public virtual string Description { get; set; }
+
         [DataMember]
-        public DateTime WrittenOn { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }
