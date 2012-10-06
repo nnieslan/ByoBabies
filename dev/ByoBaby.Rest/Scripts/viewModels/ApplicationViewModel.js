@@ -118,9 +118,9 @@ function ApplicationViewModel(svcUrl) {
 
     this.afterViewRender = function (elements) {
         //TODO - figure out how to apply this functionality inside the view models.
-        $('#username').watermark('username');
-        $('#pw').watermark('password');
-        $('#amount').watermark('amount');
+        //$('#username').watermark('username');
+        //$('#pw').watermark('password');
+        //$('#amount').watermark('amount');
 
         //refreshing jquery themes post view render via .trigger().
         //This is due to timing of knockout template rendering.  To accomplish
@@ -129,18 +129,17 @@ function ApplicationViewModel(svcUrl) {
         //template is themed.
         var view = '#' + application.currentViewModel().template + '-content';
         $(view).trigger('create');
-        if (view == '#donateView-content') {
-            $("#donateForm").submit(function () {
-                application.currentViewModel().submit();
-                return false;
-            });
-        }
+        //if (view == '#donateView-content') {
+        //    $("#donateForm").submit(function () {
+        //        application.currentViewModel().submit();
+        //        return false;
+        //    });
+        //}
         if (view == '#welcomeView-content') {
             $("#logonForm").submit(function () {
                 application.logonViewModel().login();
                 return false;
             });
-
         }
         //refreshing the ui-content div size after the header appears post-login.
         $('#ui-content').trigger('resize');

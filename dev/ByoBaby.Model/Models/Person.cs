@@ -22,13 +22,40 @@ namespace ByoBaby.Model
         public Guid UserId { get; set; }
 
         [DataMember]
-        public Profile UserProfile { get; set; }
-
-        [DataMember]
         public ICollection<Group> MemberOf { get; set; }
 
         [DataMember]
         public DateTime MemberSince { get; set; }
+
+        [DataMember]
+        public string Email { get; set; }
+
+        [DataMember]
+        public string FirstName { get; set; }
+
+        [DataMember]
+        public string LastName { get; set; }
+
+        [DataMember]
+        public string MobilePhone { get; set; }
+
+        [DataMember]
+        public string HomePhone { get; set; }
+
+        [DataMember]
+        public string City { get; set; }
+
+        [DataMember]
+        public string Neighborhood { get; set; }
+
+        [DataMember]
+        public ICollection<string> Interests { get; set; }
+
+        [DataMember]
+        public ICollection<Child> Children { get; set; }
+
+        [DataMember]
+        public DateTime LastUpdated { get; set; }
 
         /// <summary>
         /// Gets the unique Id for the person associated with the specified user name.
@@ -45,18 +72,24 @@ namespace ByoBaby.Model
         /// </returns>
         public static long? GetPersonId(ByoBabyRepository entityContext, string userName)
         {
-            var person = (from u in entityContext.Users
-                          join p in entityContext.People
-                          on u.UserId equals p.UserId into usermap
-                          from p1 in usermap
-                          where u.Username == userName
-                          select p1).FirstOrDefault();
 
-            if (person != null)
-            {
-                return person.Id;
+            using(aspnet_fbaEntities1 authContext = new aspnet_fbaEntities1()) {
+                 Guid? userId = (from u in authContext.aspnet_Users 
+                                 where u.UserName == userName 
+                                 select u.UserId).FirstOrDefault();   
+            
+                if(userId.HasValue)
+                {
+                    var person = (from p in entityContext.People
+                                  where p.UserId == userId.Value
+                                  select p).FirstOrDefault();
+
+                    if (person != null)
+                    {
+                        return person.Id;
+                    }
+                }
             }
-
             return null;
         }
 
@@ -90,16 +123,24 @@ namespace ByoBaby.Model
         /// </returns>
         public static string GetDisplayName(string userName)
         {
-            using (ByoBabyRepository entityContext = new ByoBabyRepository())
+            using (aspnet_fbaEntities1 authContext = new aspnet_fbaEntities1())
             {
 
-                var person = (from u in entityContext.Users
-                              where u.Username == userName
+                var user = (from u in authContext.aspnet_Users
+                              where u.UserName == userName
                               select u).FirstOrDefault();
 
-                if (person != null)
+                if (user != null)
                 {
-                    return GetDisplayName(person);
+
+                    using (ByoBabyRepository entityContext = new ByoBabyRepository())
+                    {
+                        var person = (from p in entityContext.People where p.UserId == user.UserId select p).FirstOrDefault();
+                        if (person != null)
+                        {
+                            return GetDisplayName(person);
+                        }
+                    }
                 }
             }
 
@@ -120,11 +161,9 @@ namespace ByoBaby.Model
         {
             using (ByoBabyRepository entityContext = new ByoBabyRepository())
             {
-                var person = (from u in entityContext.Users
-                              join p in entityContext.People
-                              on u.UserId equals p.UserId
+                var person = (from p in entityContext.People
                               where p.Id == personId
-                              select u).FirstOrDefault();
+                              select p).FirstOrDefault();
                 if (person != null)
                 {
                     return GetDisplayName(person);
@@ -143,7 +182,7 @@ namespace ByoBaby.Model
         /// <returns>
         /// The display name for the specified person.
         /// </returns>
-        public static string GetDisplayName(User person)
+        public static string GetDisplayName(Person person)
         {
             if (person != null)
             {
@@ -199,46 +238,51 @@ namespace ByoBaby.Model
         {
             using (ByoBabyRepository entityContext = new ByoBabyRepository())
             {
-                var person = (from u in entityContext.Users
-                              join p in entityContext.People
-                              on u.UserId equals p.UserId
+                var person = (from p in entityContext.People
                               where p.Id == personId
-                              select u).FirstOrDefault();
+                              select p).FirstOrDefault();
 
                 if (person != null)
                 {
-                    return person.Username;
+                    using (aspnet_fbaEntities1 authContext = new aspnet_fbaEntities1())
+                    {
+                        var user = authContext.aspnet_Users.FirstOrDefault(u => u.UserId == person.UserId);
+                        if (user != null)
+                        {
+                            return user.UserName;
+                        }
+                    }
                 }
             }
 
             return string.Empty;
         }
 
-        /// <summary>
-        /// Gets the account locked out indicator for the specified person.
-        /// </summary>
-        /// <param name="personId">
-        /// The Id of the person for which to get an the account locked out indicator.
-        /// </param>
-        /// <returns>
-        /// The account locked out indicator for the person. <b>True</b> indicates locked out; <b>false</b> otherwise.
-        /// </returns>
-        public static bool GetIsLockedOut(long personId)
-        {
-            using (ByoBabyRepository entityContext = new ByoBabyRepository())
-            {
-                var person = (from u in entityContext.Users
-                              join p in entityContext.People
-                              on u.UserId equals p.UserId
-                              where p.Id == personId
-                              select u).FirstOrDefault();
-                if (person != null)
-                {
-                    return person.IsLockedOut;
-                }
-            }
-            return false;
-        }
+        ///// <summary>
+        ///// Gets the account locked out indicator for the specified person.
+        ///// </summary>
+        ///// <param name="personId">
+        ///// The Id of the person for which to get an the account locked out indicator.
+        ///// </param>
+        ///// <returns>
+        ///// The account locked out indicator for the person. <b>True</b> indicates locked out; <b>false</b> otherwise.
+        ///// </returns>
+        //public static bool GetIsLockedOut(long personId)
+        //{
+        //    using (ByoBabyRepository entityContext = new ByoBabyRepository())
+        //    {
+        //        var person = (from u in entityContext.Users
+        //                      join p in entityContext.People
+        //                      on u.UserId equals p.UserId
+        //                      where p.Id == personId
+        //                      select u).FirstOrDefault();
+        //        if (person != null)
+        //        {
+        //            return person.IsLockedOut;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         /// <summary>
         /// Gets the account locked out indicator for the specified person.
@@ -251,14 +295,14 @@ namespace ByoBaby.Model
         /// </returns>
         public static bool GetIsLockedOut(string userName)
         {
-            using (ByoBabyRepository entityContext = new ByoBabyRepository())
+            using (aspnet_fbaEntities1 entityContext = new aspnet_fbaEntities1())
             {
-                var person = (from u in entityContext.Users
-                              where u.Username == userName
+                var person = (from u in entityContext.aspnet_Users
+                              where u.UserName == userName
                               select u).FirstOrDefault();
                 if (person != null)
                 {
-                    return person.IsLockedOut;
+                    return (person.aspnet_Membership != null ? person.aspnet_Membership.IsLockedOut : false);
                 }
             }
             return false;

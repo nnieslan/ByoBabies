@@ -17,7 +17,10 @@ namespace ByoBaby.Model
         [DataMember]
         [Key]
         public long Id { get; set; }
-        
+
+        [DataMember]
+        public long OwnerId { get; set; }
+
         [DataMember]
         public string Title { get; set; }
         
@@ -33,7 +36,5 @@ namespace ByoBaby.Model
         [DataMember]
         public ICollection<Person> WhosIn { get; set; }
         
-        [DataMember]
-        public Person Owner { get; set; }
     }
 }

@@ -8,7 +8,7 @@ var application;
 var utilities;
 
 function initializeViewModel() {
-   // utilities = new Helpers();
+    utilities = new Helpers();
     application = new ApplicationViewModel('http://localhost/byobabies');
     application.loadLogin(new LogonViewModel(application.baseUrl));
     ko.applyBindings(application);
@@ -21,7 +21,8 @@ function initializeViewModel() {
 
 $(document).ready(function () {
     //console.log("onDocumentReady - Listening for the PhoneGap deviceReady event.");
-    document.addEventListener("deviceready", onDeviceReady, false);
+    //document.addEventListener("deviceready", onDeviceReady, false);
+    initializeViewModel();
 });
 
 

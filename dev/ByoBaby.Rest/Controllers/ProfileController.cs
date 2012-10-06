@@ -18,15 +18,15 @@ namespace ByoBaby.Rest.Controllers
         private ByoBabyRepository db = new ByoBabyRepository();
 
         // GET api/Profile
-        public IEnumerable<Profile> GetProfiles()
+        public IEnumerable<Person> GetProfiles()
         {
-            return db.Profiles.AsEnumerable();
+            return db.People.AsEnumerable();
         }
 
         // GET api/Profile/5
-        public Profile GetProfile(long id)
+        public Person GetProfile(long id)
         {
-            Profile profile = db.Profiles.Find(id);
+            Person profile = db.People.Find(id);
             if (profile == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -36,7 +36,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // PUT api/Profile/5
-        public HttpResponseMessage PutProfile(long id, Profile profile)
+        public HttpResponseMessage PutProfile(long id, Person profile)
         {
             if (ModelState.IsValid && id == profile.Id)
             {
@@ -60,11 +60,11 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // POST api/Profile
-        public HttpResponseMessage PostProfile(Profile profile)
+        public HttpResponseMessage PostProfile(Person profile)
         {
             if (ModelState.IsValid)
             {
-                db.Profiles.Add(profile);
+                db.People.Add(profile);
                 db.SaveChanges();
 
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, profile);
@@ -80,13 +80,13 @@ namespace ByoBaby.Rest.Controllers
         // DELETE api/Profile/5
         public HttpResponseMessage DeleteProfile(long id)
         {
-            Profile profile = db.Profiles.Find(id);
+            Person profile = db.People.Find(id);
             if (profile == null)
             {
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            db.Profiles.Remove(profile);
+            db.People.Remove(profile);
 
             try
             {

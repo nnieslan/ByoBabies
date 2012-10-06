@@ -13,10 +13,14 @@
     <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="views/flowpay-iphone.css" type="text/css" />
     -->
 
+    <!--
     <script type="text/javascript" charset="utf-8" src="scripts/cordova-1.7.0.js"></script>
+    -->
     <script type="text/javascript" src="scripts/knockout-2.1.0.js"></script>
     <script type="text/javascript" src="scripts/knockout.extensions.js"></script>
-    <!--script type="text/javascript" src="lib/weinre.js"></script-->
+    <!--
+     <script type="text/javascript" src="lib/weinre.js"></script>
+    -->
     <script type="text/javascript" src="scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="scripts/jquery.mobile-1.1.1.min.js"></script>
     <!--script type="text/javascript" src="lib/jquery.watermark-3.1.3/jquery.watermark.min.js"></script-->
@@ -36,7 +40,6 @@
         <!-- ko with: logonViewModel -->
         <div id="welcomeView-content" data-bind="visible: loggedOut" style="vertical-align: middle;">
             <form id="logonForm" action="">
-            <img src="images/logo.png" class="welcome-img"/>
             <p data-bind="css: { error: !valid() && user.hasError() }">
                 <input type="text" id="username" data-bind="value: user, valueUpdate: 'afterkeydown'" ></input>
                 <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'> </span>

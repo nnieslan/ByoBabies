@@ -29,7 +29,7 @@ namespace ByoBaby.Security
         #region ctor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FlowPayUserValidator"/>.
+        /// Initializes a new instance of the <see cref="UserValidator"/>.
         /// </summary>
         public UserValidator()
             : base()

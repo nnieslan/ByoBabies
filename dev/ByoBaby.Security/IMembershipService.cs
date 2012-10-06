@@ -82,5 +82,17 @@ namespace ByoBaby.Security
         /// <b>true</b> if the password was changed successfully; <b>false</b> otherwise.
         /// </returns>
         bool ChangePassword(string userName, string oldPassword, string newPassword);
+
+        /// <summary>
+        /// Determines if the user already exists.
+        /// </summary>
+        /// <param name="userName">
+        /// The user name of the account to do an existence check on.
+        /// </param>
+        /// <returns>
+        /// True if the user exists, else false.
+        /// </returns>
+        bool UserExists(string userName);
+
     }
 }

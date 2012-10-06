@@ -14,7 +14,7 @@ namespace ByoBaby.Model.Test
         {
             var repo = new ByoBabyRepository();
 
-            var profiles = (from p in repo.Profiles select p);
+            var profiles = (from p in repo.People select p);
 
             Assert.IsNotNull(profiles);
         }

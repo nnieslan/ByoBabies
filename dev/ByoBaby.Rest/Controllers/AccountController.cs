@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
@@ -8,6 +9,7 @@ using System.ServiceModel;
 using ByoBaby.Rest.Models;
 using ByoBaby.Rest.Helpers;
 using ByoBaby.Model;
+using ByoBaby.Model.Repositories;
 using ByoBaby.Security;
 
 namespace ByoBaby.Rest.Controllers
@@ -49,41 +51,64 @@ namespace ByoBaby.Rest.Controllers
 
 
         /// <summary>
-        /// Gets the currently logged in user's <see cref="PersonContract"/> containing all profile information.
+        /// Gets the currently logged in user's <see cref="Person"/> containing all profile information.
         /// </summary>
         /// <returns></returns>
-        //[System.Web.Http.Authorize()]
-        //public PersonContract Get()
-        //{
-        //    using (var mgr = new FlowPay.Services.Managers.ProfileManager())
-        //    {
-        //        Log.LogInformation("Entering AccountController.Get()");
+        [System.Web.Http.Authorize()]
+        public Person Get()
+        {
+            Log.LogInformation("Entering AccountController.Get()");
+            try
+            {
+                ByoBabiesUserPrincipal currentUser = 
+                    HttpContext.Current.User as ByoBabiesUserPrincipal;
 
-        //        try
-        //        {
-        //            return mgr.GetCurrentUser();
-        //        }
-        //        catch (FaultException<NotAuthorizedFault> ex)
-        //        {
-        //            var httpEx = new HttpResponseException(
-        //                new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized));
-        //            httpEx.Response.ReasonPhrase = ex.Detail.Message;
-        //            throw httpEx;
-        //        }
-        //        catch (FaultException<InvalidArgumentFault> ex)
-        //        {
-        //            var httpEx = new HttpResponseException(
-        //                new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized));
-        //            httpEx.Response.ReasonPhrase = ex.Detail.Message;
-        //            throw httpEx;
-        //        }
-        //        finally
-        //        {
-        //            Log.LogInformation("Exiting AccountController.Get()");
+                var id = currentUser.GetUserId();
+                using (ByoBabyRepository context = new ByoBabyRepository())
+                {
+                    var person = context.People.FirstOrDefault(p => p.UserId == id);
+                    return person;
+                }
+            }
+            finally
+            {
+                Log.LogInformation("Exiting AccountController.Get()");
+            }
+        }
 
-        //        }
-        //    }
-        //}
+
+        public HttpResponseMessage Register(RegisterViewModel userInformation)
+        {
+            Log.LogInformation("Entering AccountController.Register()");
+
+            var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+
+            
+           var status = MembershipService.CreateUser(userInformation.Email, userInformation.Password, userInformation.Email);
+            
+
+            if(status == System.Web.Security.MembershipCreateStatus.DuplicateUserName)
+            {
+                response.StatusCode = System.Net.HttpStatusCode.Forbidden;
+                response.ReasonPhrase = "A user with this email address already exists.";
+            }
+            else if (status != System.Web.Security.MembershipCreateStatus.Success)
+            {
+                response.StatusCode = System.Net.HttpStatusCode.Forbidden;
+                response.ReasonPhrase = string.Format("The user could not be created. Error : {0}", status.ToString());
+            }
+            else
+            {
+                response = this.Login(
+                    new LogOnModel()
+                    {
+                        UserName = userInformation.Email,
+                        Password = userInformation.Password
+                    });
+            }
+    
+            return response;
+        }
 
         /// <summary>
         /// An HTTP GET action for logging in the user using the credentials indicated.
@@ -98,7 +123,7 @@ namespace ByoBaby.Rest.Controllers
 
             if (MembershipService.ValidateUser(userCredentials.UserName, userCredentials.Password))
             {
-                FormsService.SignIn(userCredentials.UserName, (userCredentials.RememberMe == "on" ? true : false));
+                FormsService.SignIn(userCredentials.UserName, (userCredentials.RememberMe == "yes" ? true : false));
             }
             else
             {

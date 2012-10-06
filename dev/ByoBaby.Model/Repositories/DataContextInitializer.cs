@@ -6,15 +6,25 @@ using System.Data.Entity;
 using System.Web.Security;
 
 namespace ByoBaby.Model.Repositories
-{ 
-    public class DataContextInitializer : DropCreateDatabaseAlways<ByoBabyRepository>
+{
+    public class ByoBabyDataContextInitializer  : DropCreateDatabaseIfModelChanges<ByoBabyRepository>
     {
         protected override void Seed(ByoBabyRepository context)
         {
-        MembershipCreateStatus Status;
-        Membership.CreateUser("Demo", "123456", "demo@demo.com", null, null, true, out Status);
-        Roles.CreateRole("Admin");
-        Roles.AddUserToRole("Demo", "Admin");
+            context.People.Add(new Person()
+            {
+                UserId = new Guid("98BFBB36-0742-41F0-818F-FC217B2E5553"),
+                City = "Denver",
+                Email = "nicknieslanik@gmail.com",
+                FirstName = "Nick",
+                LastName = "Nieslanik",
+                Neighborhood = "Park Hill",
+                LastUpdated = DateTime.Now,
+                MemberSince = DateTime.Now,
+                HomePhone = "720-939-9808",
+                MobilePhone = "720-939-9808"
+            });
+            context.SaveChanges();
         }
     }
 }

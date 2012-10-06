@@ -5,6 +5,7 @@ using System.Web;
 using System.Security.Principal;
 using System.Threading;
 using ByoBaby.Model;
+using ByoBaby.Model.Repositories;
 
 namespace ByoBaby.Security
 {
@@ -21,7 +22,7 @@ namespace ByoBaby.Security
         /// <summary>
         /// The list of security roles for the user.
         /// </summary>
-        private List<SecurityRoleUser> securityRoles;
+        private List<aspnet_Roles> securityRoles;
 
         /// <summary>
         /// Indicates whether the user is a system administrator.
@@ -78,7 +79,7 @@ namespace ByoBaby.Security
 
             // A system administrator is assumed to be in all roles.
             return this.IsSystemAdministrator 
-                || this.securityRoles.Exists(sr => sr.SecurityRole.Name == role);
+                || this.securityRoles.Exists(sr => sr.RoleName == role);
         }
 
         /// <summary>
@@ -116,11 +117,15 @@ namespace ByoBaby.Security
         {
             if (this.securityRoles == null)
             {
-                this.securityRoles = SecurityRole.GetUserRoles(this.identity.UserId);
+                using (aspnet_fbaEntities1 authContext = new aspnet_fbaEntities1())
+                {
+                    this.securityRoles = new List<aspnet_Roles>(
+                        authContext.aspnet_Users.First(u => u.UserId == this.identity.UserId).aspnet_Roles);
 
-                // Initialize system administrator membership.
-                this.isSystemAdministrator = this.securityRoles.Exists(sr =>
-                    sr.SecurityRole.Name == SecurityRole.SystemAdministratorRoleName);
+                    // Initialize system administrator membership.
+                    this.isSystemAdministrator = this.securityRoles.Exists(sr =>
+                        sr.RoleName == "SystemAdministrator");
+                }
             }
         }
     }

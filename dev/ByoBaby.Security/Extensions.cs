@@ -77,7 +77,7 @@ namespace ByoBaby.Security
         /// </returns>
         public static bool IsGroupMember(this IPrincipal principal, long groupId)
         {
-            return principal.IsInRole(groupId, SecurityRole.GroupMemberRoleName);
+            return principal.IsInRole(groupId, "GroupMember");
         }
 
         /// <summary>

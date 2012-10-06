@@ -74,6 +74,48 @@ function LogonViewModel(svcUrl, id) {
     }, self);
 
     /// <summary>
+    /// A function that registers the new user via REST api.
+    /// </summary>
+    self.register = function () {
+        //validate the form before processing.
+        self.valid(!self.user.hasError() && !self.password.hasError());
+        if (!self.valid()) {
+            return false;
+        }
+
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', 'Error');
+            return false;
+        }
+
+        application.isProcessing(true);
+        var url = self.baseUrl + '/api/account/register';
+        var input = {
+            email: self.user,
+            displayname: self.fullname,
+            password: self.password
+        };
+
+        var jqxhr = $.post(url, input, function (data) {
+            //TODO - login?
+            self.getProfile();
+
+        })
+        .error(function (jqxHR, exception) {
+            application.isProcessing(false);
+            if (jqxHR.responseText != '') {
+                utilities.notifyUser(jqxHR.responseText, 'Error');
+                //TODO - we probably need an error case for 'Account exists'
+            } else {
+                utilities.notifyUser('Unable to register.  Please try again later.', 'Error');
+            }
+        })
+        .complete(function () {
+            self.password(null); //clear the pw post-register-login
+        });
+    };
+
+    /// <summary>
     /// A function that logs in the current user via REST api.
     /// </summary>
     self.login = function () {

@@ -103,6 +103,23 @@ namespace ByoBaby.Security
             return status;
         }
 
+
+
+        /// <summary>
+        /// Determines if the user already exists.
+        /// </summary>
+        /// <param name="userName">
+        /// The user name of the account to do an existence check on.
+        /// </param>
+        /// <returns>
+        /// True if the user exists, else false.
+        /// </returns>
+        public bool UserExists(string userName)
+        {
+            var user = provider.GetUser(userName, false);
+            return (user != null);
+        }
+
         /// <summary>
         /// Changes the password for the specified user.
         /// </summary>

@@ -70,14 +70,15 @@ namespace ByoBaby.Security
         /// </summary>
         protected void PopulateIdentity(string name)
         {
-            using (ByoBabyRepository entityContext = new ByoBabyRepository())
+            using (aspnet_fbaEntities1 entityContext = new aspnet_fbaEntities1())
             {
-                User person = entityContext.Users.FirstOrDefault(p => p.Username == name);
-                if (person != null)
+                var user = entityContext.aspnet_Users.FirstOrDefault(p => p.UserName == name);
+                if (user != null)
                 {
-                    this.UserId = person.UserId;
-                    //this.PersonId = person.Id;
-                    //this.DisplayName = person.GetDisplayName();
+                    this.UserId = user.UserId;
+                    var person = Person.GetPersonId(name);
+                    this.PersonId = (person ?? -1 );
+                    //this.DisplayName = Person.GetDisplayName(this.PersonId);
                     //this.EmailAddress = person.GetEmailAddress(EmailType.Personal);
                 }
             }
