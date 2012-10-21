@@ -26,6 +26,26 @@ ko.extenders.required = function (target, overrideMessage) {
     return target;
 };
 
+ko.extenders.areEqual = function (target, comparable) {
+    target.hasError = ko.observable();
+    target.validationMessage = ko.observable();
+    target.comparisonValue = ko.observable(comparable);
+
+    function validate(inputValue) {
+        if (inputValue != target.comparisonValue()) {
+            target.hasError(true);
+            target.validationMessage("The values entered do not match");
+        } else {
+            target.hasError(false);
+        }
+    };
+
+    validate(target());
+
+    target.subscribe(validate);
+
+    return target;
+};
 
 /// <summary>
 /// A Knockout Extender used to validate numeric fields are greater than zero in value.

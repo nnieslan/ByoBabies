@@ -7,40 +7,52 @@ function ApplicationViewModel(svcUrl) {
     /// The view model that manages the view model back-stack
     /// </summary>
 
+    var self = this;
+
     //the application API web service Url
-    this.baseUrl = svcUrl;
+    self.baseUrl = svcUrl;
 
     //the default view for the application, shown when a user is not logged in.
-    this.template = "welcomeView";
+    self.template = "welcomeView";
 
     /// <summary> 
-    /// The observable view model managing user logon state and user profile.
+    /// The observable view model managing user logon state.
     /// </summary>
-    this.logonViewModel = ko.observable();
+    self.logonViewModel = ko.observable();
+
+    /// <summary> 
+    /// The observable view model managing user registration state.
+    /// </summary>
+    //self.registrationViewModel = ko.observable();
+
+    /// <summary> 
+    /// The observable view model managing the logged on user's profile.
+    /// </summary>
+    self.profileViewModel = ko.observable(new ProfileViewModel());
 
     /// <summary> 
     /// The observable indicator used to toggle progress bars.
     /// </summary>
-    this.isProcessing = ko.observable(true);
+    self.isProcessing = ko.observable(true);
 
     /// <summary> 
     /// The observable indicator user to toggle donation wizard UI status.
     /// </summary>
-    this.isComplete = ko.observable(false);
+    self.isComplete = ko.observable(false);
 
     /// <summary> 
     /// The observable array managing the UI navigation back stack for the application.
     /// </summary>
-    this.viewModelBackStack = ko.observableArray();
+    self.viewModelBackStack = ko.observableArray();
 
 
     /// <summary> 
     /// The computed current view model to display in the UI.
     /// </summary>
-    this.currentViewModel = ko.computed(function () {
-        var stacklength = this.viewModelBackStack().length;
+    self.currentViewModel = ko.computed(function () {
+        var stacklength = self.viewModelBackStack().length;
         if (stacklength > 0) {
-            return this.viewModelBackStack()[stacklength - 1];
+            return self.viewModelBackStack()[stacklength - 1];
         } else {
             return this;
         }
@@ -50,77 +62,112 @@ function ApplicationViewModel(svcUrl) {
     /// <summary> 
     /// The computed indicator denoting if a back button should be shown.
     /// </summary>
-    this.backButtonRequired = ko.dependentObservable(function () {
-        return (this.viewModelBackStack().length > 0 && this.currentViewModel().template != 'homeView' && !this.isProcessing() && !this.isComplete());
+    self.backButtonRequired = ko.dependentObservable(function () {
+        return (self.viewModelBackStack().length > 0 && self.currentViewModel().template != 'homeView' && !self.isProcessing() && !self.isComplete());
     }, this);
 
 
     /// <summary> 
     /// The computed indicator denoting if a logout button should be shown.
     /// </summary>
-    this.logoutButtonRequired = ko.dependentObservable(function () {
-        return (this.logonViewModel() != null && this.logonViewModel().loggedIn() && !this.isProcessing() && !this.isComplete());
+    self.logoutButtonRequired = ko.dependentObservable(function () {
+        return (self.logonViewModel() != null && self.logonViewModel().loggedIn() && !self.isProcessing() && !self.isComplete());
     }, this);
 
     //functions
 
     /// <summary> 
-    /// Initializes the LoginViewModel for the application.
+    /// Initializes the LogonViewModel for the application.
     /// </summary>
-    this.loadLogin = function (viewModel) {
-        this.logonViewModel(viewModel);
+    self.loadLogin = function (viewModel) {
+        self.logonViewModel(viewModel);
+        self.logonViewModel().loggedIn.subscribe(function (newValue) {
+            if (newValue) {
+                self.profileViewModel().getProfile();
+            }
+        });
+    };
+
+    /// <summary> 
+    /// Initializes the RegistrationViewModel for the application.
+    /// </summary>
+    self.loadRegistration = function () {
+        self.registrationViewModel(new RegistrationViewModel());
+        self.registrationViewModel().registered.subscribe(function (newValue) {
+            if (newValue) {
+                self.logonViewModel.loggedIn(true);
+                self.viewModelBackStack([]);
+            }
+        });
     };
 
     /// <summary> 
     /// Navigates to the viewModel indicated, optionally clearing back stack history.
     /// </summary>
-    this.navigateTo = function (viewModel, clear) {
+    self.navigateTo = function (viewModel, clear) {
         if (clear != undefined && clear == true) {
-            this.viewModelBackStack([]);
+            self.viewModelBackStack([]);
         }
-        this.viewModelBackStack.push(viewModel);
+        self.viewModelBackStack.push(viewModel);
     };
 
     /// <summary>
     /// Navigates to the TasksViewModel, which backs the homeView.
     /// </summary>
-    this.navigateHome = function () {
-        this.navigateTo(new TasksViewModel(), true);
+    self.navigateHome = function () {
+        self.navigateTo(new TasksViewModel(), true);
+    };
+
+    /// <summary>
+    /// Navigates to the TasksViewModel, which backs the homeView.
+    /// </summary>
+    self.navigateRegister = function () {
+        var viewModel = new RegistrationViewModel(self.baseUrl);
+        viewModel.registered.subscribe(function (newValue) {
+            if (newValue) {
+                self.logonViewModel().loggedIn(true);
+                self.viewModelBackStack([]);
+            }
+        });
+        self.navigateTo(viewModel);
     };
 
     /// <summary>
     /// In the event of a HTTP 401, we need to clear the application.
     /// </summary>
-    this.clear = function () {
-        this.logonViewModel().profile(null);
-        this.viewModelBackStack([]);
-        this.isProcessing(false);
-        this.isComplete(false);
+    self.clear = function () {
+        self.profileViewModel(new ProfileViewModel());
+        self.viewModelBackStack([]);
+        self.isProcessing(false);
+        self.isComplete(false);
     };
 
 
     /// <summary> 
     /// Navigates back to the previous view if possible.
     /// </summary>
-    this.back = function () {
-        this.viewModelBackStack.pop();
-        if (this.viewModelBackStack().length == 0 && this.logonViewModel().loggedIn()) {
-            this.viewModelBackStack.push(new TasksViewModel());
+    self.back = function () {
+        self.viewModelBackStack.pop();
+        if (self.viewModelBackStack().length == 0 && self.logonViewModel().loggedIn()) {
+            self.viewModelBackStack.push(new TasksViewModel());
         }
     };
 
     /// <summary> 
     /// Fetches the view to display for the current viewModel.
     /// </summary>
-    this.templateSelector = function (viewModel) {
+    self.templateSelector = function (viewModel) {
         return viewModel.template;
     };
 
-    this.afterViewRender = function (elements) {
+    self.afterViewRender = function (elements) {
         //TODO - figure out how to apply this functionality inside the view models.
-        //$('#username').watermark('username');
-        //$('#pw').watermark('password');
-        //$('#amount').watermark('amount');
+        $('#username').watermark('what\'s your email?');
+        $('#new-username').watermark('what\'s your email?');
+        $('#pw').watermark('what\'s your password?');
+        $('#new-pw').watermark('what\'s your password?');
+        $('#confirm-pw').watermark('confirm your password');
+        $('#displayname').watermark('what\'s your name?');
 
         //refreshing jquery themes post view render via .trigger().
         //This is due to timing of knockout template rendering.  To accomplish
@@ -129,12 +176,6 @@ function ApplicationViewModel(svcUrl) {
         //template is themed.
         var view = '#' + application.currentViewModel().template + '-content';
         $(view).trigger('create');
-        //if (view == '#donateView-content') {
-        //    $("#donateForm").submit(function () {
-        //        application.currentViewModel().submit();
-        //        return false;
-        //    });
-        //}
         if (view == '#welcomeView-content') {
             $("#logonForm").submit(function () {
                 application.logonViewModel().login();

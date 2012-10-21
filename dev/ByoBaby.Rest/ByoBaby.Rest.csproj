@@ -287,6 +287,8 @@
     <Content Include="Scripts\viewModels\ApplicationViewModel.js" />
     <Content Include="Scripts\viewModels\ConversationViewModel.js" />
     <Content Include="Scripts\viewModels\LogonViewModel.js" />
+    <Content Include="Scripts\viewModels\ProfileViewModel.js" />
+    <Content Include="Scripts\viewModels\RegistrationViewModel.js" />
     <Content Include="Scripts\viewModels\TasksViewModel.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

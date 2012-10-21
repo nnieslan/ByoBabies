@@ -23,9 +23,11 @@
     -->
     <script type="text/javascript" src="scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="scripts/jquery.mobile-1.1.1.min.js"></script>
-    <!--script type="text/javascript" src="lib/jquery.watermark-3.1.3/jquery.watermark.min.js"></script-->
+    <script type="text/javascript" src="scripts/jquery.watermark-3.1.3/jquery.watermark.min.js"></script>
     <script type="text/javascript" src="scripts/viewModels/ApplicationViewModel.js"></script>
     <script type="text/javascript" src="scripts/viewModels/LogonViewModel.js"></script>
+    <script type="text/javascript" src="scripts/viewModels/RegistrationViewModel.js"></script>
+    <script type="text/javascript" src="scripts/viewModels/ProfileViewModel.js"></script>
     <script type="text/javascript" src="scripts/viewModels/ConversationsViewModel.js"></script>
     <script type="text/javascript" src="scripts/viewModels/ConversationViewModel.js"></script>
     <script type="text/javascript" src="scripts/viewModels/TasksViewModel.js"></script>
@@ -39,6 +41,8 @@
     <script type="text/x-jquery-tmpl" charset="utf-8" id="welcomeView">
         <!-- ko with: logonViewModel -->
         <div id="welcomeView-content" data-bind="visible: loggedOut" style="vertical-align: middle;">
+            <h3>Welcome to ByoBabies</h3>
+            <h4>Login!</h4>
             <form id="logonForm" action="">
             <p data-bind="css: { error: !valid() && user.hasError() }">
                 <input type="text" id="username" data-bind="value: user, valueUpdate: 'afterkeydown'" ></input>
@@ -50,15 +54,41 @@
             </p>
             <div class="containing-element rightAlign">
                 <label class="rememberMe">Remember username?</label>
-                <select name="remember" id="remember" data-role="slider" data-track-theme="b" data-bind="options: rememberOptions, selectedOptions: remember">
+                <select name="remember" id="remember" data-role="slider" data-track-theme="a" data-bind="options: rememberOptions, selectedOptions: remember">
                 </select> 
             </div>
             <br />
-            <a id="loginUser" data-bind="click: login" data-role="button" data-theme="b">Login</a>
+            <a id="loginUser" data-bind="click: login" data-role="button" data-theme="a">Login</a>
+            <a id="goToRegistration" data-bind="click: $parent.navigateRegister" data-role="button" data-theme="a">Create a profile</a>
             </form>
         </div>
         <!-- /ko -->
      </script>
+
+    <script type="text/x-jquery-tmpl" charset="utf-8" id="registerView">
+        <div id="registerView-content" data-bind="visible: !registered()" style="vertical-align: middle;">
+            <form id="registerForm" action="">
+            <p data-bind="css: { error: !valid() && user.hasError() }">
+                <input type="text" id="new-username" data-bind="value: user, valueUpdate: 'afterkeydown'" ></input>
+                <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'> </span>
+            </p>
+            <p>
+                <input type="text" id="displayname" data-bind="value: displayName, valueUpdate: 'afterkeydown'" ></input>
+            </p>
+            <p data-bind="css: { error: !valid() && password.hasError()  }">
+                <input type="password" id="new-pw" data-bind="value: password, valueUpdate: 'afterkeydown'" ></input>
+                <span data-bind='visible: !valid() && password.hasError(), text: password.validationMessage'> </span>
+            </p>
+            <p data-bind="css: { error: !valid() && confirmPassword.hasError()  }">
+                <input type="password" id="confirm-pw" data-bind="value: confirmPassword, valueUpdate: 'afterkeydown'" ></input>
+                <span data-bind='visible: !valid() && confirmPassword.hasError(), text: confirmPassword.validationMessage'> </span>
+            </p>
+            <br />
+            <a id="registerUser" data-bind="click: register" data-role="button" data-theme="a">Create my profile</a>
+            </form>
+        </div>
+     </script>
+
 
     <!-- The home page - displays the application user actions -->  
     <script type="text/x-jquery-tmpl" charset="utf-8" id="homeView">
@@ -81,11 +111,10 @@
 
     <div id="contentPage" data-role="page">
         <div id="header" data-role="header" data-position="fixed">
-            <!--
-            <div data-role="header" data-theme="b" data-bind="fadeVisible: logonViewModel().loggedIn">
-                <label>FlowPay™</label>
-            </div>
             
+            <div data-role="header" data-theme="b" data-bind="fadeVisible: logonViewModel().loggedIn">
+                <label>ByoBabies</label>
+            </div>
             <div data-role="header" data-theme="a" data-bind="slideVisible: logonViewModel().loggedIn">
                 <a data-role="button" data-theme="b" data-icon="back"
                     data-bind="click: back,
@@ -93,12 +122,11 @@
                 <div id="profileView" class="centerAlign">
                     <span class="centerAlign">Welcome!</span>
                     <br />
-                    <span class="centerAlign" data-bind="text: logonViewModel().fullname"></span>
+                    <span class="centerAlign" data-bind="text: profileViewModel().fullname"></span>
                 </div>
                 <a data-role="button" data-theme="b" data-icon="delete"
                     data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired">Logout</a>
             </div>
-            -->
         </div>
 
         <!-- progress bar -->
