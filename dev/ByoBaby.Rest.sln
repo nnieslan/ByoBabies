@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Model.Test", "..\te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Security", "ByoBaby.Security\ByoBaby.Security.csproj", "{D5AE1119-6295-48C0-9941-405200790636}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Rest.Test", "..\ByoBaby.Rest.Test\ByoBaby.Rest.Test.csproj", "{7FE930A3-7436-4E1C-8C2B-13FD71C52689}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{D5AE1119-6295-48C0-9941-405200790636}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5AE1119-6295-48C0-9941-405200790636}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5AE1119-6295-48C0-9941-405200790636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FE930A3-7436-4E1C-8C2B-13FD71C52689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FE930A3-7436-4E1C-8C2B-13FD71C52689}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FE930A3-7436-4E1C-8C2B-13FD71C52689}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FE930A3-7436-4E1C-8C2B-13FD71C52689}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

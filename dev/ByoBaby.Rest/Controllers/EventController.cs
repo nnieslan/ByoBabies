@@ -51,7 +51,7 @@ namespace ByoBaby.Rest.Controllers
                     return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK, evnt);
             }
             else
             {
