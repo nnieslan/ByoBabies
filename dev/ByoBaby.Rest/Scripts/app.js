@@ -7,15 +7,20 @@ $.support.cors = true;
 var application;
 var utilities;
 
+var views = ["welcomeView", "profileView", "registerView", "conversationsView", "conversationView"];
 function initializeViewModel() {
     utilities = new Helpers();
-    application = new ApplicationViewModel('http://localhost/byobabies');
-    application.loadLogin(new LogonViewModel(application.baseUrl));
-    ko.applyBindings(application);
 
-    if (navigator.network == undefined) {
-        application.isProcessing(false);
-    }
+    utilities.ensureTemplates(views, function () {
+        application = new ApplicationViewModel('');
+        application.loadLogin(new LogonViewModel(application.baseUrl));
+        ko.applyBindings(application);
+
+        if (navigator.network == undefined) {
+            application.isProcessing(false);
+        }
+    });
+    
 
 };
 

@@ -28,7 +28,9 @@ function ApplicationViewModel(svcUrl) {
     /// <summary> 
     /// The observable view model managing the logged on user's profile.
     /// </summary>
-    self.profileViewModel = ko.observable(new ProfileViewModel());
+    //self.profileViewModel = ko.observable();
+
+    self.Pages = ko.observableArray([]);
 
     /// <summary> 
     /// The observable indicator used to toggle progress bars.
@@ -63,7 +65,7 @@ function ApplicationViewModel(svcUrl) {
     /// The computed indicator denoting if a back button should be shown.
     /// </summary>
     self.backButtonRequired = ko.dependentObservable(function () {
-        return (self.viewModelBackStack().length > 0 && self.currentViewModel().template != 'homeView' && !self.isProcessing() && !self.isComplete());
+        return (self.viewModelBackStack().length > 0 && self.currentViewModel().template != 'profileView' && !self.isProcessing() && !self.isComplete());
     }, this);
 
 
@@ -83,7 +85,9 @@ function ApplicationViewModel(svcUrl) {
         self.logonViewModel(viewModel);
         self.logonViewModel().loggedIn.subscribe(function (newValue) {
             if (newValue) {
-                self.profileViewModel().getProfile();
+                var profile = new ProfileViewModel(self.baseUrl);
+                self.Pages.push({ DisplayName: 'Profile', value: profile });
+                profile.getProfile();
             }
         });
     };
@@ -115,11 +119,11 @@ function ApplicationViewModel(svcUrl) {
     /// Navigates to the TasksViewModel, which backs the homeView.
     /// </summary>
     self.navigateHome = function () {
-        self.navigateTo(new TasksViewModel(), true);
+        self.navigateTo(self.profileViewModel(), true);
     };
 
     /// <summary>
-    /// Navigates to the TasksViewModel, which backs the homeView.
+    /// Navigates to the ProfileViewModel, which backs the homeView.
     /// </summary>
     self.navigateRegister = function () {
         var viewModel = new RegistrationViewModel(self.baseUrl);
@@ -136,7 +140,7 @@ function ApplicationViewModel(svcUrl) {
     /// In the event of a HTTP 401, we need to clear the application.
     /// </summary>
     self.clear = function () {
-        self.profileViewModel(new ProfileViewModel());
+        self.profileViewModel(new ProfileViewModel(self.baseUrl));
         self.viewModelBackStack([]);
         self.isProcessing(false);
         self.isComplete(false);

@@ -1,0 +1,24 @@
+﻿<!-- ko with: logonViewModel -->
+        <div id="welcomeView-content" data-bind="visible: loggedOut" style="vertical-align: middle;">
+    <h3>Welcome to ByoBabies</h3>
+    <h4>Login!</h4>
+    <form id="logonForm" action="">
+        <p data-bind="css: { error: !valid() && user.hasError() }">
+            <input type="text" id="username" data-bind="value: user, valueUpdate: 'afterkeydown'"></input>
+            <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'></span>
+        </p>
+        <p data-bind="css: { error: !valid() && password.hasError() }">
+            <input type="password" id="pw" data-bind="value: password, valueUpdate: 'afterkeydown'"></input>
+            <span data-bind='visible: !valid() && password.hasError(), text: password.validationMessage'></span>
+        </p>
+        <div class="containing-element rightAlign">
+            <label class="rememberMe">Remember username?</label>
+            <select name="remember" id="remember" data-role="slider" data-track-theme="a" data-bind="options: rememberOptions, selectedOptions: remember">
+            </select>
+        </div>
+        <br />
+        <a id="loginUser" data-bind="click: login" data-role="button" data-theme="a">Login</a>
+        <a id="goToRegistration" data-bind="click: $parent.navigateRegister" data-role="button" data-theme="a">Create a profile</a>
+    </form>
+</div>
+<!-- /ko -->

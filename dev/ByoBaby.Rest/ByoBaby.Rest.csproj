@@ -15,11 +15,13 @@
     <AssemblyName>ByoBaby.Rest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -290,6 +292,11 @@
     <Content Include="Scripts\viewModels\ProfileViewModel.js" />
     <Content Include="Scripts\viewModels\RegistrationViewModel.js" />
     <Content Include="Scripts\viewModels\TasksViewModel.js" />
+    <Content Include="Templates\conversationsView.html" />
+    <Content Include="Templates\conversationView.html" />
+    <Content Include="Templates\profileView.html" />
+    <Content Include="Templates\registerView.html" />
+    <Content Include="Templates\welcomeView.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -354,7 +361,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2730</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/byobabies</IISUrl>
+          <IISUrl>http://localhost:1306/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -364,6 +371,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
