@@ -70,9 +70,9 @@
                     data-dividertheme="a"
                     data-corners="false"
                     class=""
-                    data-bind="foreach: Pages">
+                    data-bind="foreach: tasksViewModel().tasks">
                     <li>
-                        <a data-bind="text: DisplayName "></a>
+                        <a data-bind="text: DisplayName, click: function() {$root.navigateTo($data.value);} "></a>
                     </li>
                 </ul>
        </div>

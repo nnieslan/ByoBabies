@@ -12,7 +12,7 @@ function ProfileViewModel(svcUrl, id) {
     self.template = "profileView";
 
     //view model properties
-    self.baseUrl = svcUrl;
+    self.baseUrl = (svcUrl == undefined ? '' : svcUrl);
 
     /// <summary>
     /// An observable containing an indicator denoting if the user-entered data is valid.
@@ -59,11 +59,11 @@ function ProfileViewModel(svcUrl, id) {
             return false;
         }
 
-        var url = self.baseUrl + '/api/account';
+        var url = self.baseUrl + 'api/account/get';
         var jqxhr = $.get(url, function (data) {
+            console.log("ProfileViewModel.getProfile() - ajax call complete");
             self.profile(data);
             application.navigateHome();
-
         })
         .error(function (jqxhr, exception) {
             if (jqxhr.status == '401') {

@@ -70,8 +70,6 @@ function RegistrationViewModel(svcUrl) {
 
         var jqxhr = $.post(url, input, function (data) {
             self.registered(true);
-            //self.getProfile();
-            //TODO - navigate and get profile.
         })
         .error(function (jqxHR, exception) {
             application.isProcessing(false);

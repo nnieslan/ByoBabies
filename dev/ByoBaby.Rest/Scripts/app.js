@@ -10,8 +10,9 @@ var utilities;
 var views = ["welcomeView", "profileView", "registerView", "conversationsView", "conversationView"];
 function initializeViewModel() {
     utilities = new Helpers();
-
+    console.log("InitializeViewModels - calling utilities.ensureTemplates ");
     utilities.ensureTemplates(views, function () {
+        console.log("ensureTemplates().Callback - inititalizing ApplicationViewModel");
         application = new ApplicationViewModel('');
         application.loadLogin(new LogonViewModel(application.baseUrl));
         ko.applyBindings(application);

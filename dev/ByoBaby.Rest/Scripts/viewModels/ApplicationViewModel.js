@@ -30,7 +30,9 @@ function ApplicationViewModel(svcUrl) {
     /// </summary>
     //self.profileViewModel = ko.observable();
 
-    self.Pages = ko.observableArray([]);
+    self.tasksViewModel = ko.observable(new TasksViewModel(self.baseUrl));
+
+    self.tasksViewModel().loadTasks();
 
     /// <summary> 
     /// The observable indicator used to toggle progress bars.
@@ -46,7 +48,6 @@ function ApplicationViewModel(svcUrl) {
     /// The observable array managing the UI navigation back stack for the application.
     /// </summary>
     self.viewModelBackStack = ko.observableArray();
-
 
     /// <summary> 
     /// The computed current view model to display in the UI.
@@ -64,7 +65,7 @@ function ApplicationViewModel(svcUrl) {
     /// <summary> 
     /// The computed indicator denoting if a back button should be shown.
     /// </summary>
-    self.backButtonRequired = ko.dependentObservable(function () {
+    self.backButtonRequired = ko.dependentObservable(function () {  
         return (self.viewModelBackStack().length > 0 && self.currentViewModel().template != 'profileView' && !self.isProcessing() && !self.isComplete());
     }, this);
 
@@ -85,9 +86,14 @@ function ApplicationViewModel(svcUrl) {
         self.logonViewModel(viewModel);
         self.logonViewModel().loggedIn.subscribe(function (newValue) {
             if (newValue) {
-                var profile = new ProfileViewModel(self.baseUrl);
-                self.Pages.push({ DisplayName: 'Profile', value: profile });
-                profile.getProfile();
+                console.log("logonViewModel().loggedIn().subscribe - user is logged in");
+                for (var i = 0; i < self.tasksViewModel().tasks().length; i++) {
+                    var task = self.tasksViewModel().tasks()[i];
+                    if (task.DisplayName == 'Profile') {
+                        console.log("logonViewModel().loggedIn().subscribe - fetching user profile");
+                        task.value.getProfile();
+                    }
+                }
             }
         });
     };
@@ -109,6 +115,7 @@ function ApplicationViewModel(svcUrl) {
     /// Navigates to the viewModel indicated, optionally clearing back stack history.
     /// </summary>
     self.navigateTo = function (viewModel, clear) {
+        console.log("application.navigateTo - Navigating to : " + viewModel.template);
         if (clear != undefined && clear == true) {
             self.viewModelBackStack([]);
         }
@@ -116,10 +123,10 @@ function ApplicationViewModel(svcUrl) {
     };
 
     /// <summary>
-    /// Navigates to the TasksViewModel, which backs the homeView.
+    /// Navigates to the homeView.
     /// </summary>
     self.navigateHome = function () {
-        self.navigateTo(self.profileViewModel(), true);
+        self.navigateTo(self, true);
     };
 
     /// <summary>

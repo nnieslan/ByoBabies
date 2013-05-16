@@ -69,7 +69,7 @@ function LogonViewModel(svcUrl, id) {
         }
 
         application.isProcessing(true);
-        var url = self.baseUrl + '/api/account/login';
+        var url = self.baseUrl + 'api/account/login';
         var input = {
             username: self.user,
             password: self.password,
@@ -104,7 +104,7 @@ function LogonViewModel(svcUrl, id) {
             return false;
         }
 
-        var url = self.baseUrl + '/api/account/logout';
+        var url = self.baseUrl + 'api/account/logout';
         var jqxhr = $.post(url, function (data) {
             self.loggedIn(false);
             application.viewModelBackStack([]);

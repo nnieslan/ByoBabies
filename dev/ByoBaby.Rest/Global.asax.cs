@@ -19,6 +19,20 @@ namespace ByoBaby.Rest
 
     public class WebApiApplication : System.Web.HttpApplication
     {
+        #region properties
+
+        /// <summary>
+        /// Gets or sets the <see cref="IFormsAuthenticationService"/> for the controller.
+        /// </summary>
+        public IFormsAuthenticationService FormsService { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IMembershipService"/> for the controller.
+        /// </summary>
+        public IMembershipService MembershipService { get; set; }
+
+        #endregion
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -29,7 +43,26 @@ namespace ByoBaby.Rest
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Database.SetInitializer<ByoBabyRepository>(new ByoBabyDataContextInitializer());
+
+            //[nick] -  This code would be leveraged by the WCF Authentication Service if we chose to go that route.  
+            //          Leaving until I consult with Matt.
+            if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
+            if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
+
+            //System.Web.ApplicationServices.AuthenticationService.Authenticating +=
+            //    new EventHandler<System.Web.ApplicationServices.AuthenticatingEventArgs>(AuthenticationService_Authenticating);
         }
+
+        //private void AuthenticationService_Authenticating(object sender, System.Web.ApplicationServices.AuthenticatingEventArgs e)
+        //{
+        //    if (MembershipService.ValidateUser(e.UserName, e.Password))
+        //    {
+        //        FormsService.SignIn(e.UserName, false);
+        //        e.Authenticated = true;
+        //    }
+        //    e.AuthenticationIsComplete = true;
+
+        //}
 
         /// <summary>
         /// Handles the PostAuthenticateRequest event for the application.
@@ -41,7 +74,7 @@ namespace ByoBaby.Rest
         /// The <see cref="EventArgs"/> for the event.
         /// </param>
         protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
-        {
+        {                                       
             var user = HttpContext.Current.User;
             if (user.Identity.IsAuthenticated && user.Identity.AuthenticationType == "Forms")
             {
