@@ -10,7 +10,7 @@ namespace ByoBaby.Rest.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return new RedirectResult("~/index.html");
         }
     }
 }

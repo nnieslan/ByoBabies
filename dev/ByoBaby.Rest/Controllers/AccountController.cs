@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Controllers;
+using System.Web.Security;
 using System.ServiceModel;
 using ByoBaby.Rest.Models;
 using ByoBaby.Rest.Helpers;
@@ -19,6 +20,8 @@ namespace ByoBaby.Rest.Controllers
     /// </summary>
     public class AccountController : ApiController
     {
+        private ByoBabyRepository db = new ByoBabyRepository();
+
         #region Properties
 
         /// <summary>
@@ -60,7 +63,7 @@ namespace ByoBaby.Rest.Controllers
             Log.LogInformation("Entering AccountController.Get()");
             try
             {
-                ByoBabiesUserPrincipal currentUser = 
+                ByoBabiesUserPrincipal currentUser =
                     HttpContext.Current.User as ByoBabiesUserPrincipal;
 
                 var id = currentUser.GetUserId();
@@ -81,13 +84,20 @@ namespace ByoBaby.Rest.Controllers
         {
             Log.LogInformation("Entering AccountController.Register()");
 
+            if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                this.Logout();
+                //FormsService = new FormsAuthenticationService(); 
+                //MembershipService = new AccountMembershipService(); 
+
+            }
+
             var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
 
-            
-           var status = MembershipService.CreateUser(userInformation.Email, userInformation.Password, userInformation.Email);
-            
+            var status = MembershipService.CreateUser(
+                userInformation.Email, userInformation.Password, userInformation.Email);
 
-            if(status == System.Web.Security.MembershipCreateStatus.DuplicateUserName)
+            if (status == System.Web.Security.MembershipCreateStatus.DuplicateUserName)
             {
                 response.StatusCode = System.Net.HttpStatusCode.Forbidden;
                 response.ReasonPhrase = "A user with this email address already exists.";
@@ -99,14 +109,46 @@ namespace ByoBaby.Rest.Controllers
             }
             else
             {
+                //log in the user
                 response = this.Login(
                     new LogOnModel()
                     {
                         UserName = userInformation.Email,
                         Password = userInformation.Password
                     });
+
+                //create a stubbed in profile for the newly logged in user
+                using (aspnet_fbaEntities1 entityContext = new aspnet_fbaEntities1())
+                {
+                    var user = entityContext.aspnet_Users.FirstOrDefault(p => p.UserName == userInformation.Email);
+                    if (user != null)
+                    {
+                        var nameParts = userInformation.DisplayName.Split(' ');
+                        var first = nameParts[0];
+                        var last = (nameParts.Length > 1 ? userInformation.DisplayName.Split(' ')[1] : string.Empty);
+                        var profile = new Person()
+                        {
+                            Email = userInformation.Email,
+                            FirstName = first,
+                            LastName = last,
+                            UserId = user.UserId,
+                            MemberSince = DateTime.Now,
+                            LastUpdated = DateTime.Now,
+                        };
+                        db.People.Add(profile);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new HttpResponseException(
+                            new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized)
+                            {
+                                ReasonPhrase = "Registration failed"
+                            });
+                    }
+                }
             }
-    
+
             return response;
         }
 
@@ -120,6 +162,11 @@ namespace ByoBaby.Rest.Controllers
             Log.LogInformation("Entering AccountController.PostLogin()");
 
             var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                this.Logout();
+                //HttpContext.Current.User = null;
+            }
 
             if (MembershipService.ValidateUser(userCredentials.UserName, userCredentials.Password))
             {

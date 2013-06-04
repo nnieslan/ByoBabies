@@ -61,7 +61,7 @@ function RegistrationViewModel(svcUrl) {
         }
 
         application.isProcessing(true);
-        var url = self.baseUrl + '/api/account/register';
+        var url = self.baseUrl + 'api/account/register';
         var input = {
             Email: self.user,
             DisplayName: self.displayName,
