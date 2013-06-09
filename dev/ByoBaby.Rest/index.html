@@ -39,16 +39,14 @@
 <body>
     <div id="contentPage" data-role="page">
         <div data-role="header" data-theme="a" data-bind="fadeVisible: logonViewModel().loggedIn">
-            <a href="#left-panel" 
-                data-theme="a" 
-                data-role="button" 
-                data-icon="bars" 
-                data-shadow="false" 
-                data-iconshadow="false" 
-                data-inline="true" >Menu</a>
+            <a href="#left-panel"
+                data-theme="a"
+                data-role="button"
+                data-icon="bars"
+                data-shadow="false"
+                data-iconshadow="false"
+                data-inline="true">Menu</a>
             <h2 class="ui-wizard-header-text">ByoBabies</h2>
-            <a data-role="button" data-theme="a" data-icon="back"
-                data-bind="click: back, fadeVisible: backButtonRequired" ></a>
         </div>
 
         <!-- progress bar -->
@@ -60,26 +58,27 @@
             </div>
         </div>
 
-        
-        <div data-role="panel" id="left-panel" data-theme="a" data-dismissible="false" >
-                <ul data-role="listview" 
-                    id="pageList"
-                    data-inset="true"
-                    data-theme="a"
-                    data-content-theme="a"
-                    data-dividertheme="a"
-                    data-corners="false"
-                    class=""
-                    data-bind="foreach: tasksViewModel().tasks">
-                    <li>
-                        <a data-bind="text: DisplayName, click: function() {$root.navigateTo($data.value);} "></a>
-                    </li>
-                </ul>
-       </div>
+
+        <div data-role="panel" id="left-panel" data-theme="a" data-dismissible="false">
+            <a data-role="button" data-theme="a" data-icon="back" data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired"></a>
+            <ul data-role="listview"
+                id="pageList"
+                data-inset="true"
+                data-theme="a"
+                data-content-theme="a"
+                data-dividertheme="a"
+                data-corners="false"
+                class=""
+                data-bind="foreach: tasksViewModel().tasks">
+                <li>
+                    <a data-bind="text: DisplayName, click: function () { $root.navigateTo($data.value); } "></a>
+                </li>
+            </ul>
+        </div>
 
         <div id="ui-content" class="centerPageFill" data-bind="visible: !isProcessing()" data-role="content">
             <div style="vertical-align: middle;"
-                data-bind="template: { name: templateSelector, data: currentViewModel, afterRender: afterViewRender }">
+                data-bind="template: { name: templateSelector, data: currentViewModel, afterRender: currentViewModel().afterViewRender }">
             </div>
         </div>
 

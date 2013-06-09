@@ -106,7 +106,7 @@ namespace ByoBaby.Rest.Test.Controllers
             var oldPhone = SeededPerson.HomePhone;
             SeededPerson.HomePhone = "720-939-9808";
 
-            var response = controller.PutProfile(SeededPerson.Id, SeededPerson);
+            var response = controller.PostProfile(SeededPerson);
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);

@@ -24,13 +24,13 @@ namespace ByoBaby.Rest
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{user}/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional, user = RouteParameter.Optional });
+                routeTemplate: "api/{userId}/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional });
 
             config.Routes.MapHttpRoute(
                 name: "ConversationsApi",
-                routeTemplate: "api/{user}/conversation/{conversationId}/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional, user = RouteParameter.Optional, controller = "blurb" },
+                routeTemplate: "api/{userId}/conversation/{conversationId}/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional, controller = "blurb" },
                 constraints: new { controller = "blurb" });
 
         }

@@ -173,6 +173,7 @@ function ApplicationViewModel(svcUrl) {
 
     self.afterViewRender = function (elements) {
         //TODO - figure out how to apply this functionality inside the view models.
+        console.log("application.afterViewRender()");
         $('#username').watermark('what\'s your email?');
         $('#new-username').watermark('what\'s your email?');
         $('#pw').watermark('what\'s your password?');

@@ -86,4 +86,23 @@ function RegistrationViewModel(svcUrl) {
         });
     };
 
+    self.afterViewRender = function (elements) {
+        console.log("registrationViewModel.afterViewRender()");
+        //TODO - figure out how to apply this functionality inside the view models.
+        $('#new-username').watermark('what\'s your email?');
+        $('#new-pw').watermark('what\'s your password?');
+        $('#confirm-pw').watermark('confirm your password');
+        $('#displayname').watermark('what\'s your name?');
+
+        //refreshing jquery themes post view render via .trigger().
+        //This is due to timing of knockout template rendering.  To accomplish
+        //this I had to put a base div in each template with an id based
+        //on the template name itself so I could ensure only the current
+        //template is themed.
+        var view = '#' + self.template + '-content';
+        $(view).trigger('create');
+        //refreshing the ui-content div size after the header appears post-login.
+        $('#ui-content').trigger('resize');
+
+    }
 };

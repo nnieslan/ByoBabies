@@ -1,4 +1,31 @@
 ﻿<div id="profileView-content">
-    <h3>Welcome back <span data-bind="text: fullname" /></h3>
+    <h3 data-bind="text: fullname" />
+    <form id="profileView-form">
+        <ul id="profileView-list" data-role="listview" data-inset="true">
+            <li data-role="fieldcontain">
+                <input type="text" name="mobilePhone" id="mobilePhone" data-bind="value: profile().MobilePhone" data-clear-btn="true">
+            </li>
+            <li class="ui-body ui-body-b">
+                <fieldset class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <input type="text" name="city" id="city" data-bind="value: profile().City" data-clear-btn="true">
+                    </div>
+                    <div class="ui-block-b">
+                        <select name="state" id="state">
+                            <!-- TODO Add state list -->
+                            <option value="CO">Colorado</option>
+                        </select>
+                    </div>
+                </fieldset>
+            </li>
+            <li data-role="fieldcontain">
+                <input type="text" name="neighborhood" id="neighborhood" data-bind="value: profile().Neighborhood" data-clear-btn="true">
+            </li>
+            <li class="fieldcontain">
+                <button id="saveProfile" type="submit" data-bind="click: saveProfile" data-theme="a">Save</button>
+            </li>
+        </ul>
+    </form>
+
 
 </div>

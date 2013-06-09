@@ -87,9 +87,6 @@ namespace ByoBaby.Rest.Controllers
             if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
                 this.Logout();
-                //FormsService = new FormsAuthenticationService(); 
-                //MembershipService = new AccountMembershipService(); 
-
             }
 
             var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
