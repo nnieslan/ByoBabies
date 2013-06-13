@@ -21,32 +21,48 @@ function ProfileViewModel(svcUrl, id) {
     /// </summary>
     self.valid = ko.observable(true);
 
-    /// <summary>
-    /// An observable containing the logged on user's profile.
-    /// </summary>
-    self.profile = ko.observable();
+    ///// <summary>
+    ///// An observable containing the logged on user's profile.
+    ///// </summary>
+    //self.profile = ko.observable();
 
-    //computed values that determine current display info and user state.
-    self.firstname = ko.computed(function () {
-        if (self.profile() != undefined && self.profile() != null) {
-            return self.profile().FirstName;
+    var mapping = {
+        'Children': {
+            key: function (data) {
+                return ko.utils.unwrapObservable(data.Id);
+            }
+        },
+        'MemberOf': {
+            key: function (data) {
+                return ko.utils.unwrapObservable(data.Id);
+            }
         }
-        else {
-            return '';
-        }
-    }, self);
+    }
 
-    self.lastname = ko.computed(function () {
-        if (self.profile() != undefined && self.profile() != null) {
-            return self.profile().LastName;
-        }
-        else {
-            return '';
-        }
-    }, self);
+    ////computed values that determine current display info and user state.
+    //self.firstname = ko.computed(function () {
+    //    if (self.profile() != undefined && self.profile() != null) {
+    //        return self.profile().FirstName;
+    //    }
+    //    else {
+    //        return '';
+    //    }
+    //}, self);
+
+    //self.lastname = ko.computed(function () {
+    //    if (self.profile() != undefined && self.profile() != null) {
+    //        return self.profile().LastName;
+    //    }
+    //    else {
+    //        return '';
+    //    }
+    //}, self);
 
     self.fullname = ko.computed(function () {
-        return self.firstname() + ' ' + self.lastname();
+        if (self.FirstName !== undefined && self.LastName !== undefined) {
+            return self.FirstName() + ' ' + self.LastName();
+        }
+        return '';
     }, self);
     
     /// <summary>
@@ -62,7 +78,7 @@ function ProfileViewModel(svcUrl, id) {
         var url = self.baseUrl + 'api/account/get';
         var jqxhr = $.get(url, function (data) {
             console.log("ProfileViewModel.getProfile() - ajax call complete");
-            self.profile(data);
+            ko.mapping.fromJS(data, mapping, self);
             application.navigateHome();
         })
         .error(function (jqxhr, exception) {
@@ -90,12 +106,14 @@ function ProfileViewModel(svcUrl, id) {
         }
         application.isProcessing(true);
         
-        var url = self.baseUrl + 'api/' + self.profile().Id + '/profile';
+        var url = self.baseUrl + 'api/' + self.Id() + '/profile';
         
+        var input = ko.mapping.toJS(self);
 
-        var jqxhr = $.post(url, self.profile(), function (data) {
+        var jqxhr = $.post(url, input, function (data) {
             console.log("ProfileViewModel.saveProfile() - ajax call complete");
-            self.profile(data);
+            ko.mapping.fromJS(data, self);
+            //TODO - Denote successful save rather than navigate.
             application.navigateHome();
         })
         .error(function (jqxhr, exception) {

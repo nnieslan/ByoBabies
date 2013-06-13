@@ -14,6 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ByoBaby.Rest.Controllers;
 using ByoBaby.Model;
 using ByoBaby.Model.Repositories;
+using ByoBaby.Rest.Models;
 
 namespace ByoBaby.Rest.Test.Controllers
 {
@@ -77,7 +78,7 @@ namespace ByoBaby.Rest.Test.Controllers
             var controller = InitializeController(HttpMethod.Get,
                "http://localhost/byobabies/api/profile");
 
-            var profiles = controller.GetProfiles();
+            var profiles = controller.GetProfiles(1);
 
             Assert.IsNotNull(profiles);
             Assert.IsTrue(profiles.Count() > 0);
@@ -90,7 +91,7 @@ namespace ByoBaby.Rest.Test.Controllers
             var controller = InitializeController(HttpMethod.Get,
                "http://localhost/byobabies/api/profile");
 
-            var profile = controller.GetProfile(SeededPerson.Id);
+            var profile = controller.GetProfile(SeededPerson.Id, SeededPerson.Id);
 
             Assert.IsNotNull(profile);
             Assert.AreEqual(SeededPerson.FirstName, profile.FirstName);
@@ -106,11 +107,11 @@ namespace ByoBaby.Rest.Test.Controllers
             var oldPhone = SeededPerson.HomePhone;
             SeededPerson.HomePhone = "720-939-9808";
 
-            var response = controller.PostProfile(SeededPerson);
+            var response = controller.PostProfile(SeededPerson.Id,ProfileViewModel.FromPerson(SeededPerson));
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            var savedProfile = controller.GetProfile(SeededPerson.Id);
+            var savedProfile = controller.GetProfile(SeededPerson.Id, SeededPerson.Id);
             Assert.AreNotEqual(oldPhone, savedProfile.HomePhone);
             Assert.AreEqual("720-939-9808", savedProfile.HomePhone);
 

@@ -99,6 +99,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Selectors" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -189,6 +190,7 @@
     </Compile>
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Models\LogonViewModel.cs" />
+    <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -280,9 +282,18 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\changelog.txt" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\gpl2-license.txt" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\jquery.data.js" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\jquery.watermark.htm" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\jquery.watermark.js" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\jquery.watermark.min.js" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\mit-license.txt" />
+    <Content Include="Scripts\jquery.watermark-3.1.3\readme.txt" />
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\knockout.extensions.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\viewModels\ConversationsViewModel.js" />
     <Content Include="Scripts\viewModels\ApplicationViewModel.js" />

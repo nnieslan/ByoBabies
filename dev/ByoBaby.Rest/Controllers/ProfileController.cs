@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using ByoBaby.Rest.Models;
 using ByoBaby.Model;
 using ByoBaby.Model.Repositories;
 using ByoBaby.Security;
@@ -19,13 +20,14 @@ namespace ByoBaby.Rest.Controllers
         private ByoBabyRepository db = new ByoBabyRepository();
 
         // GET api/Profile
-        public IEnumerable<Person> GetProfiles(long userId)
+        public IEnumerable<ProfileViewModel> GetProfiles(long userId)
         {
-            return db.People.AsEnumerable();
+            throw new NotImplementedException();
+            //var people = db.People.AsEnumerable();
         }
 
         // GET api/Profile/5 - get another user's profile
-        public Person GetProfile(long userId, long id)
+        public ProfileViewModel GetProfile(long userId, long id)
         {
             Person profile = db.People.Find(id);
             if (profile == null)
@@ -33,13 +35,13 @@ namespace ByoBaby.Rest.Controllers
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
             }
 
-            return profile;
+            return ProfileViewModel.FromPerson(profile);
         }
 
         // POST api/Profile - Existing user update
         public HttpResponseMessage PostProfile(
             [FromUri] long userId, 
-            [FromBody] Person profile)
+            [FromBody] ProfileViewModel profile)
         {
             ByoBabiesUserPrincipal currentUser =
                     HttpContext.Current.User as ByoBabiesUserPrincipal;
@@ -47,9 +49,39 @@ namespace ByoBaby.Rest.Controllers
             var id = currentUser.GetUserId();
             //ensure the profile passed in is the current user's profile.
             //TODO - consider a more robust validation check here and some null assignment handling.
-            if (ModelState.IsValid && id == profile.UserId && profile.Id == userId)
+            if (ModelState.IsValid 
+                && profile.Id == userId 
+                && userId == currentUser.GetPersonId().Value)
             {
-                db.Entry(profile).State = EntityState.Modified;
+                Person existingProfile = db.People.Find(userId);
+                if (existingProfile == null)
+                {
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
+                }
+
+                if (string.Compare(existingProfile.LastName, profile.LastName, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    existingProfile.LastName = profile.LastName;
+                }
+                if (string.Compare(existingProfile.FirstName, profile.FirstName, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    existingProfile.FirstName = profile.FirstName;
+                }
+                if (string.Compare(existingProfile.City, profile.City, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    existingProfile.City = profile.City;
+                }
+                if (string.Compare(existingProfile.Neighborhood, profile.Neighborhood, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    existingProfile.Neighborhood = profile.Neighborhood;
+                }
+                if (string.Compare(existingProfile.MobilePhone, profile.MobilePhone, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    existingProfile.MobilePhone = profile.MobilePhone;
+                }
+
+                //TODO - home Phone, email, interests, kids, groups
+
                 try
                 {
                     db.SaveChanges();
