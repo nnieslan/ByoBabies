@@ -2,6 +2,16 @@
 
 /*globals ko*/
 
+
+function Country(name, code) {
+    /// <summary>
+    /// The view model that represents a state or province
+    /// </summary>
+
+    this.DisplayName = name;
+    this.Code = code;
+};
+
 function ProfileViewModel(svcUrl, id) {
     /// <summary>
     /// The view model that manages the user's profile
@@ -21,6 +31,10 @@ function ProfileViewModel(svcUrl, id) {
     /// </summary>
     self.valid = ko.observable(true);
 
+    self.availableStates = [new Country('California', 'CA'), new Country('Colorado', 'CO')];
+
+    self.selectedState = ko.observable();
+
     ///// <summary>
     ///// An observable containing the logged on user's profile.
     ///// </summary>
@@ -38,25 +52,6 @@ function ProfileViewModel(svcUrl, id) {
             }
         }
     }
-
-    ////computed values that determine current display info and user state.
-    //self.firstname = ko.computed(function () {
-    //    if (self.profile() != undefined && self.profile() != null) {
-    //        return self.profile().FirstName;
-    //    }
-    //    else {
-    //        return '';
-    //    }
-    //}, self);
-
-    //self.lastname = ko.computed(function () {
-    //    if (self.profile() != undefined && self.profile() != null) {
-    //        return self.profile().LastName;
-    //    }
-    //    else {
-    //        return '';
-    //    }
-    //}, self);
 
     self.fullname = ko.computed(function () {
         if (self.FirstName !== undefined && self.LastName !== undefined) {
@@ -79,6 +74,19 @@ function ProfileViewModel(svcUrl, id) {
         var jqxhr = $.get(url, function (data) {
             console.log("ProfileViewModel.getProfile() - ajax call complete");
             ko.mapping.fromJS(data, mapping, self);
+            if (self.State !== undefined && self.State() !== '') {
+                ko.utils.arrayForEach(self.availableStates, function (value) {
+                    if (value.Code == self.State()) {
+                        self.selectedState(value);
+                    }
+                });
+            }
+            self.selectedState.subscribe(function (newValue) {
+                if (newValue && newValue.Code !== self.State()) {
+                    self.State(newValue.Code);
+                }
+            });
+
             application.navigateHome();
         })
         .error(function (jqxhr, exception) {
@@ -113,8 +121,7 @@ function ProfileViewModel(svcUrl, id) {
         var jqxhr = $.post(url, input, function (data) {
             console.log("ProfileViewModel.saveProfile() - ajax call complete");
             ko.mapping.fromJS(data, self);
-            //TODO - Denote successful save rather than navigate.
-            application.navigateHome();
+
         })
         .error(function (jqxhr, exception) {
             if (jqxhr.status == '401') {

@@ -21,6 +21,7 @@ namespace ByoBaby.Model.Repositories
                     var profile = new Person()
                     {
                         City = "Denver",
+                        State = "CO",
                         Email = "nicknieslanik@gmail.com",
                         FirstName = "Nick",
                         LastName = "Nieslanik",

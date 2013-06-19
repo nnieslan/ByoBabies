@@ -46,6 +46,9 @@ namespace ByoBaby.Model
         public string City { get; set; }
 
         [DataMember]
+        public string State { get; set; }
+
+        [DataMember]
         public string Neighborhood { get; set; }
 
         [DataMember]

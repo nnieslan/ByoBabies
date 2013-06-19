@@ -71,6 +71,10 @@ namespace ByoBaby.Rest.Controllers
                 {
                     existingProfile.City = profile.City;
                 }
+                if (string.Compare(existingProfile.State, profile.State, StringComparison.OrdinalIgnoreCase) != 0)
+                {
+                    existingProfile.State = profile.State;
+                }
                 if (string.Compare(existingProfile.Neighborhood, profile.Neighborhood, StringComparison.OrdinalIgnoreCase) != 0)
                 {
                     existingProfile.Neighborhood = profile.Neighborhood;

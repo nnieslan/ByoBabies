@@ -45,6 +45,10 @@ namespace ByoBaby.Rest.Models
 
         [Required]
         [DataMember(IsRequired = true)]
+        public string State { get; set; }
+
+        [Required]
+        [DataMember(IsRequired = true)]
         public string Neighborhood { get; set; }
 
         //public ICollection<string> Interests { get; set; }
@@ -66,6 +70,7 @@ namespace ByoBaby.Rest.Models
                 FirstName = person.FirstName,
                 LastName = person.LastName,
                 City = person.City,
+                State = person.State,
                 MobilePhone = person.MobilePhone,
                 HomePhone = person.HomePhone,
                 Neighborhood = person.Neighborhood,
