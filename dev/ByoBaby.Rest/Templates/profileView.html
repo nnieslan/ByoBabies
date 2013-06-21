@@ -30,8 +30,34 @@
         </div>
         <div data-role="collapsible">
             <h4>Children</h4>
+
             <ul id="profileView-childrenlist" data-role="listview" data-inset="true">
+                <!-- ko foreach: Children -->
+                <li data-role="fieldcontain">
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a">
+                            <input type="text" data-bind="value: Name" data-clear-btn="true">
+                        </div>
+                        <div class="ui-block-b">
+                            <input type="text" data-bind="value: Age" data-clear-btn="true">
+                        </div>
+                        <div class="ui-block-c">
+                            <select data-mini="true" data-bind="value: Gender">
+                                <option value="">Boy/Girl</option>
+                                <option value="M">Boy</option>
+                                <option value="F">Girl</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+                <!-- /ko -->
+                <li data-role="fieldcontain">
+                    <div class="ui-grid-solo">
+                        <button id="addChild" type="submit" data-bind="click: addChild" data-theme="a">Add...</button>
+                    </div>
+                </li>
             </ul>
+
         </div>
         <div data-role="collapsible">
             <h4>Groups</h4>

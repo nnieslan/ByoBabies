@@ -59,32 +59,7 @@ namespace ByoBaby.Rest.Controllers
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
                 }
 
-                if (string.Compare(existingProfile.LastName, profile.LastName, StringComparison.OrdinalIgnoreCase) != 0)
-                {
-                    existingProfile.LastName = profile.LastName;
-                }
-                if (string.Compare(existingProfile.FirstName, profile.FirstName, StringComparison.OrdinalIgnoreCase) != 0)
-                {
-                    existingProfile.FirstName = profile.FirstName;
-                }
-                if (string.Compare(existingProfile.City, profile.City, StringComparison.OrdinalIgnoreCase) != 0)
-                {
-                    existingProfile.City = profile.City;
-                }
-                if (string.Compare(existingProfile.State, profile.State, StringComparison.OrdinalIgnoreCase) != 0)
-                {
-                    existingProfile.State = profile.State;
-                }
-                if (string.Compare(existingProfile.Neighborhood, profile.Neighborhood, StringComparison.OrdinalIgnoreCase) != 0)
-                {
-                    existingProfile.Neighborhood = profile.Neighborhood;
-                }
-                if (string.Compare(existingProfile.MobilePhone, profile.MobilePhone, StringComparison.OrdinalIgnoreCase) != 0)
-                {
-                    existingProfile.MobilePhone = profile.MobilePhone;
-                }
-
-                //TODO - home Phone, email, interests, kids, groups
+                MapProfileToPerson(profile, existingProfile);
 
                 try
                 {
@@ -148,6 +123,60 @@ namespace ByoBaby.Rest.Controllers
         {
             db.Dispose();
             base.Dispose(disposing);
+        }
+
+        private static void MapProfileToPerson (ProfileViewModel profile, Person existingProfile)
+        {
+            if (string.Compare(existingProfile.LastName, profile.LastName, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                existingProfile.LastName = profile.LastName;
+            }
+            if (string.Compare(existingProfile.FirstName, profile.FirstName, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                existingProfile.FirstName = profile.FirstName;
+            }
+            if (string.Compare(existingProfile.City, profile.City, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                existingProfile.City = profile.City;
+            }
+            if (string.Compare(existingProfile.State, profile.State, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                existingProfile.State = profile.State;
+            }
+            if (string.Compare(existingProfile.Neighborhood, profile.Neighborhood, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                existingProfile.Neighborhood = profile.Neighborhood;
+            }
+            if (string.Compare(existingProfile.MobilePhone, profile.MobilePhone, StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                existingProfile.MobilePhone = profile.MobilePhone;
+            }
+
+            foreach (var child in profile.Children)
+            {
+                if (child.Id.HasValue)
+                {
+                    var existingChild = existingProfile.Children.First(c => c.Id == child.Id.Value);
+                    if (string.Compare(existingChild.Name, child.Name, StringComparison.OrdinalIgnoreCase) != 0)
+                    {
+                        existingChild.Name = child.Name;
+                    }
+                    if (existingChild.Age != child.Age)
+                    {
+                        existingChild.Age = child.Age;
+                    }
+                    if (string.Compare(existingChild.Gender, child.Gender, StringComparison.OrdinalIgnoreCase) != 0)
+                    {
+                        existingChild.Gender = child.Gender;
+                    }
+                }
+                else
+                {
+                    existingProfile.Children.Add(new Child() { ParentId = existingProfile.Id, Name = child.Name, Age = child.Age, Gender = child.Gender });
+                }
+            }
+
+            //TODO - home Phone, email, interests, groups
         }
     }
 }

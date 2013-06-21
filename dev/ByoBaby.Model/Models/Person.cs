@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ServiceModel;
@@ -22,7 +23,7 @@ namespace ByoBaby.Model
         public Guid UserId { get; set; }
 
         [DataMember]
-        public ICollection<Group> MemberOf { get; set; }
+        public Collection<Group> MemberOf { get; set; }
 
         [DataMember]
         public DateTime MemberSince { get; set; }
@@ -52,10 +53,10 @@ namespace ByoBaby.Model
         public string Neighborhood { get; set; }
 
         [DataMember]
-        public ICollection<string> Interests { get; set; }
+        public Collection<string> Interests { get; set; }
 
         [DataMember]
-        public ICollection<Child> Children { get; set; }
+        public Collection<Child> Children { get; set; }
 
         [DataMember]
         public DateTime LastUpdated { get; set; }

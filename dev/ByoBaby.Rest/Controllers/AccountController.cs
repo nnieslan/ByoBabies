@@ -58,7 +58,7 @@ namespace ByoBaby.Rest.Controllers
         /// </summary>
         /// <returns></returns>
         [System.Web.Http.Authorize()]
-        public Person Get()
+        public ProfileViewModel Get()
         {
             Log.LogInformation("Entering AccountController.Get()");
             try
@@ -69,8 +69,11 @@ namespace ByoBaby.Rest.Controllers
                 var id = currentUser.GetUserId();
                 using (ByoBabyRepository context = new ByoBabyRepository())
                 {
-                    var person = context.People.FirstOrDefault(p => p.UserId == id);
-                    return person;
+                    var person = context.People
+                        .Include("Children")
+                        .Include("MemberOf")
+                        .FirstOrDefault(p => p.UserId == id);
+                    return ProfileViewModel.FromPerson(person);
                 }
             }
             finally

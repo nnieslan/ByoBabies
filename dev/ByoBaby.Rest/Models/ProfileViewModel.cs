@@ -13,11 +13,22 @@ namespace ByoBaby.Rest.Models
     [DataContract]
     public class ProfileViewModel
     {
+        #region ctor
+        
+        public ProfileViewModel()
+        {
+            this.MemberOf = new List<Group>();
+            this.Children = new List<ChildViewModel>();
+        }
+
+        #endregion
+
         [Required]
         [DataMember(IsRequired=true)]
         public long Id { get; set; }
 
-        //public ICollection<Group> MemberOf { get; set; }
+        [DataMember()]
+        public List<Group> MemberOf { get; set; }
 
         public DateTime MemberSince { get; set; }
 
@@ -51,9 +62,11 @@ namespace ByoBaby.Rest.Models
         [DataMember(IsRequired = true)]
         public string Neighborhood { get; set; }
 
-        //public ICollection<string> Interests { get; set; }
+        [DataMember()]
+        public List<string> Interests { get; set; }
 
-        //public ICollection<Child> Children { get; set; }
+        [DataMember()]
+        public List<ChildViewModel> Children { get; set; }
 
         public DateTime LastUpdated { get; set; }
 
@@ -64,7 +77,7 @@ namespace ByoBaby.Rest.Models
                 throw new ArgumentNullException("person");
             }
 
-            return new ProfileViewModel()
+            var profile = new ProfileViewModel()
             {
                 Id = person.Id,
                 FirstName = person.FirstName,
@@ -78,6 +91,12 @@ namespace ByoBaby.Rest.Models
                 MemberSince = person.MemberSince,
                 LastUpdated = person.LastUpdated
             };
+            if (person.Children != null)
+            {
+                profile.Children = new List<ChildViewModel>(
+                    person.Children.Select(c => new ChildViewModel() { Name = c.Name, Age = c.Age, Gender = c.Gender, Id = c.Id }));
+            }
+            return profile;
         }
 
     }

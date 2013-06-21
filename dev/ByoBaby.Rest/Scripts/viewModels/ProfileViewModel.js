@@ -12,6 +12,16 @@ function Country(name, code) {
     this.Code = code;
 };
 
+function ChildViewModel(data) {
+    var self = this;
+    ko.mapping.fromJS(data, {}, self);
+};
+
+function GroupViewModel(data) {
+    var self = this;
+    ko.mapping.fromJS(data, {}, self);
+};
+
 function ProfileViewModel(svcUrl, id) {
     /// <summary>
     /// The view model that manages the user's profile
@@ -42,11 +52,17 @@ function ProfileViewModel(svcUrl, id) {
 
     var mapping = {
         'Children': {
+            create: function (options) {
+                return new ChildViewModel(options.data);
+            },
             key: function (data) {
                 return ko.utils.unwrapObservable(data.Id);
             }
         },
         'MemberOf': {
+            create: function (options) {
+                return new GroupViewModel(options.data);
+            },
             key: function (data) {
                 return ko.utils.unwrapObservable(data.Id);
             }
@@ -117,6 +133,9 @@ function ProfileViewModel(svcUrl, id) {
         var url = self.baseUrl + 'api/' + self.Id() + '/profile';
         
         var input = ko.mapping.toJS(self);
+        if (input.Children == null) { input.Children = []; }
+        if (input.MemberOf == null) { input.MemberOf = []; }
+        if (input.Interests == null) { input.Interests = []; }
 
         var jqxhr = $.post(url, input, function (data) {
             console.log("ProfileViewModel.saveProfile() - ajax call complete");
@@ -142,7 +161,6 @@ function ProfileViewModel(svcUrl, id) {
     };
 
     self.afterViewRender = function (elements) {
-        //TODO - figure out how to apply this functionality inside the view models.
         $('#mobilePhone').watermark('phone number');
         $('#neighborhood').watermark('neighborhood');
         $('#state').watermark('state');
@@ -166,4 +184,14 @@ function ProfileViewModel(svcUrl, id) {
         //});
     }
 
+    self.addChild = function () {
+        var list = '#profileView-childrenlist';
+        self.Children.push(new ChildViewModel({
+            'Id': null, 'Name': '', 'Age': '', 'Gender': ''
+        }));
+        //redraw the list to show the new child correctly.
+        $(list).trigger('create')
+        $(list).listview("refresh");
+
+    };
 };

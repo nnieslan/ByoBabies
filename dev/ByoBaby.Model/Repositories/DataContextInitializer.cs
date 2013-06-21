@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
@@ -30,10 +31,15 @@ namespace ByoBaby.Model.Repositories
                         HomePhone = "720-939-9808",
                         MobilePhone = "720-939-9808",
                         MemberSince = DateTime.Now,
-                        LastUpdated = DateTime.Now,
+                        LastUpdated = DateTime.Now
 
                     };
                     context.People.Add(profile);
+                    context.SaveChanges();
+                    profile.Children = new Collection<Child>()
+                    {
+                        new Child() { ParentId = profile.Id, Name="Ephraim", Age=1, Gender = "M"} 
+                    };
                     context.SaveChanges();
                 }
             }
