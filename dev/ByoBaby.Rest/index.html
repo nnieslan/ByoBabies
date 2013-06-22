@@ -44,9 +44,10 @@
                 data-theme="a"
                 data-role="button"
                 data-icon="bars"
+                data-iconpos="notext"
                 data-shadow="false"
                 data-iconshadow="false"
-                data-inline="true">Menu</a>
+                data-inline="true"></a>
             <h2 class="ui-wizard-header-text">ByoBabies</h2>
         </div>
 
@@ -60,8 +61,9 @@
         </div>
 
 
-        <div data-role="panel" id="left-panel" data-theme="a" data-dismissible="false">
-            <a data-role="button" data-theme="a" data-icon="back" data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired"></a>
+        <div data-role="panel" id="left-panel" data-theme="a">
+            <a data-role="button" data-theme="a" data-icon="back" data-rel="close"
+                data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired">Sign out</a>
             <ul data-role="listview"
                 id="pageList"
                 data-inset="true"

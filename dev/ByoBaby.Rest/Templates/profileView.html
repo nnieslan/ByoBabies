@@ -1,73 +1,91 @@
 ﻿<div id="profileView-content">
-    <h3 data-bind="text: fullname" />
-    <form id="profileView-form">
-        <div data-role="collapsible" data-theme="a" data-content-theme="b">
-            <h4>Contact Info</h4>
-            <ul id="profileView-contactinfolist" data-role="listview" data-inset="true">
-                <li data-role="fieldcontain">
-                    <div class="ui-grid-solo">
-                        <input type="text" name="mobilePhone" id="mobilePhone" data-bind="value: MobilePhone" data-clear-btn="true">
-                    </div>
-                </li>
-                <li data-role="fieldcontain">
-                    <div class="ui-grid-solo">
-                        <input type="text" name="city" id="city" data-bind="value: City" data-clear-btn="true">
-                    </div>
-                </li>
-                <li data-role="fieldcontain">
-                    <div class="ui-grid-solo">
-                        <select name="state" id="state" data-mini="true"
-                            data-bind="options: availableStates, value: selectedState, optionsText: 'Code', optionsCaption: 'State'">
-                        </select>
-                    </div>
-                </li>
-                <li data-role="fieldcontain">
-                    <div class="ui-grid-solo">
-                        <input type="text" name="neighborhood" id="neighborhood" data-bind="value: Neighborhood" data-clear-btn="true">
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div data-role="collapsible">
-            <h4>Children</h4>
+    <ul data-role="listview">
+        <li data-role="fieldcontain">
+            <div data-role="ui-grid-a">
+                <div class="ui-block-a">
+                    <img style="max-height: 75px; max-width:75px" data-bind="attr: {src: ProfilePictureUrl}" />
+                </div>
+                <div class="ui-block-b">
+                    <h3 style="padding-left: 2em;"><span data-bind="text: FirstName"></span>&nbsp;<span data-bind="    text: LastName"></span></h3>
+                    <h3 style="padding-left: 2em;"><span data-bind="text: Email"></span></h3>
+                </div>
+            </div>
+        </li>
+        <li data-role="fieldcontain">
+            <div data-role="collapsible-set" data-theme="a" data-content-theme="b">
+                <div data-role="collapsible" data-theme="a" data-content-theme="b">
+                    <h4>Contact Info</h4>
+                    <ul id="profileView-contactinfolist" data-role="listview" data-inset="true">
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <input type="text" name="mobilePhone" id="mobilePhone" data-bind="value: MobilePhone" data-clear-btn="true">
+                            </div>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <input type="text" name="city" id="city" data-bind="value: City" data-clear-btn="true">
+                            </div>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <select name="state" id="state" data-mini="true"
+                                    data-bind="options: availableStates, value: selectedState, optionsText: 'Code', optionsCaption: 'State'">
+                                </select>
+                            </div>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <input type="text" name="neighborhood" id="neighborhood" data-bind="value: Neighborhood" data-clear-btn="true">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div data-role="collapsible">
+                    <h4>Children</h4>
+                    <ul id="profileView-childrenlist" data-role="listview" data-split-icon="delete" data-theme="a" data-split-theme="b" data-inset="true">
+                        <!-- ko foreach: Children -->
+                        <li data-role="fieldcontain">
+                            <a href="#">
+                                <div class="ui-grid-b">
+                                    <div class="ui-block-a">
+                                        <input name="childName" type="text" data-bind="value: Name">
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <input name="childAge" type="text" data-bind="value: Age">
+                                    </div>
+                                    <div class="ui-block-c">
+                                        <select name="childGender" data-mini="true" data-bind="value: Gender">
+                                            <option value="">Boy/Girl</option>
+                                            <option value="M">Boy</option>
+                                            <option value="F">Girl</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </a>
+                            <a data-bind="click: $parent.removeChild"></a>
 
-            <ul id="profileView-childrenlist" data-role="listview" data-inset="true">
-                <!-- ko foreach: Children -->
-                <li data-role="fieldcontain">
-                    <div class="ui-grid-b">
-                        <div class="ui-block-a">
-                            <input type="text" data-bind="value: Name" data-clear-btn="true">
-                        </div>
-                        <div class="ui-block-b">
-                            <input type="text" data-bind="value: Age" data-clear-btn="true">
-                        </div>
-                        <div class="ui-block-c">
-                            <select data-mini="true" data-bind="value: Gender">
-                                <option value="">Boy/Girl</option>
-                                <option value="M">Boy</option>
-                                <option value="F">Girl</option>
-                            </select>
-                        </div>
-                    </div>
-                </li>
-                <!-- /ko -->
-                <li data-role="fieldcontain">
-                    <div class="ui-grid-solo">
-                        <button id="addChild" type="submit" data-bind="click: addChild" data-theme="a">Add...</button>
-                    </div>
-                </li>
-            </ul>
+                        </li>
+                        <!-- /ko -->
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <button id="addChild" type="submit" data-bind="click: addChild" data-theme="a">Add...</button>
+                            </div>
+                        </li>
+                    </ul>
 
-        </div>
-        <div data-role="collapsible">
-            <h4>Groups</h4>
-            <ul id="profileView-groupslist" data-role="listview" data-inset="true">
-            </ul>
-        </div>
-        <div class="ui-grid-solo">
-            <button id="saveProfile" type="submit" data-bind="click: saveProfile" data-theme="a">Save</button>
-        </div>
-    </form>
-
+                </div>
+                <div data-role="collapsible">
+                    <h4>Groups</h4>
+                    <ul id="profileView-groupslist" data-role="listview" data-inset="true">
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li data-role="fieldcontain">
+            <div class="ui-grid-solo">
+                <a id="saveProfile" data-role="button" href="#" data-bind="click: saveProfile" data-theme="a">Save</a>
+            </div>
+        </li>
+    </ul>
 
 </div>

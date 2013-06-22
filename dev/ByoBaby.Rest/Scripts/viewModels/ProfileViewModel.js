@@ -34,6 +34,8 @@ function ProfileViewModel(svcUrl, id) {
     //view model properties
     self.baseUrl = (svcUrl == undefined ? '' : svcUrl);
 
+    self.ProfilePictureUrl = 'http://m.c.lnkd.licdn.com/mpr/mpr/shrink_200_200/p/3/000/029/338/0961cc9.jpg';
+
     /// <summary>
     /// An observable containing an indicator denoting if the user-entered data is valid.
     /// This is "hack" to ensure that knockout validation doesn't render in the UI until the user
@@ -124,6 +126,9 @@ function ProfileViewModel(svcUrl, id) {
     };
 
     self.saveProfile = function () {
+
+        console.log("ProfileViewModel.saveProfile() called");
+
         if (!utilities.checkConnection()) {
             utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
             return false;
@@ -143,6 +148,8 @@ function ProfileViewModel(svcUrl, id) {
 
         })
         .error(function (jqxhr, exception) {
+            console.log("ProfileViewModel.saveProfile() - ajax POST errored : " + jqxhr.repsonseText);
+
             if (jqxhr.status == '401') {
                 application.clear();
                 return;
@@ -161,6 +168,8 @@ function ProfileViewModel(svcUrl, id) {
     };
 
     self.afterViewRender = function (elements) {
+        console.log("ProfileViewModel.afterViewRender() called");
+
         $('#mobilePhone').watermark('phone number');
         $('#neighborhood').watermark('neighborhood');
         $('#state').watermark('state');
@@ -185,6 +194,8 @@ function ProfileViewModel(svcUrl, id) {
     }
 
     self.addChild = function () {
+
+        console.log("Adding new child");
         var list = '#profileView-childrenlist';
         self.Children.push(new ChildViewModel({
             'Id': null, 'Name': '', 'Age': '', 'Gender': ''
@@ -194,4 +205,9 @@ function ProfileViewModel(svcUrl, id) {
         $(list).listview("refresh");
 
     };
+
+    self.removeChild = function (value) {
+        console.log("Removing child : " + value.Id);
+
+    }
 };
