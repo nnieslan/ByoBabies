@@ -208,6 +208,12 @@ function ProfileViewModel(svcUrl, id) {
 
     self.removeChild = function (value) {
         console.log("Removing child : " + value.Id);
-
+        //use mapped Remove in the case of an existing child
+        if (value.Id() !== null && value.Id() !== '') {
+            self.Children.mappedRemove(value);
+        } else {
+            var index = ko.utils.arrayIndexOf(self.Children(), value);
+            self.Children.remove(self.Children()[index]);
+        }
     }
 };

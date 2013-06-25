@@ -53,7 +53,7 @@ namespace ByoBaby.Rest.Controllers
                 && profile.Id == userId 
                 && userId == currentUser.GetPersonId().Value)
             {
-                Person existingProfile = db.People.Find(userId);
+                Person existingProfile = db.People.Include("Children").FirstOrDefault(u => u.Id == userId);
                 if (existingProfile == null)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -152,6 +152,21 @@ namespace ByoBaby.Rest.Controllers
                 existingProfile.MobilePhone = profile.MobilePhone;
             }
 
+            //TODO - come up with a better algo here, this is super inefficient, 
+            //       but necessary for now as the iterative collection can't be modified during first loop.
+            List<Child> toDelete = new List<Child>();
+            foreach (var existing in existingProfile.Children)
+            {
+                if (!profile.Children.Any(c => c.Id == existing.Id))
+                {
+                    toDelete.Add(existing);
+                }
+            }
+            foreach (var delete in toDelete)
+            {
+                existingProfile.Children.Remove(delete);
+            }
+
             foreach (var child in profile.Children)
             {
                 if (child.Id.HasValue)
@@ -161,9 +176,9 @@ namespace ByoBaby.Rest.Controllers
                     {
                         existingChild.Name = child.Name;
                     }
-                    if (existingChild.Age != child.Age)
+                    if (child.Age.HasValue && existingChild.Age != child.Age.Value)
                     {
-                        existingChild.Age = child.Age;
+                        existingChild.Age = child.Age.Value;
                     }
                     if (string.Compare(existingChild.Gender, child.Gender, StringComparison.OrdinalIgnoreCase) != 0)
                     {
@@ -172,7 +187,7 @@ namespace ByoBaby.Rest.Controllers
                 }
                 else
                 {
-                    existingProfile.Children.Add(new Child() { ParentId = existingProfile.Id, Name = child.Name, Age = child.Age, Gender = child.Gender });
+                    existingProfile.Children.Add(new Child() { ParentId = existingProfile.Id, Name = child.Name, Age = child.Age.Value, Gender = child.Gender });
                 }
             }
 

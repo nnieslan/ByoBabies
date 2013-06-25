@@ -147,7 +147,7 @@ function ApplicationViewModel(svcUrl) {
     /// In the event of a HTTP 401, we need to clear the application.
     /// </summary>
     self.clear = function () {
-        self.profileViewModel(new ProfileViewModel(self.baseUrl));
+        self.loadLogin(new LogonViewModel(self.baseUrl));
         self.viewModelBackStack([]);
         self.isProcessing(false);
         self.isComplete(false);

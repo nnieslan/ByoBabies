@@ -10,6 +10,7 @@ using ByoBaby.Model;
 
 namespace ByoBaby.Rest.Models
 {
+    [DataContract]
     public class ChildViewModel
     {
         [DataMember]
@@ -21,7 +22,7 @@ namespace ByoBaby.Rest.Models
 
         [Required]
         [DataMember(IsRequired = true)]
-        public int Age { get; set; }
+        public int? Age { get; set; }
 
         [Required]
         [DataMember(IsRequired = true)]
