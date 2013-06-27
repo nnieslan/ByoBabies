@@ -22,7 +22,30 @@ function GroupViewModel(data) {
     ko.mapping.fromJS(data, {}, self);
 };
 
-function ProfileViewModel(svcUrl, id) {
+
+function FriendViewModel(data) {
+    var self = this;
+    self.friendProfile = new ProfileViewModel(application.baseUrl, data)
+
+    self.viewDetails = function () {
+        application.naviateTo(self.friendProfile);
+    }
+};
+
+function FriendsViewModel(data) {
+    var self = this;
+
+    self.template = "friendsListView";
+    self.profile = data;
+
+    self.afterViewRender = function (elements) {
+        var view = '#' + self.template + '-content';
+        $(view).trigger('create');
+    };
+    
+};
+
+function ProfileViewModel(svcUrl, data) {
     /// <summary>
     /// The view model that manages the user's profile
     /// </summary>
@@ -33,24 +56,6 @@ function ProfileViewModel(svcUrl, id) {
 
     //view model properties
     self.baseUrl = (svcUrl == undefined ? '' : svcUrl);
-
-    self.ProfilePictureUrl = 'http://m.c.lnkd.licdn.com/mpr/mpr/shrink_200_200/p/3/000/029/338/0961cc9.jpg';
-
-    /// <summary>
-    /// An observable containing an indicator denoting if the user-entered data is valid.
-    /// This is "hack" to ensure that knockout validation doesn't render in the UI until the user
-    /// clicks an action button the first time.
-    /// </summary>
-    self.valid = ko.observable(true);
-
-    self.availableStates = [new Country('California', 'CA'), new Country('Colorado', 'CO')];
-
-    self.selectedState = ko.observable();
-
-    ///// <summary>
-    ///// An observable containing the logged on user's profile.
-    ///// </summary>
-    //self.profile = ko.observable();
 
     var mapping = {
         'Children': {
@@ -68,8 +73,35 @@ function ProfileViewModel(svcUrl, id) {
             key: function (data) {
                 return ko.utils.unwrapObservable(data.Id);
             }
+        },
+        'Friends': {
+            create: function (options) {
+                return new FriendViewModel(options.data);
+            },
+            key: function (data) {
+                return ko.utils.unwrapObservable(data.Id);
+            }
         }
     }
+
+    if (data !== undefined && data !== null) {
+        ko.mapping.fromJS(data, mapping, self);
+    }
+
+    self.ProfilePictureUrl = 'http://m.c.lnkd.licdn.com/mpr/mpr/shrink_200_200/p/3/000/029/338/0961cc9.jpg';
+
+    self.Friends = ko.observableArray([]);
+
+    /// <summary>
+    /// An observable containing an indicator denoting if the user-entered data is valid.
+    /// This is "hack" to ensure that knockout validation doesn't render in the UI until the user
+    /// clicks an action button the first time.
+    /// </summary>
+    self.valid = ko.observable(true);
+
+    self.availableStates = [new Country('California', 'CA'), new Country('Colorado', 'CO')];
+
+    self.selectedState = ko.observable();
 
     self.fullname = ko.computed(function () {
         if (self.FirstName !== undefined && self.LastName !== undefined) {
@@ -77,7 +109,7 @@ function ProfileViewModel(svcUrl, id) {
         }
         return '';
     }, self);
-    
+
     /// <summary>
     /// A function that fetches the profile of the current user.
     /// </summary>
@@ -134,9 +166,9 @@ function ProfileViewModel(svcUrl, id) {
             return false;
         }
         application.isProcessing(true);
-        
+
         var url = self.baseUrl + 'api/' + self.Id() + '/profile';
-        
+
         var input = ko.mapping.toJS(self);
         if (input.Children == null) { input.Children = []; }
         if (input.MemberOf == null) { input.MemberOf = []; }
@@ -174,7 +206,7 @@ function ProfileViewModel(svcUrl, id) {
         $('#neighborhood').watermark('neighborhood');
         $('#state').watermark('state');
         $('#city').watermark('city');
-        
+
         //refreshing jquery themes post view render via .trigger().
         //This is due to timing of knockout template rendering.  To accomplish
         //this I had to put a base div in each template with an id based
@@ -191,6 +223,41 @@ function ProfileViewModel(svcUrl, id) {
         //    self.saveProfile();
         //    return false;
         //});
+    }
+
+    self.viewFriends = function () {
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+            return false;
+        }
+
+        var url = self.baseUrl + 'api/' + self.Id() + '/friends';
+        var jqxhr = $.get(url, function (data) {
+            console.log("ProfileViewModel.viewFriends() - ajax call complete");
+            self.Friends([]);
+            var i, max = data.length;
+            for (i = 0; i < max; i++){
+                var current = new FriendViewModel(data[i]);
+                self.Friends.push(current);
+            }
+            application.navigateTo(new FriendsViewModel(self));
+        })
+        .error(function (jqxhr, exception) {
+            if (jqxhr.status == '401') {
+                application.clear();
+                return;
+            }
+
+            if (jqxhr.responseText != '') {
+                utilities.notifyUser(jqxhr.responseText, 'Error');
+            } else {
+                utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
+            }
+        })
+        .complete(function () {
+            application.isProcessing(false);
+
+        });
     }
 
     self.addChild = function () {

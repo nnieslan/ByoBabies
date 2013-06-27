@@ -1,0 +1,11 @@
+﻿<div id="friendsListView-content">
+    <ul data-role="listview"
+        data-autodividers="true"
+        data-filter="true"
+        data-bind="foreach: profile.Friends()">
+        <li>
+            <a data-bind="text: $data.friendProfile.FirstName() + ' ' + $data.friendProfile.LastName(), click: function () { $root.navigateTo($data.friendProfile); } "></a>
+        </li>
+    </ul>
+
+</div>

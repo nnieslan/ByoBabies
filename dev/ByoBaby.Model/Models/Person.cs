@@ -26,6 +26,9 @@ namespace ByoBaby.Model
         public Collection<Group> MemberOf { get; set; }
 
         [DataMember]
+        public Collection<Person> Friends { get; set; }
+
+        [DataMember]
         public DateTime MemberSince { get; set; }
 
         [DataMember]

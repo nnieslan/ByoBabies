@@ -183,6 +183,7 @@
     <Compile Include="Controllers\BlurbController.cs" />
     <Compile Include="Controllers\ConversationController.cs" />
     <Compile Include="Controllers\EventController.cs" />
+    <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
@@ -305,6 +306,7 @@
     <Content Include="Scripts\viewModels\TasksViewModel.js" />
     <Content Include="Templates\conversationsView.html" />
     <Content Include="Templates\conversationView.html" />
+    <Content Include="Templates\friendsListView.html" />
     <Content Include="Templates\profileView.html" />
     <Content Include="Templates\registerView.html" />
     <Content Include="Templates\welcomeView.html" />
