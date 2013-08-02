@@ -6,7 +6,7 @@
                     <img style="max-height: 75px; max-width: 75px" data-bind="attr: { src: ProfilePictureUrl }" />
                 </div>
                 <div class="ui-block-b">
-                    <h3 style="padding-left: 2em;"><span data-bind="text: FirstName"></span>&nbsp;<span data-bind="text: LastName"></span></h3>
+                    <h3 style="padding-left: 2em;"><span data-bind="text: FirstName"></span>&nbsp;<span data-bind="    text: LastName"></span></h3>
                     <h3 style="padding-left: 2em;"><span data-bind="text: Email"></span></h3>
                 </div>
             </div>
@@ -17,37 +17,51 @@
                     <h4>Contact Info</h4>
                     <ul id="firendDetailView-contactinfolist" data-role="listview" data-inset="true">
                         <li data-role="fieldcontain">
-                            <p data-bind="value: MobilePhone" />
+                            <div class="ui-grid-solo">
+                                <h4 data-bind="text: MobilePhone" />
+                            </div>
                         </li>
                         <li data-role="fieldcontain">
-                            <p data-bind="value: City" />
+                            <div class="ui-grid-solo">
+                                <h4><span data-bind="text: City" />,&nbsp<span data-bind="    text: State" /></h4>
+                            </div>
                         </li>
                         <li data-role="fieldcontain">
-                            <p data-bind="value: selectedState" />
-                        </li>
-                        <li data-role="fieldcontain">
-                            <p data-bind="value: Neighborhood" />
+                            <div class="ui-grid-solo">
+                                <h4 data-bind="text: Neighborhood" />
+                            </div>
                         </li>
                     </ul>
                 </div>
                 <div data-role="collapsible">
                     <h4>Children</h4>
                     <ul id="firendDetailView-childrenlist" data-role="listview" data-split-icon="delete" data-theme="a" data-split-theme="b" data-inset="true">
+                        <li data-role="list-divider">
+                            <div class="ui-grid-b">
+                                <div class="ui-block-a">
+                                    <h6>Name</h6>
+                                </div>
+                                <div class="ui-block-b">
+                                    <h6>Age</h6>
+                                </div>
+                                <div class="ui-block-c">
+                                    <h6>Gender</h6>
+                                </div>
+                            </div>
+                        </li>
                         <!-- ko foreach: Children -->
                         <li data-role="fieldcontain">
-                            <a href="#">
-                                <div class="ui-grid-b">
-                                    <div class="ui-block-a">
-                                        <p data-bind="value: Name" />
-                                    </div>
-                                    <div class="ui-block-b">
-                                        <p data-bind="value: Age" />
-                                    </div>
-                                    <div class="ui-block-c">
-                                        <p data-bind="value: Gender" />
-                                    </div>
+                            <div class="ui-grid-b">
+                                <div class="ui-block-a">
+                                    <h6 data-bind="text: Name" />
                                 </div>
-                            </a>
+                                <div class="ui-block-b">
+                                    <h6 data-bind="text: Age" />
+                                </div>
+                                <div class="ui-block-c">
+                                    <h6 data-bind="text: Gender" />
+                                </div>
+                            </div>
                         </li>
                         <!-- /ko -->
                     </ul>

@@ -100,16 +100,7 @@ function PersonViewModel(svcUrl, data) {
         var url = self.baseUrl + 'api/' + application.loggedInUserProfileId() + '/profile/' + self.Id();
         var jqxhr = $.get(url, function (data) {
             console.log("PersonViewModel.getProfile() - ajax call complete");
-
-            self.update(data);
-            if (self.State !== undefined && self.State() !== '') {
-                ko.utils.arrayForEach(self.availableStates, function (value) {
-                    if (value.Code == self.State()) {
-                        self.selectedState(value);
-                    }
-                });
-            }
-            
+            self.update(data);            
             if (navigateDelegate !== undefined) { navigateDelegate(); }
         })
         .error(function (jqxhr, exception) {
