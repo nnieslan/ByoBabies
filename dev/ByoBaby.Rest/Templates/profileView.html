@@ -3,11 +3,14 @@
         <li data-role="fieldcontain">
             <div data-role="ui-grid-a">
                 <div class="ui-block-a">
-                    <img style="max-height: 75px; max-width:75px" data-bind="attr: {src: ProfilePictureUrl}" />
+                    <img style="max-height: 75px; max-width: 75px" data-bind="attr: { src: ProfilePictureUrl }" /><br />
+                    <a style="font-size: smaller" data-bind="click: toggleUploader">change...</a>
                 </div>
                 <div class="ui-block-b">
                     <h3 style="padding-left: 2em;"><span data-bind="text: FirstName"></span>&nbsp;<span data-bind="    text: LastName"></span></h3>
                     <h3 style="padding-left: 2em;"><span data-bind="text: Email"></span></h3>
+                    <!-- TODO - Replace with Phone specific func later -->
+                    <input style="margin-left: 2em;" type="file" data-mini="true" data-bind="visible: ShowUploader" />
                 </div>
             </div>
         </li>

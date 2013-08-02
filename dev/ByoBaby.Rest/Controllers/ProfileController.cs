@@ -6,9 +6,11 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using ByoBaby.Rest.Models;
+using ByoBaby.Rest.Helpers;
 using ByoBaby.Model;
 using ByoBaby.Model.Repositories;
 using ByoBaby.Security;
@@ -29,7 +31,11 @@ namespace ByoBaby.Rest.Controllers
         // GET api/Profile/5 - get another user's profile
         public ProfileViewModel GetProfile(long userId, long id)
         {
-            Person profile = db.People.Find(id);
+            Person profile = db.People
+                .Include("Children")
+                .Include("MemberOf")
+                .Include("Friends")
+                .FirstOrDefault(u => u.Id == id);
             if (profile == null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -37,6 +43,40 @@ namespace ByoBaby.Rest.Controllers
 
             return ProfileViewModel.FromPerson(profile);
         }
+
+        // POST api/Profile/UploadProfilePicture - add a picture to your profile.
+        public Task<IEnumerable<string>> UploadProfilePicture()
+        {
+            if (Request.Content.IsMimeMultipartContent())
+            {
+                string folderName = "uploads";
+                string serverPath = HttpContext.Current.Server.MapPath(string.Format("~/{0}", folderName));
+                string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
+
+                var streamProvider = new CustomMultipartFormDataStreamProvider(serverPath);
+                var task = Request.Content
+                    .ReadAsMultipartAsync(streamProvider)
+                    .ContinueWith<IEnumerable<string>>(t =>
+                    {
+                        if (t.IsFaulted || t.IsCanceled)
+                            throw new HttpResponseException(HttpStatusCode.InternalServerError);
+
+                        var fileInfo = streamProvider.FileData.Select(i =>
+                        {
+                            return string.Format("{0}/{1}/{2}", rootUrl, folderName, i.LocalFileName);
+                        });
+                        //TODO - assign the new Url to the user's profile object and save it.
+                        return fileInfo;
+                    });
+
+                return task;
+            }
+            else
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
+            }
+        }
+
 
         // POST api/Profile - Existing user update
         public HttpResponseMessage PostProfile(

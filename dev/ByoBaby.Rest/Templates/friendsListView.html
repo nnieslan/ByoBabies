@@ -4,7 +4,7 @@
         data-filter="true"
         data-bind="foreach: profile.Friends()">
         <li>
-            <a data-bind="text: $data.friendProfile.FirstName() + ' ' + $data.friendProfile.LastName(), click: function () { $root.navigateTo($data.friendProfile); } "></a>
+            <a data-bind="text: $data.FirstName() + ' ' + $data.LastName(), click: function () { $data.viewDetails(); } "></a>
         </li>
     </ul>
 

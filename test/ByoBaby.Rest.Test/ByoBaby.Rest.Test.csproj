@@ -16,7 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\dev\</SolutionDir>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\dev\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -110,11 +110,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dev\ByoBaby.Model\ByoBaby.Model.csproj">
+    <ProjectReference Include="..\..\dev\ByoBaby.Model\ByoBaby.Model.csproj">
       <Project>{4e9088e6-88d1-4165-8ede-0a8d3e2ff512}</Project>
       <Name>ByoBaby.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\dev\ByoBaby.Rest\ByoBaby.Rest.csproj">
+    <ProjectReference Include="..\..\dev\ByoBaby.Rest\ByoBaby.Rest.csproj">
       <Project>{28b1e4df-7ec9-458a-85f9-aa50b06d940e}</Project>
       <Name>ByoBaby.Rest</Name>
     </ProjectReference>

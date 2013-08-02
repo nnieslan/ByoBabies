@@ -2,7 +2,6 @@
 
 /*globals ko*/
 
-
 function Country(name, code) {
     /// <summary>
     /// The view model that represents a state or province
@@ -22,16 +21,6 @@ function GroupViewModel(data) {
     ko.mapping.fromJS(data, {}, self);
 };
 
-
-function FriendViewModel(data) {
-    var self = this;
-    self.friendProfile = new ProfileViewModel(application.baseUrl, data)
-
-    self.viewDetails = function () {
-        application.naviateTo(self.friendProfile);
-    }
-};
-
 function FriendsViewModel(data) {
     var self = this;
 
@@ -42,18 +31,14 @@ function FriendsViewModel(data) {
         var view = '#' + self.template + '-content';
         $(view).trigger('create');
     };
-    
+
 };
 
-function ProfileViewModel(svcUrl, data) {
-    /// <summary>
-    /// The view model that manages the user's profile
-    /// </summary>
-
+function PersonViewModel(svcUrl, data) {
     var self = this;
 
-    self.template = "profileView";
-
+    self.template = "personView";
+    self.profile = data;
     //view model properties
     self.baseUrl = (svcUrl == undefined ? '' : svcUrl);
 
@@ -84,13 +69,135 @@ function ProfileViewModel(svcUrl, data) {
         }
     }
 
-    if (data !== undefined && data !== null) {
-        ko.mapping.fromJS(data, mapping, self);
+    self.update = function (data) {
+        if (data !== undefined && data !== null) {
+            ko.mapping.fromJS(data, mapping, self);
+        }
+    }
+    self.update(data);
+    
+    self.ProfilePictureUrl = ko.observable('http://communications.iu.edu/img/photos/people/placeholder.jpg');
+    self.Friends = ko.observableArray([]);
+    //todo - make this a comprehensive and 
+    self.availableStates = [new Country('California', 'CA'), new Country('Colorado', 'CO')];
+    self.selectedState = ko.observable();
+    
+    self.viewDetails = function () {
+        self.getProfile(function () { application.navigateTo(self);});
     }
 
-    self.ProfilePictureUrl = 'http://m.c.lnkd.licdn.com/mpr/mpr/shrink_200_200/p/3/000/029/338/0961cc9.jpg';
+    /// <summary>
+    /// A function that fetches the profile of the current user.
+    /// </summary>
+    self.getProfile = function (navigateDelegate) {
 
-    self.Friends = ko.observableArray([]);
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+            return false;
+        }
+
+        application.isProcessing(true);
+        var url = self.baseUrl + 'api/' + application.loggedInUserProfileId() + '/profile/' + self.Id();
+        var jqxhr = $.get(url, function (data) {
+            console.log("PersonViewModel.getProfile() - ajax call complete");
+
+            self.update(data);
+            if (self.State !== undefined && self.State() !== '') {
+                ko.utils.arrayForEach(self.availableStates, function (value) {
+                    if (value.Code == self.State()) {
+                        self.selectedState(value);
+                    }
+                });
+            }
+            
+            if (navigateDelegate !== undefined) { navigateDelegate(); }
+        })
+        .error(function (jqxhr, exception) {
+            if (jqxhr.status == '401') {
+                application.clear();
+                return;
+            }
+
+            if (jqxhr.responseText != '') {
+                utilities.notifyUser(jqxhr.responseText, 'Error');
+            } else {
+                utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
+            }
+        })
+        .complete(function () {
+            application.isProcessing(false);
+        });
+    };
+
+    self.viewFriends = function () {
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+            return false;
+        }
+
+        var url = self.baseUrl + 'api/' + self.Id() + '/friends';
+        var jqxhr = $.get(url, function (data) {
+            console.log("PersonViewModel.viewFriends() - ajax call complete");
+            self.Friends([]);
+            var i, max = data.length;
+            for (i = 0; i < max; i++) {
+                var current = new FriendViewModel(new PersonViewModel(self.baseUrl, data[i]));
+                self.Friends.push(current);
+            }
+            application.navigateTo(new FriendsViewModel(self));
+        })
+        .error(function (jqxhr, exception) {
+            if (jqxhr.status == '401') {
+                application.clear();
+                return;
+            }
+
+            if (jqxhr.responseText != '') {
+                utilities.notifyUser(jqxhr.responseText, 'Error');
+            } else {
+                utilities.notifyUser('Unable to the friends of the currently selected person. Please try again later.', 'Error');
+            }
+        })
+        .complete(function () {
+            application.isProcessing(false);
+
+        });
+    }
+
+    self.afterViewRender = function (elements) {
+        var view = '#' + self.template + '-content';
+        var list = '#' + self.template + '-list';
+        $(view).trigger('create');
+
+        //refreshing the ui-content div size after the header appears post-login.
+        $('#ui-content').trigger('resize');
+
+    };
+};
+
+function FriendViewModel(data) {
+
+    function F() { }
+    F.prototype = data;
+    F.prototype.template = "friendDetailView";
+    var retval = new F();
+
+    return retval;
+};
+
+function ProfileViewModel(data) {
+    /// <summary>
+    /// The view model that manages the user's profile
+    /// </summary>
+    
+    function P() { }
+    P.prototype = data;
+    P.prototype.template = "profileView";
+    
+    var self = new P();
+
+    self.ShowUploader = ko.observable(false);
+    self.Notifications = ko.observableArray([]);
 
     /// <summary>
     /// An observable containing an indicator denoting if the user-entered data is valid.
@@ -98,10 +205,6 @@ function ProfileViewModel(svcUrl, data) {
     /// clicks an action button the first time.
     /// </summary>
     self.valid = ko.observable(true);
-
-    self.availableStates = [new Country('California', 'CA'), new Country('Colorado', 'CO')];
-
-    self.selectedState = ko.observable();
 
     self.fullname = ko.computed(function () {
         if (self.FirstName !== undefined && self.LastName !== undefined) {
@@ -123,7 +226,8 @@ function ProfileViewModel(svcUrl, data) {
         var url = self.baseUrl + 'api/account/get';
         var jqxhr = $.get(url, function (data) {
             console.log("ProfileViewModel.getProfile() - ajax call complete");
-            ko.mapping.fromJS(data, mapping, self);
+            self.update(data);
+            //ko.mapping.fromJS(data, self.mapping, self.prototype);
             if (self.State !== undefined && self.State() !== '') {
                 ko.utils.arrayForEach(self.availableStates, function (value) {
                     if (value.Code == self.State()) {
@@ -173,6 +277,8 @@ function ProfileViewModel(svcUrl, data) {
         if (input.Children == null) { input.Children = []; }
         if (input.MemberOf == null) { input.MemberOf = []; }
         if (input.Interests == null) { input.Interests = []; }
+        //if (input.Friends == null) { input.Friends = []; }
+        //if (input.Notifications == null) { input.Notifications = []; }
 
         var jqxhr = $.post(url, input, function (data) {
             console.log("ProfileViewModel.saveProfile() - ajax call complete");
@@ -225,6 +331,10 @@ function ProfileViewModel(svcUrl, data) {
         //});
     }
 
+    self.toggleUploader = function () {
+        self.ShowUploader(!self.ShowUploader());
+    }
+
     self.viewFriends = function () {
         if (!utilities.checkConnection()) {
             utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
@@ -237,8 +347,8 @@ function ProfileViewModel(svcUrl, data) {
             self.Friends([]);
             var i, max = data.length;
             for (i = 0; i < max; i++){
-                var current = new FriendViewModel(data[i]);
-                self.Friends.push(current);
+                var current = new PersonViewModel(self.baseUrl, data[i]);
+                self.Friends.push(new FriendViewModel(current));
             }
             application.navigateTo(new FriendsViewModel(self));
         })
@@ -283,4 +393,6 @@ function ProfileViewModel(svcUrl, data) {
             self.Children.remove(self.Children()[index]);
         }
     }
+
+    return self;
 };

@@ -26,8 +26,7 @@ namespace ByoBaby.Rest.Controllers
             return existingProfile.Friends.Select(f => ProfileViewModel.FromPerson(f));
         }
 
-
-        public HttpResponseMessage PostNewFriend(long userId, long friendId)
+        public HttpResponseMessage PostNewFriend(long userId, long friendId, string message)
         {
             ByoBabiesUserPrincipal currentUser =
                     HttpContext.Current.User as ByoBabiesUserPrincipal;
@@ -37,7 +36,7 @@ namespace ByoBaby.Rest.Controllers
             //TODO - consider a more robust validation check here and some null assignment handling.
             if (userId == currentUser.GetPersonId().Value)
             {
-                Person existingProfile = db.People.Include("Friends").FirstOrDefault(u => u.Id == userId);
+                Person existingProfile = this.db.People.Include("Friends").FirstOrDefault(u => u.Id == userId);
                 if (existingProfile == null)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
@@ -50,8 +49,8 @@ namespace ByoBaby.Rest.Controllers
 
                 try
                 {
-                    existingProfile.Friends.Add(friend);
-                    db.SaveChanges();
+                    this.db.Notifications.Add(new FriendRequest() { TargetId = friendId, RequestorId = userId, Title = "Friend Request", Description = message });
+                    this.db.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -1,0 +1,68 @@
+﻿<div id="friendDetailView-content">
+    <ul id="friendDetailView-list" data-role="listview">
+        <li data-role="fieldcontain">
+            <div data-role="ui-grid-a">
+                <div class="ui-block-a">
+                    <img style="max-height: 75px; max-width: 75px" data-bind="attr: { src: ProfilePictureUrl }" />
+                </div>
+                <div class="ui-block-b">
+                    <h3 style="padding-left: 2em;"><span data-bind="text: FirstName"></span>&nbsp;<span data-bind="text: LastName"></span></h3>
+                    <h3 style="padding-left: 2em;"><span data-bind="text: Email"></span></h3>
+                </div>
+            </div>
+        </li>
+        <li data-role="fieldcontain">
+            <div data-role="collapsible-set" data-theme="a" data-content-theme="b">
+                <div data-role="collapsible" data-theme="a" data-content-theme="b">
+                    <h4>Contact Info</h4>
+                    <ul id="firendDetailView-contactinfolist" data-role="listview" data-inset="true">
+                        <li data-role="fieldcontain">
+                            <p data-bind="value: MobilePhone" />
+                        </li>
+                        <li data-role="fieldcontain">
+                            <p data-bind="value: City" />
+                        </li>
+                        <li data-role="fieldcontain">
+                            <p data-bind="value: selectedState" />
+                        </li>
+                        <li data-role="fieldcontain">
+                            <p data-bind="value: Neighborhood" />
+                        </li>
+                    </ul>
+                </div>
+                <div data-role="collapsible">
+                    <h4>Children</h4>
+                    <ul id="firendDetailView-childrenlist" data-role="listview" data-split-icon="delete" data-theme="a" data-split-theme="b" data-inset="true">
+                        <!-- ko foreach: Children -->
+                        <li data-role="fieldcontain">
+                            <a href="#">
+                                <div class="ui-grid-b">
+                                    <div class="ui-block-a">
+                                        <p data-bind="value: Name" />
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <p data-bind="value: Age" />
+                                    </div>
+                                    <div class="ui-block-c">
+                                        <p data-bind="value: Gender" />
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <!-- /ko -->
+                    </ul>
+
+                </div>
+                <div data-role="collapsible">
+                    <h4>Groups</h4>
+                    <ul id="firendDetailView-groupslist" data-role="listview" data-inset="true">
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li data-role="fieldcontain">
+            <a href="#" data-bind="click: viewFriends">Friends</a>
+        </li>
+    </ul>
+
+</div>

@@ -23,11 +23,9 @@ namespace ByoBaby.Model
         public Guid UserId { get; set; }
 
         [DataMember]
-        public Collection<Group> MemberOf { get; set; }
+        public string ProfilePictureUrl { get; set; }
 
-        [DataMember]
-        public Collection<Person> Friends { get; set; }
-
+        
         [DataMember]
         public DateTime MemberSince { get; set; }
 
@@ -60,6 +58,15 @@ namespace ByoBaby.Model
 
         [DataMember]
         public Collection<Child> Children { get; set; }
+
+        [DataMember]
+        public Collection<Group> MemberOf { get; set; }
+
+        [DataMember]
+        public Collection<Person> Friends { get; set; }
+
+        [DataMember]
+        public Collection<INotification> Notifications { get; set; }
 
         [DataMember]
         public DateTime LastUpdated { get; set; }

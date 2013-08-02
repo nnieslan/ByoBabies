@@ -63,6 +63,9 @@ namespace ByoBaby.Rest.Models
         public string Neighborhood { get; set; }
 
         [DataMember()]
+        public string ProfilePictureUrl { get; set; }
+
+        [DataMember()]
         public List<string> Interests { get; set; }
 
         [DataMember()]
@@ -88,14 +91,17 @@ namespace ByoBaby.Rest.Models
                 HomePhone = person.HomePhone,
                 Neighborhood = person.Neighborhood,
                 Email = person.Email,
+                ProfilePictureUrl = person.ProfilePictureUrl,
                 MemberSince = person.MemberSince,
                 LastUpdated = person.LastUpdated
             };
+
             if (person.Children != null)
             {
                 profile.Children = new List<ChildViewModel>(
                     person.Children.Select(c => new ChildViewModel() { Name = c.Name, Age = c.Age, Gender = c.Gender, Id = c.Id }));
             }
+            
             return profile;
         }
 

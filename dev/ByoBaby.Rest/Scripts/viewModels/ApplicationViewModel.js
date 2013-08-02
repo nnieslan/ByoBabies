@@ -77,6 +77,21 @@ function ApplicationViewModel(svcUrl) {
         return (self.logonViewModel() != null && self.logonViewModel().loggedIn() && !self.isProcessing() && !self.isComplete());
     }, this);
 
+    /// <summary> 
+    /// The currently logged in user's profile Id if possible.
+    /// </summary>
+    self.loggedInUserProfileId = function () {
+        if (self.logonViewModel() != null && self.logonViewModel().loggedIn()) {
+            for (var i = 0; i < self.tasksViewModel().tasks().length; i++) {
+                var task = self.tasksViewModel().tasks()[i];
+                if (task.DisplayName == 'Profile' && task.value.Id !== undefined) {
+                    return task.value.Id();
+                }
+            }
+        }
+        return null;
+    }
+
     //functions
 
     /// <summary> 

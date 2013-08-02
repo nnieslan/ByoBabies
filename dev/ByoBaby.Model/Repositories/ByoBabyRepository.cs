@@ -15,6 +15,7 @@ namespace ByoBaby.Model.Repositories
         public DbSet<Group> Groups { get; set; }
         public DbSet<Child> Children { get; set; }
         public DbSet<Blurb> Blurbs { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
     }

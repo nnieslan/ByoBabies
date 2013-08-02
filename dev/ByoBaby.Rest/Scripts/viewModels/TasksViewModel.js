@@ -20,7 +20,7 @@ function TasksViewModel(svcUrl) {
 
     self.loadTasks = function () {
         console.log("Loading the left nav menu view models");
-        self.tasks.push({ DisplayName: 'Profile', value: new ProfileViewModel(self.baseUrl) });
+        self.tasks.push({ DisplayName: 'Profile', value: new ProfileViewModel(new PersonViewModel(self.baseUrl)) });
         self.tasks.push({ DisplayName: 'Conversations', value: new ConversationsViewModel(self.baseUrl) });
     };
 

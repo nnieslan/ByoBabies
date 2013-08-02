@@ -25,6 +25,7 @@ namespace ByoBaby.Model.Repositories
                         City = "Denver",
                         State = "CO",
                         Email = "nicknieslanik@gmail.com",
+                        ProfilePictureUrl = "http://m.c.lnkd.licdn.com/mpr/mpr/shrink_200_200/p/3/000/029/338/0961cc9.jpg",
                         FirstName = "Nick",
                         LastName = "Nieslanik",
                         Neighborhood = "Park Hill",
