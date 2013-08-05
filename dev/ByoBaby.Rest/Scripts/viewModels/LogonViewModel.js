@@ -6,12 +6,9 @@ function LogonViewModel(svcUrl, id) {
     /// <summary>
     /// The view model that manages the logon status of a user
     /// </summary>
-
+    NavViewModel.apply(this, [svcUrl]);
     var self = this;
-
     self.template = "welcomeView";
-    //view model properties
-    self.baseUrl = svcUrl;
 
     /// <summary>
     /// An observable containing the user's logon username.

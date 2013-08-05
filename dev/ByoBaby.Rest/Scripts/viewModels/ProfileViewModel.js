@@ -22,26 +22,31 @@ function GroupViewModel(data) {
 };
 
 function FriendsViewModel(data) {
-    var self = this;
+    NavViewModel.apply(this, [data.baseUrl]);
 
+    var self = this;
+    self.button(new BackButtonModel());
     self.template = "friendsListView";
     self.profile = data;
 
     self.afterViewRender = function (elements) {
         var view = '#' + self.template + '-content';
         $(view).trigger('create');
+        self.afterAdd();
     };
 
 };
 
 function PersonViewModel(svcUrl, data) {
-    var self = this;
 
+    NavViewModel.apply(this, [svcUrl]);
+
+    var self = this;
+    self.button(new BackButtonModel());
     self.template = "personView";
     self.profile = data;
     //view model properties
-    self.baseUrl = (svcUrl == undefined ? '' : svcUrl);
-
+    
     var mapping = {
         'Children': {
             create: function (options) {
@@ -163,6 +168,7 @@ function PersonViewModel(svcUrl, data) {
         //refreshing the ui-content div size after the header appears post-login.
         $('#ui-content').trigger('resize');
 
+        self.afterAdd();
     };
 };
 
@@ -186,7 +192,7 @@ function ProfileViewModel(data) {
     P.prototype.template = "profileView";
     
     var self = new P();
-
+    self.button(new MenuButtonModel());
     self.ShowUploader = ko.observable(false);
     self.Notifications = ko.observableArray([]);
 
@@ -315,6 +321,8 @@ function ProfileViewModel(data) {
 
         //refreshing the ui-content div size after the header appears post-login.
         $('#ui-content').trigger('resize');
+
+        self.afterAdd();
         //$(list).listview("refresh");
         //$(form).submit(function () {
         //    self.saveProfile();

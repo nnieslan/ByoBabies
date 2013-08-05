@@ -6,12 +6,12 @@ function RegistrationViewModel(svcUrl) {
     /// <summary>
     /// The view model that manages the logon status of a user
     /// </summary>
+    /// 
+    NavViewModel.apply(this, [svcUrl]);
 
     var self = this;
 
     self.template = "registerView";
-    //view model properties
-    self.baseUrl = svcUrl;
 
     /// <summary>
     /// An observable containing the user's logon username.

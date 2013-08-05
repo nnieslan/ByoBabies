@@ -40,14 +40,15 @@
 <body>
     <div id="contentPage" data-role="page">
         <div data-role="header" data-theme="a" data-bind="fadeVisible: logonViewModel().loggedIn">
-            <a href="#left-panel"
+            <a id="navButton" 
+                data-bind="attr: { href: currentViewModel().button().href, 'data-icon': currentViewModel().button().icon}, click: function () { currentViewModel().button().clickAction();}" 
                 data-theme="a"
                 data-role="button"
-                data-icon="bars"
                 data-iconpos="notext"
                 data-shadow="false"
                 data-iconshadow="false"
                 data-inline="true"></a>
+            <!-- href="#left-panel" data-icon="bars" -->
             <h2 class="ui-wizard-header-text">ByoBabies</h2>
         </div>
 

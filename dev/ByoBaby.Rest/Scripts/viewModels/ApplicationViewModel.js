@@ -2,15 +2,55 @@
 
 /*globals ko*/
 
+
+function NavButtonModel() {
+
+    var self = this;
+    self.href = ko.observable();
+    self.icon = ko.observable();
+    self.clickAction = function () { };
+}
+
+function MenuButtonModel() {
+    NavButtonModel.apply(this);
+
+    var self = this;
+
+    self.href('#left-panel');
+    self.icon('bars');
+}
+
+function BackButtonModel() {
+    NavButtonModel.apply(this);
+
+    var self = this;
+
+    self.href('#');
+    self.icon('back');
+    self.clickAction = function () {
+        application.back();
+    }
+}
+
+function NavViewModel(svcUrl) {
+    var self = this;
+    self.baseUrl = (svcUrl == undefined ? '' : svcUrl);
+    self.button = ko.observable(new MenuButtonModel());
+
+    self.afterAdd = function () {
+        $("#navButton").buttonMarkup("refresh");
+    }
+}
+
+
 function ApplicationViewModel(svcUrl) {
     /// <summary>
     /// The view model that manages the view model back-stack
     /// </summary>
 
-    var self = this;
+    NavViewModel.apply(this, [svcUrl]);
 
-    //the application API web service Url
-    self.baseUrl = svcUrl;
+    var self = this;
 
     //the default view for the application, shown when a user is not logged in.
     self.template = "welcomeView";
@@ -211,6 +251,9 @@ function ApplicationViewModel(svcUrl) {
         }
         //refreshing the ui-content div size after the header appears post-login.
         $('#ui-content').trigger('resize');
+        if (self.logonViewModel().loggedIn()) {
+            self.afterAdd();
+        }
 
     }
 }

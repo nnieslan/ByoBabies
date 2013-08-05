@@ -7,10 +7,9 @@ function TasksViewModel(svcUrl) {
     /// The view model that manages the application task display and navigation
     /// </summary>
 
-    var self = this;
+    NavViewModel.apply(this, [svcUrl]);
 
-    //the application API web service Url
-    self.baseUrl = svcUrl;
+    var self = this;
 
     //the menu view for the application, shown when a user is logged in and clicks the menu button.
     self.template = "menuView";

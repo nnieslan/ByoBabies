@@ -7,8 +7,7 @@ function ConversationsViewModel(svcUrl) {
     /// The view model that manages the graph of conversation threads
     /// </summary>
 
-    //the application API web service Url
-    this.baseUrl = svcUrl;
+    NavViewModel.apply(this, [svcUrl]);
 
     //the default view for the application, shown when a user is not logged in.
     this.template = "conversationsView";
