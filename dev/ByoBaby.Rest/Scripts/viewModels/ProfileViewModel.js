@@ -11,6 +11,22 @@ function Country(name, code) {
     this.Code = code;
 };
 
+function NotificationsViewModel(data) {
+    NavViewModel.apply(this, [data.baseUrl]);
+
+    var self = this;
+    self.button(new BackButtonModel());
+    self.template = "notificationsView";
+    self.profile = data;
+
+    self.afterViewRender = function (elements) {
+        var view = '#' + self.template + '-content';
+        $(view).trigger('create');
+        self.afterAdd();
+    };
+
+};
+
 function ChildViewModel(data) {
     var self = this;
     ko.mapping.fromJS(data, {}, self);
@@ -334,6 +350,40 @@ function ProfileViewModel(data) {
         self.ShowUploader(!self.ShowUploader());
     }
 
+    self.viewNotifications = function () {
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+            return false;
+        }
+
+        var url = self.baseUrl + 'api/notifications';
+        var jqxhr = $.get(url, function (data) {
+            console.log("ProfileViewModel.viewNotifications() - ajax call complete");
+            self.Notifications([]);
+            var i, max = data.length;
+            for (i = 0; i < max; i++) {
+                self.Notifications.push(data[i]);
+            }
+            application.navigateTo(new NotificationsViewModel(self));
+        })
+        .error(function (jqxhr, exception) {
+            if (jqxhr.status == '401') {
+                application.clear();
+                return;
+            }
+
+            if (jqxhr.responseText != '') {
+                utilities.notifyUser(jqxhr.responseText, 'Error');
+            } else {
+                utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
+            }
+        })
+        .complete(function () {
+            application.isProcessing(false);
+
+        });
+    }
+
     self.viewFriends = function () {
         if (!utilities.checkConnection()) {
             utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
@@ -360,7 +410,7 @@ function ProfileViewModel(data) {
             if (jqxhr.responseText != '') {
                 utilities.notifyUser(jqxhr.responseText, 'Error');
             } else {
-                utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
+                utilities.notifyUser('Unable to load your friends.  Please try again later.', 'Error');
             }
         })
         .complete(function () {

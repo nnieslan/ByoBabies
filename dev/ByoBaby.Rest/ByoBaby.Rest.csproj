@@ -197,6 +197,7 @@
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -321,6 +322,7 @@
     <Content Include="Templates\conversationView.html" />
     <Content Include="Templates\friendDetailView.html" />
     <Content Include="Templates\friendsListView.html" />
+    <Content Include="Templates\notificationsView.html" />
     <Content Include="Templates\profileView.html" />
     <Content Include="Templates\registerView.html" />
     <Content Include="Templates\welcomeView.html" />

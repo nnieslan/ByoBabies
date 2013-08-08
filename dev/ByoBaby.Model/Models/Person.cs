@@ -66,7 +66,7 @@ namespace ByoBaby.Model
         public Collection<Person> Friends { get; set; }
 
         [DataMember]
-        public Collection<INotification> Notifications { get; set; }
+        public Collection<Notification> Notifications { get; set; }
 
         [DataMember]
         public DateTime LastUpdated { get; set; }

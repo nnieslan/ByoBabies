@@ -1,0 +1,12 @@
+﻿<div id="notificationsView-content">
+    <ul id="notificationsView-list" data-role="listview"
+        data-autodividers="true"
+        data-filter="true"
+        data-bind="foreach: profile.Notifications()">
+        <li>
+            <h3 data-bind="text: Title"></h3>
+            <p data-bind="text: Description"></p>
+        </li>
+    </ul>
+
+</div>

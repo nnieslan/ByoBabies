@@ -40,8 +40,8 @@
 <body>
     <div id="contentPage" data-role="page">
         <div data-role="header" data-theme="a" data-bind="fadeVisible: logonViewModel().loggedIn">
-            <a id="navButton" 
-                data-bind="attr: { href: currentViewModel().button().href, 'data-icon': currentViewModel().button().icon}, click: function () { currentViewModel().button().clickAction();}" 
+            <a id="navButton"
+                data-bind="attr: { href: currentViewModel().button().href, 'data-icon': currentViewModel().button().icon }, click: function () { currentViewModel().button().clickAction(); }"
                 data-theme="a"
                 data-role="button"
                 data-iconpos="notext"
@@ -63,8 +63,16 @@
 
 
         <div data-role="panel" id="left-panel" data-theme="a">
-            <a data-role="button" data-theme="a" data-icon="back" data-rel="close"
-                data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired">Sign out</a>
+            <div class="ui-grid-a">
+                <div class="ui-block-a">
+                    <a data-role="button" data-theme="a" data-icon="back" data-rel="close"
+                        data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired">Sign out</a>
+                </div>
+                <div class="ui-block-b">
+                    <a data-role="button" data-theme="a" data-icon="star" data-rel="close"
+                        data-bind="click: viewNotifications, fadeVisible: logoutButtonRequired, enable: (loggedInUserProfile() !== null)">Notifications</a>
+                </div>
+            </div>
             <ul data-role="listview"
                 id="pageList"
                 data-inset="true"

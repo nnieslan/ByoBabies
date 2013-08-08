@@ -7,7 +7,7 @@ $.support.cors = true;
 var application;
 var utilities;
 
-var views = ["welcomeView", "profileView", "registerView", "conversationsView", "conversationView", "friendsListView", "friendDetailView"];
+var views = ["welcomeView", "profileView", "registerView", "conversationsView", "conversationView", "friendsListView", "friendDetailView", "notificationsView"];
 function initializeViewModel() {
     utilities = new Helpers();
     console.log("InitializeViewModels - calling utilities.ensureTemplates ");

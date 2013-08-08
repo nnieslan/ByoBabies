@@ -22,6 +22,13 @@ namespace ByoBaby.Rest
                defaults: new { controller = "account", action = "get" },
                constraints: new { controller = "account" });
 
+
+            config.Routes.MapHttpRoute(
+               name: "NotificationsApi",
+               routeTemplate: "api/{controller}/{id}",
+               defaults: new { controller = "notifications", id = RouteParameter.Optional },
+               constraints: new { controller = "notifications" });
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{userId}/{controller}/{id}",

@@ -100,14 +100,14 @@ function ApplicationViewModel(svcUrl) {
             return this;
         }
 
-    }, this);
+    }, self);
 
     /// <summary> 
     /// The computed indicator denoting if a back button should be shown.
     /// </summary>
     self.backButtonRequired = ko.dependentObservable(function () {  
         return (self.viewModelBackStack().length > 0 && self.currentViewModel().template != 'profileView' && !self.isProcessing() && !self.isComplete());
-    }, this);
+    }, self);
 
 
     /// <summary> 
@@ -115,24 +115,38 @@ function ApplicationViewModel(svcUrl) {
     /// </summary>
     self.logoutButtonRequired = ko.dependentObservable(function () {
         return (self.logonViewModel() != null && self.logonViewModel().loggedIn() && !self.isProcessing() && !self.isComplete());
-    }, this);
+    }, self);
+
+
+    self.loggedInUserProfile = function () {
+        if (self.logonViewModel() != null && self.logonViewModel().loggedIn()) {
+            for (var i = 0; i < self.tasksViewModel().tasks().length; i++) {
+                var task = self.tasksViewModel().tasks()[i];
+                if (task.DisplayName == 'Profile' && task.value.Id !== undefined) {
+                    return task.value;
+                }
+            }
+        }
+        return null;
+
+    }
 
     /// <summary> 
     /// The currently logged in user's profile Id if possible.
     /// </summary>
     self.loggedInUserProfileId = function () {
-        if (self.logonViewModel() != null && self.logonViewModel().loggedIn()) {
-            for (var i = 0; i < self.tasksViewModel().tasks().length; i++) {
-                var task = self.tasksViewModel().tasks()[i];
-                if (task.DisplayName == 'Profile' && task.value.Id !== undefined) {
-                    return task.value.Id();
-                }
-            }
-        }
+        var profile = self.loggedInUserProfile();
+        if (profile !== null) { return profile.Id(); }
         return null;
     }
 
     //functions
+
+    self.viewNotifications = function () {
+        if (self.loggedInUserProfile() !== null) {
+            self.loggedInUserProfile().viewNotifications();
+        }
+    }
 
     /// <summary> 
     /// Initializes the LogonViewModel for the application.
