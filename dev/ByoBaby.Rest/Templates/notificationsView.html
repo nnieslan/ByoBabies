@@ -1,11 +1,11 @@
 ﻿<div id="notificationsView-content">
     <ul id="notificationsView-list" data-role="listview"
-        data-autodividers="true"
-        data-filter="true"
+        data-autodividers="false"
+        data-filter="false"
         data-bind="foreach: profile.Notifications()">
-        <li>
+        <li data-bind="click: function () { $parent.navigateTo($data); }">
             <h3 data-bind="text: Title"></h3>
-            <p data-bind="text: Description"></p>
+            <p data-bind="text: Body"></p>
         </li>
     </ul>
 

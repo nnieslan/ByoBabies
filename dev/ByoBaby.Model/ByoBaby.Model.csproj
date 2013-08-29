@@ -53,8 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\FriendRequest.cs" />
-    <Compile Include="Models\INotification.cs" />
+    <Compile Include="Models\NotificationOriginator.cs" />
     <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\Request.cs" />
     <Compile Include="Models\Setting.cs" />
     <Compile Include="Repositories\AspNetMembership.Context.cs">
       <AutoGen>True</AutoGen>

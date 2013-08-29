@@ -22,19 +22,20 @@ namespace ByoBaby.Rest.Controllers
 
         // GET api/notifications
         [Authorize()]
-        public IEnumerable<INotification> GetNotifications()
+        public IEnumerable<NotificationViewModel> GetNotifications()
         {
-
             ByoBabiesUserPrincipal currentUser =
                 HttpContext.Current.User as ByoBabiesUserPrincipal;
 
             var id = currentUser.GetPersonId();
 
-            //TODO - restrict to the currently logged in user.
             Person existingProfile = db.People
                 .Include("Notifications")
+                .Include("Notifications.Originator")
                 .FirstOrDefault(u => u.Id == id.Value);
-            return existingProfile.Notifications;
+
+            return existingProfile.Notifications
+                .Select(s => NotificationViewModel.FromNotification(s));
         }
 
     }

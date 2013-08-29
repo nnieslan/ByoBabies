@@ -193,6 +193,7 @@ namespace ByoBaby.Rest.Controllers
         /// <summary>
         /// An HTTP POST action for logging out the current user.
         /// </summary>
+        [Authorize()]
         public HttpResponseMessage Logout()
         {
             Log.LogInformation("Entering AccountController.PostLogout()");

@@ -8,7 +8,7 @@ using ByoBaby.Model.Repositories;
 namespace ByoBaby.Model
 {
 
-    public class FriendRequest : Notification
+    public class FriendRequest : Request
     {
         public long RequestorId { get; set; }
         
@@ -17,9 +17,19 @@ namespace ByoBaby.Model
             using (ByoBabyRepository entityContext = new ByoBabyRepository())
             {
                 var requestor = entityContext.People.Find(this.RequestorId);
-                requestor.Friends.Add(entityContext.People.Find(this.TargetId));
+                var acceptor = entityContext.People.Find(this.TargetId);
+                requestor.Friends.Add(acceptor);
+                acceptor.Friends.Add(requestor);
 
-                entityContext.Notifications.Remove(this);
+                entityContext.Requests.Remove(this);
+
+                var associatedNotifications = entityContext.Notifications
+                    .Where(n => n.Originator.Id == this.Id).ToList();
+
+                foreach (var notification in associatedNotifications)
+                {
+                    entityContext.Notifications.Remove(notification);
+                }
 
                 entityContext.SaveChanges();
             }
@@ -29,7 +39,16 @@ namespace ByoBaby.Model
         {
             using (ByoBabyRepository entityContext = new ByoBabyRepository())
             {
-                entityContext.Notifications.Remove(this);
+                entityContext.Requests.Remove(this);
+                
+                var associatedNotifications = entityContext.Notifications
+                    .Where(n => n.Originator.Id == this.Id).ToList();
+
+                foreach (var notification in associatedNotifications)
+                {
+                    entityContext.Notifications.Remove(notification);
+                }
+
                 entityContext.SaveChanges();
             }
         }

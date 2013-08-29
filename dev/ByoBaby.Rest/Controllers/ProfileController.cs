@@ -22,6 +22,7 @@ namespace ByoBaby.Rest.Controllers
         private ByoBabyRepository db = new ByoBabyRepository();
 
         // GET api/Profile
+        [Authorize()]
         public IEnumerable<ProfileViewModel> GetProfiles(long userId)
         {
             throw new NotImplementedException();
@@ -29,6 +30,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // GET api/Profile/5 - get another user's profile
+        [Authorize()]
         public ProfileViewModel GetProfile(long userId, long id)
         {
             Person profile = db.People
@@ -45,6 +47,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // POST api/Profile/UploadProfilePicture - add a picture to your profile.
+        [Authorize()]
         public Task<IEnumerable<string>> UploadProfilePicture()
         {
             if (Request.Content.IsMimeMultipartContent())
@@ -79,6 +82,7 @@ namespace ByoBaby.Rest.Controllers
 
 
         // POST api/Profile - Existing user update
+        [Authorize()]
         public HttpResponseMessage PostProfile(
             [FromUri] long userId, 
             [FromBody] ProfileViewModel profile)
@@ -116,47 +120,6 @@ namespace ByoBaby.Rest.Controllers
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
-        }
-
-        //// POST api/Profile - new user profile save
-        //public HttpResponseMessage PostProfile(Person profile)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.People.Add(profile);
-        //        db.SaveChanges();
-
-        //        HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, profile);
-        //        response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = profile.Id }));
-        //        return response;
-        //    }
-        //    else
-        //    {
-        //        return Request.CreateResponse(HttpStatusCode.BadRequest);
-        //    }
-        //}
-
-        // DELETE api/Profile/5
-        public HttpResponseMessage DeleteProfile(long userId)
-        {
-            Person profile = db.People.Find(userId);
-            if (profile == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            db.People.Remove(profile);
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return Request.CreateResponse(HttpStatusCode.NotFound);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, profile);
         }
 
         protected override void Dispose(bool disposing)

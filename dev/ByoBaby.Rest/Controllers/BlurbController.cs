@@ -18,12 +18,14 @@ namespace ByoBaby.Rest.Controllers
         private ByoBabyRepository db = new ByoBabyRepository();
 
         // GET api/Blurb
+        [Authorize()]
         public IEnumerable<Blurb> GetBlurbs(long conversationId)
         {
             return db.Blurbs.Where(b => b.ConversationId == conversationId).OrderByDescending(b=> b.Id);
         }
 
         // GET api/conversation/1/Blurb/5
+        [Authorize()]
         public Blurb GetBlurb(long conversationId, long id)
         {
             Blurb blurb = db.Blurbs.FirstOrDefault(b => b.ConversationId == conversationId && b.Id == id);
@@ -36,6 +38,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // PUT api/conversation/1/Blurb/5
+        [Authorize()]
         public HttpResponseMessage PutBlurb(long conversationId, long id, Blurb blurb)
         {
             if (ModelState.IsValid && id == blurb.Id)
@@ -60,6 +63,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // POST api/conversation/1/Blurb
+        [Authorize()]
         public HttpResponseMessage PostBlurb(long conversationId, Blurb blurb)
         {
             if (ModelState.IsValid)
@@ -79,6 +83,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // DELETE api/conversation/1/blurb/5
+        [Authorize()]
         public HttpResponseMessage DeleteBlurb(long conversationId, long id)
         {
             Blurb blurb = db.Blurbs.FirstOrDefault(b => b.ConversationId == conversationId && b.Id == id);

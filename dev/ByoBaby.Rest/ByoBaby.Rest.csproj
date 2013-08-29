@@ -199,6 +199,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -206,8 +207,11 @@
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Models\ChildViewModel.cs" />
     <Compile Include="Models\LogonViewModel.cs" />
+    <Compile Include="Models\NotificationViewModel.cs" />
     <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
+    <Compile Include="Models\RequestorViewModel.cs" />
+    <Compile Include="Models\RequestViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -325,6 +329,7 @@
     <Content Include="Templates\notificationsView.html" />
     <Content Include="Templates\profileView.html" />
     <Content Include="Templates\registerView.html" />
+    <Content Include="Templates\requestView.html" />
     <Content Include="Templates\welcomeView.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

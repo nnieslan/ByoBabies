@@ -25,7 +25,18 @@ function NotificationsViewModel(data) {
         self.afterAdd();
     };
 
+    self.navigateTo = function (selected) {
+        if (selected !== null && selected.OriginatorType == 'FriendRequest') {
+            alert('is a friend request');
+        }
+    };
 };
+
+function RequestViewModel(svcUrl, data) {
+    NavViewModel.apply(this, [svcUrl]);
+
+
+}
 
 function ChildViewModel(data) {
     var self = this;
@@ -50,7 +61,6 @@ function FriendsViewModel(data) {
         $(view).trigger('create');
         self.afterAdd();
     };
-
 };
 
 function PersonViewModel(svcUrl, data) {

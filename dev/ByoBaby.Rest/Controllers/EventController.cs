@@ -18,12 +18,14 @@ namespace ByoBaby.Rest.Controllers
         private ByoBabyRepository db = new ByoBabyRepository();
 
         // GET api/Event
+        [Authorize()]
         public IEnumerable<Event> GetEvents()
         {
             return db.Events.AsEnumerable();
         }
 
         // GET api/Event/5
+        [Authorize()]
         public Event GetEvent(long id)
         {
             Event evnt = db.Events.Find(id);
@@ -36,6 +38,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // PUT api/Event/5
+        [Authorize()]
         public HttpResponseMessage PutEvent(long id, Event evnt)
         {
             if (ModelState.IsValid && id == evnt.Id)
@@ -60,6 +63,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // POST api/Event
+        [Authorize()]
         public HttpResponseMessage PostEvent(Event evnt)
         {
             if (ModelState.IsValid)
@@ -78,6 +82,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // DELETE api/Event/5
+        [Authorize()]
         public HttpResponseMessage DeleteEvent(long id)
         {
             Event evnt = db.Events.Find(id);

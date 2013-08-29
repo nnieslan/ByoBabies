@@ -69,6 +69,9 @@ namespace ByoBaby.Model
         public Collection<Notification> Notifications { get; set; }
 
         [DataMember]
+        public Collection<Request> PendingRequests { get; set; }
+        
+        [DataMember]
         public DateTime LastUpdated { get; set; }
 
         /// <summary>

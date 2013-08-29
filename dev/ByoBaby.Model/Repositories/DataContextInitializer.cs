@@ -8,13 +8,15 @@ using System.Web.Security;
 
 namespace ByoBaby.Model.Repositories
 {
-    public class ByoBabyDataContextInitializer  : DropCreateDatabaseAlways<ByoBabyRepository>
+    public class ByoBabyDataContextInitializer : DropCreateDatabaseAlways<ByoBabyRepository>
     {
         protected override void Seed(ByoBabyRepository context)
         {
             Person nickProfile = null;
             Person tiffanyProfile = null;
-             //create a stubbed in profile for the newly logged in user
+            Person willProfile = null;
+
+            //create a stubbed in profile for the newly logged in user
             using (aspnet_fbaEntities1 entityContext = new aspnet_fbaEntities1())
             {
                 var nick = entityContext.aspnet_Users.FirstOrDefault(p => p.UserName == "nicknieslanik@gmail.com");
@@ -73,10 +75,55 @@ namespace ByoBaby.Model.Repositories
                     context.SaveChanges();
                 }
 
-                if(tiffanyProfile != null && nickProfile != null)
+                var will = entityContext.aspnet_Users.FirstOrDefault(p => p.UserName == "w.simpson@hotmail.com");
+                if (will != null)
+                {
+                    willProfile = new Person()
+                    {
+                        City = "Denver",
+                        State = "CO",
+                        Email = "w.simpson@hotmail.com",
+                        FirstName = "Will",
+                        LastName = "Simpson",
+                        Neighborhood = "North Park Hill",
+                        UserId = will.UserId,
+                        HomePhone = "720-884-7684",
+                        MobilePhone = "720-884-7684",
+                        MemberSince = DateTime.Now,
+                        LastUpdated = DateTime.Now
+
+                    };
+                    context.People.Add(willProfile);
+                    context.SaveChanges();
+                    willProfile.Children = new Collection<Child>()
+                    {
+                        new Child() { ParentId = willProfile.Id, Name="Jude", Age=1, Gender = "M"} 
+                    };
+                    context.SaveChanges();
+                }
+
+
+                if (tiffanyProfile != null && nickProfile != null)
                 {
                     nickProfile.Friends = new Collection<Person>() { tiffanyProfile };
                     tiffanyProfile.Friends = new Collection<Person>() { nickProfile };
+
+                    context.SaveChanges();  
+                }
+
+                if (willProfile != null && nickProfile != null)
+                {
+
+                    var fr = new FriendRequest()
+                     {
+                         Title = "Wait a minute.... You have a kid too?",
+                         Description = "Hi Guy! I'd like to hang-out, play-date and stuff.",
+                         RequestorId = willProfile.Id,
+                         TargetId = nickProfile.Id
+                     };
+
+                    nickProfile.PendingRequests = new Collection<Request>() { fr };
+                    nickProfile.Notifications = new Collection<Notification>() { new Notification() { Originator = fr } };
 
                     context.SaveChanges();
                 }

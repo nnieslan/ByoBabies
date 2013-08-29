@@ -20,6 +20,7 @@ namespace ByoBaby.Rest.Controllers
         private ByoBabyRepository db = new ByoBabyRepository();
 
         // GET api/{userId}/Friends
+        [Authorize()]
         public IEnumerable<ProfileViewModel> GetFriends(long userId)
         {
             Person existingProfile = db.People.Include("Friends").FirstOrDefault(u => u.Id == userId);
@@ -49,7 +50,13 @@ namespace ByoBaby.Rest.Controllers
 
                 try
                 {
-                    this.db.Notifications.Add(new FriendRequest() { TargetId = friendId, RequestorId = userId, Title = "Friend Request", Description = message });
+                    friend.PendingRequests.Add(new FriendRequest()
+                    {
+                        TargetId = friendId,
+                        RequestorId = userId,
+                        Title = "Friend Request",
+                        Description = message
+                    });
                     this.db.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -64,5 +71,6 @@ namespace ByoBaby.Rest.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
+
     }
 }

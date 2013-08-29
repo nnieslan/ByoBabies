@@ -18,12 +18,14 @@ namespace ByoBaby.Rest.Controllers
         private ByoBabyRepository db = new ByoBabyRepository();
 
         // GET api/Conversation
+        [Authorize()]
         public IQueryable<Conversation> GetConversations()
         {
             return db.Conversations;
         }
 
         // GET api/Conversation/5
+        [Authorize()]
         public Conversation GetConversation(long id)
         {
             Conversation conversation = db.Conversations.Find(id);
@@ -36,6 +38,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         // PUT api/Conversation/5
+        [Authorize()]
         public HttpResponseMessage PutConversation(long id, Conversation conversation)
         {
             if (ModelState.IsValid && id == conversation.Id)

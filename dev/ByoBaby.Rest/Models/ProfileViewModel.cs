@@ -11,7 +11,7 @@ using ByoBaby.Model;
 namespace ByoBaby.Rest.Models
 {
     [DataContract]
-    public class ProfileViewModel
+    public class ProfileViewModel : RequestorViewModel
     {
         #region ctor
         
@@ -22,10 +22,6 @@ namespace ByoBaby.Rest.Models
         }
 
         #endregion
-
-        [Required]
-        [DataMember(IsRequired=true)]
-        public long Id { get; set; }
 
         [DataMember()]
         public List<Group> MemberOf { get; set; }

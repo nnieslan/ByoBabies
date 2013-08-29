@@ -12,22 +12,16 @@ using ByoBaby.Model.Repositories;
 
 namespace ByoBaby.Model
 {
-    public interface INotification
+    public class NotificationOriginator
     {
         [DataMember]
         [Key]
-        long Id { get; set; }
+        public virtual long Id { get; set; }
 
         [DataMember]
-        long TargetId { get; set; }
+        public virtual string Title { get; set; }
 
         [DataMember]
-        string TargetIdType { get; set; }
-
-        [DataMember]
-        string Title { get; set; }
-
-        [DataMember]
-        string Description { get; set; }
+        public virtual string Description { get; set; }
     }
 }
