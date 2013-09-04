@@ -3,7 +3,7 @@
         data-autodividers="false"
         data-filter="false"
         data-bind="foreach: profile.Notifications()">
-        <li data-bind="click: function () { $parent.navigateTo($data); }">
+        <li data-bind="click: function () { $parent.navigateToOrigin($data); }">
             <h3 data-bind="text: Title"></h3>
             <p data-bind="text: Body"></p>
         </li>

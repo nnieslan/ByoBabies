@@ -25,9 +25,30 @@ function NotificationsViewModel(data) {
         self.afterAdd();
     };
 
-    self.navigateTo = function (selected) {
+    self.navigateToOrigin = function (selected) {
         if (selected !== null && selected.OriginatorType == 'FriendRequest') {
-            alert('is a friend request');
+            var url = self.baseUrl + 'api/requests/' + selected.OriginatorId;
+            var jqxhr = $.get(url, function (data) {
+                console.log("NotificationsViewModel.navigateToOrigin() - ajax call for origin request is complete");
+                application.navigateTo(new RequestViewModel(self.baseUrl, data));
+            })
+            .error(function (jqxhr, exception) {
+                if (jqxhr.status == '401') {
+                    application.clear();
+                    return;
+                }
+
+                if (jqxhr.responseText != '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
+
+            });
+            
         }
     };
 };
@@ -35,7 +56,65 @@ function NotificationsViewModel(data) {
 function RequestViewModel(svcUrl, data) {
     NavViewModel.apply(this, [svcUrl]);
 
+    var self = this;
+    self.button(new BackButtonModel());
+    self.template = "requestView";
 
+    ko.mapping.fromJS(data, {}, self);
+
+    self.afterViewRender = function (elements) {
+        var view = '#' + self.template + '-content';
+        $(view).trigger('create');
+        self.afterAdd();
+    };
+
+    self.accept = function () {
+        console.log("RequestViewModel.accept() called");
+        self.postResponse('accept');
+    };
+
+    self.deny = function () {
+        console.log("RequestViewModel.deny() called");
+        self.postResponse('deny');
+    };
+
+    self.postResponse = function (actionValue) {
+        console.log("RequestViewModel.postResponse() called");
+
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+            return false;
+        }
+        application.isProcessing(true);
+
+        var url = self.baseUrl + 'api/requests/' + self.Id();
+
+        
+        var jqxhr = $.post(url, '=' + actionValue, function (data) {
+            console.log("RequestViewModel.postResponse() - ajax call complete");
+            
+            application.back();
+            application.loggedInUserProfile().refreshNotifications();
+        })
+        .error(function (jqxhr, exception) {
+            console.log("RequestViewModel.postResponse() - ajax POST errored : " + jqxhr.repsonseText);
+
+            if (jqxhr.status == '401') {
+                application.clear();
+                return;
+            }
+
+            if (jqxhr.responseText != '') {
+                utilities.notifyUser(jqxhr.responseText, 'Error');
+            } else {
+                utilities.notifyUser('Unable to respond to request.  Please try again later.', 'Error');
+            }
+        })
+        .complete(function () {
+            application.isProcessing(false);
+
+        });
+    };
 }
 
 function ChildViewModel(data) {
@@ -360,7 +439,7 @@ function ProfileViewModel(data) {
         self.ShowUploader(!self.ShowUploader());
     }
 
-    self.viewNotifications = function () {
+    self.refreshNotifications = function (navigationActionCallback) {
         if (!utilities.checkConnection()) {
             utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
             return false;
@@ -374,7 +453,9 @@ function ProfileViewModel(data) {
             for (i = 0; i < max; i++) {
                 self.Notifications.push(data[i]);
             }
-            application.navigateTo(new NotificationsViewModel(self));
+            if (navigationActionCallback !== undefined && navigationActionCallback !== null) {
+                navigationActionCallback();
+            }
         })
         .error(function (jqxhr, exception) {
             if (jqxhr.status == '401') {
@@ -391,6 +472,12 @@ function ProfileViewModel(data) {
         .complete(function () {
             application.isProcessing(false);
 
+        });
+    };
+
+    self.viewNotifications = function () {
+        self.refreshNotifications(function () {
+            application.navigateTo(new NotificationsViewModel(self));
         });
     }
 

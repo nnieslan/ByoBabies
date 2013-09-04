@@ -42,17 +42,9 @@ namespace ByoBaby.Rest.Models
                 Id = source.Id,
                 Title = source.Title,
                 Body = source.Description,
-                RequestType = source.GetType().Name
+                RequestType = source.GetType().Name,
+                Requestor = ProfileViewModel.FromPerson(source.Requestor)
             };
-
-            if (source.TargetIdType.Equals("person", StringComparison.OrdinalIgnoreCase))
-            {
-                using (var repo = new ByoBabyRepository())
-                {
-                    var person = repo.People.Find(source.TargetId);
-                    vm.Requestor = ProfileViewModel.FromPerson(person);
-                }
-            }
 
             //TODO - implement fetching the other possible target types (group, event
 

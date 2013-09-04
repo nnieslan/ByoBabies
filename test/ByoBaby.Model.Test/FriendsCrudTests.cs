@@ -10,7 +10,7 @@ using ByoBaby.Model.Repositories;
 namespace ByoBaby.Model.Test
 {
     [TestClass]
-    public class ByoBabyRepositoryTest
+    public class FriendsCrudTests
     {
         [ClassInitialize()]
         public static void Initialize(TestContext context)
@@ -72,22 +72,22 @@ namespace ByoBaby.Model.Test
                     };
             db.SaveChanges();
 
-            if (willProfile != null && nickProfile != null)
-            {
+            //if (willProfile != null && nickProfile != null)
+            //{
 
-                var fr = new FriendRequest()
-                {
-                    Title = "Wait a minute.... You have a kid too?",
-                    Description = "Hi Guy! I'd like to hang-out, play-date and stuff.",
-                    Requestor = willProfile,
-                    Audience = nickProfile
-                };
+            //    var fr = new FriendRequest()
+            //    {
+            //        Title = "Wait a minute.... You have a kid too?",
+            //        Description = "Hi Guy! I'd like to hang-out, play-date and stuff.",
+            //        Requestor = willProfile,
+            //        Audience = nickProfile
+            //    };
 
-                nickProfile.PendingRequests = new Collection<Request>() { fr };
-                nickProfile.Notifications = new Collection<Notification>() { new Notification() { Originator = fr } };
+            //    nickProfile.PendingRequests = new Collection<Request>() { fr };
+            //    nickProfile.Notifications = new Collection<Notification>() { new Notification() { Originator = fr } };
 
-                db.SaveChanges();
-            }
+            //    db.SaveChanges();
+            //}
 
 
             tiffanyProfile = new Person()
@@ -101,7 +101,7 @@ namespace ByoBaby.Model.Test
                 Neighborhood = "North Park Hill",
                 MemberSince = DateTime.Now.AddDays(-1),
                 LastUpdated = DateTime.Now,
-                Children = new Collection<Child>() { new Child() { Age = 1, Gender = "M" } }
+                Children = new Collection<Child>() { new Child() { Age = 1, Gender = "M", Name = "Ephraim" } }
             };
 
             db.People.Add(tiffanyProfile);
@@ -117,28 +117,79 @@ namespace ByoBaby.Model.Test
         private static Collection<Person> SeededPeople { get; set; }
 
         [TestMethod]
-        public void ByoBabyRepository_ConstructorTest()
+        public void FriendsCrudTests_AddFriendsTest()
         {
+            long userId = SeededPeople[0].Id; 
+            Collection<long> friendIds = new Collection<long>();
             using (var repo = new ByoBabyRepository())
             {
                 Assert.IsNotNull(repo);
+
+                var user = repo.People
+                    .Include(u => u.Friends)
+                    .FirstOrDefault(u => u.Id == userId);
+                if (user.Friends == null) { user.Friends = new Collection<Person>(); }
+                foreach (var other in repo.People.Where(u => u.Id != user.Id))
+                {
+                    user.Friends.Add(other);
+                    friendIds.Add(other.Id);
+                    repo.SaveChanges();
+                }
+            }
+
+            using (var repo = new ByoBabyRepository())
+            {
+                var user = repo.People.Include(u => u.Friends).FirstOrDefault(u => u.Id == userId);
+
+                Assert.IsNotNull(user);
+                Assert.IsNotNull(user.Friends);
+                Assert.AreEqual(friendIds.Count, user.Friends.Count);
+                foreach (var id in friendIds)
+                {
+                    Assert.AreEqual(true, user.Friends.Any(f => f.Id == id));
+                }
             }
         }
 
         [TestMethod]
-        public void ByoBabyRepository_GetProfilesTest()
+        public void FriendsCrudTests_RemoveFriendTest()
         {
+            long userId = SeededPeople[1].Id;
+            Collection<long> friendIds = new Collection<long>();
             using (var repo = new ByoBabyRepository())
             {
+                Assert.IsNotNull(repo);
 
-                var profiles = (from p in repo.People select p);
+                var user = repo.People.Include(u => u.Friends).FirstOrDefault(u => u.Id == userId);
+                if (user.Friends == null) { user.Friends = new Collection<Person>(); }
+                foreach (var other in repo.People.Where(u => u.Id != user.Id))
+                {
+                    user.Friends.Add(other);
+                    friendIds.Add(other.Id);
+                    repo.SaveChanges();
+                }
+            }
 
-                Assert.IsNotNull(profiles);
-                Assert.AreEqual(SeededPeople.Count, profiles.Count());
+            using (var repo = new ByoBabyRepository())
+            {
+                var user = repo.People.Include(u => u.Friends).FirstOrDefault(u => u.Id == userId);
+
+                Assert.IsNotNull(user);
+                Assert.IsNotNull(user.Friends);
+                Assert.AreEqual(friendIds.Count, user.Friends.Count);
+                foreach (var friend in user.Friends.ToList())
+                {
+                    user.Friends.Remove(friend);
+                }
+                repo.SaveChanges();
+            }
+            using (var repo = new ByoBabyRepository())
+            {
+                var user = repo.People.Include(u => u.Friends).FirstOrDefault(u => u.Id == userId);
+
+                Assert.IsNotNull(user);
+                Assert.IsTrue(user.Friends == null || user.Friends.Count == 0);
             }
         }
-
-
-
     }
 }

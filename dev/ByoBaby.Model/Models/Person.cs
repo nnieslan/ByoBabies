@@ -19,59 +19,40 @@ namespace ByoBaby.Model
         [Key]
         public long Id { get; set; }
 
-        [DataMember]
         public Guid UserId { get; set; }
 
-        [DataMember]
         public string ProfilePictureUrl { get; set; }
 
-        
-        [DataMember]
         public DateTime MemberSince { get; set; }
 
-        [DataMember]
         public string Email { get; set; }
 
-        [DataMember]
         public string FirstName { get; set; }
 
-        [DataMember]
         public string LastName { get; set; }
 
-        [DataMember]
         public string MobilePhone { get; set; }
 
-        [DataMember]
         public string HomePhone { get; set; }
 
-        [DataMember]
         public string City { get; set; }
 
-        [DataMember]
         public string State { get; set; }
 
-        [DataMember]
         public string Neighborhood { get; set; }
 
-        [DataMember]
-        public Collection<string> Interests { get; set; }
+        public ICollection<string> Interests { get; set; }
 
-        [DataMember]
-        public Collection<Child> Children { get; set; }
+        public ICollection<Child> Children { get; set; }
 
-        [DataMember]
-        public Collection<Group> MemberOf { get; set; }
+        public ICollection<Group> MemberOf { get; set; }
 
-        [DataMember]
-        public Collection<Person> Friends { get; set; }
+        public ICollection<Person> Friends { get; set; }
 
-        [DataMember]
-        public Collection<Notification> Notifications { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
 
-        [DataMember]
-        public Collection<Request> PendingRequests { get; set; }
+        public ICollection<Request> PendingRequests { get; set; }
         
-        [DataMember]
         public DateTime LastUpdated { get; set; }
 
         /// <summary>

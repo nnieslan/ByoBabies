@@ -43,7 +43,7 @@ namespace ByoBaby.Model.Repositories
                     context.SaveChanges();
                     nickProfile.Children = new Collection<Child>()
                     {
-                        new Child() { ParentId = nickProfile.Id, Name="Ephraim", Age=1, Gender = "M"} 
+                        new Child() { Parent = nickProfile, Name="Ephraim", Age=1, Gender = "M"} 
                     };
                     context.SaveChanges();
                 }
@@ -70,7 +70,7 @@ namespace ByoBaby.Model.Repositories
                     context.SaveChanges();
                     tiffanyProfile.Children = new Collection<Child>()
                     {
-                        new Child() { ParentId = tiffanyProfile.Id, Name="Ephraim", Age=1, Gender = "M"} 
+                        new Child() { Parent = tiffanyProfile, Name="Ephraim", Age=1, Gender = "M"} 
                     };
                     context.SaveChanges();
                 }
@@ -97,7 +97,7 @@ namespace ByoBaby.Model.Repositories
                     context.SaveChanges();
                     willProfile.Children = new Collection<Child>()
                     {
-                        new Child() { ParentId = willProfile.Id, Name="Jude", Age=1, Gender = "M"} 
+                        new Child() { Parent = willProfile, Name="Jude", Age=1, Gender = "M"} 
                     };
                     context.SaveChanges();
                 }
@@ -118,8 +118,8 @@ namespace ByoBaby.Model.Repositories
                      {
                          Title = "Wait a minute.... You have a kid too?",
                          Description = "Hi Guy! I'd like to hang-out, play-date and stuff.",
-                         RequestorId = willProfile.Id,
-                         TargetId = nickProfile.Id
+                         Requestor = willProfile,
+                         Audience = nickProfile
                      };
 
                     nickProfile.PendingRequests = new Collection<Request>() { fr };

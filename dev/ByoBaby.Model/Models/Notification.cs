@@ -20,5 +20,8 @@ namespace ByoBaby.Model
 
         [DataMember]
         public NotificationOriginator Originator { get; set; }
+
+        [DataMember]
+        public Person Audience { get; set; }
     }
 }

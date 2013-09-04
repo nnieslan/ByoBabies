@@ -15,7 +15,7 @@ namespace ByoBaby.Model
     public class Child
     {
         [DataMember]
-        public long ParentId { get; set; }
+        public Person Parent { get; set; }
 
         [DataMember]
         [Key]

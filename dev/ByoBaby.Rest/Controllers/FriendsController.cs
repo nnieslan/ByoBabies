@@ -33,15 +33,17 @@ namespace ByoBaby.Rest.Controllers
                     HttpContext.Current.User as ByoBabiesUserPrincipal;
 
             var id = currentUser.GetUserId();
-            //ensure the profile passed in is the current user's profile.
-            //TODO - consider a more robust validation check here and some null assignment handling.
             if (userId == currentUser.GetPersonId().Value)
             {
-                Person existingProfile = this.db.People.Include("Friends").FirstOrDefault(u => u.Id == userId);
+                Person existingProfile = this.db.People
+                    .Include(p => p.Friends.Select(f => f.Id))
+                    .FirstOrDefault(u => u.Id == userId);
+                
                 if (existingProfile == null)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound));
                 }
+                
                 Person friend = db.People.Find(friendId);
                 if (friend == null)
                 {
@@ -50,13 +52,14 @@ namespace ByoBaby.Rest.Controllers
 
                 try
                 {
-                    friend.PendingRequests.Add(new FriendRequest()
+                    var request = new FriendRequest()
                     {
-                        TargetId = friendId,
-                        RequestorId = userId,
-                        Title = "Friend Request",
+                        Audience = friend,
+                        Requestor = existingProfile,
+                        Title = "Can we be friends?",
                         Description = message
-                    });
+                    };
+                    friend.PendingRequests.Add(request);
                     this.db.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)

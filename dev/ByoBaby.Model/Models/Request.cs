@@ -15,9 +15,9 @@ namespace ByoBaby.Model
     [DataContract]
     public abstract class Request : NotificationOriginator
     {
-        public long TargetId { get; set; }
+        public Person Requestor { get; set; }
 
-        public string TargetIdType { get; set; }
+        public Person Audience { get; set; }
 
         protected abstract void HandleAccept();
 

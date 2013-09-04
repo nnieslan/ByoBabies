@@ -44,6 +44,7 @@ namespace ByoBaby.Rest.Controllers
 
             Person existingProfile = db.People
                 .Include("PendingRequests")
+                .Include("PendingRequests.Requestor")
                 .FirstOrDefault(u => u.Id == personId.Value);
 
             return RequestViewModel.FromRequest(
@@ -51,7 +52,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         [Authorize()]
-        public HttpResponseMessage PostReply(long id, string action)
+        public HttpResponseMessage PostReply([FromUri]long id, [FromBody]string action)
         {
             var response = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
 
@@ -60,13 +61,14 @@ namespace ByoBaby.Rest.Controllers
 
             var personId = currentUser.GetPersonId();
 
-            Person existingProfile = db.People
-                .Include("PendingRequests")
-                .FirstOrDefault(u => u.Id == personId.Value);
+            var request = db.Requests
+                .Include("Requestor")
+                .Include("Requestor.Friends")
+                .Include("Audience")
+                .Include("Audience.Friends")
+                .FirstOrDefault(u => u.Id == id);
 
-            var request = existingProfile.PendingRequests.FirstOrDefault(s => s.Id == id);
-
-            if (request != null)
+            if (request != null && request.Audience.Id == personId)
             {
                 if (string.Compare(action, "accept", StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -81,6 +83,11 @@ namespace ByoBaby.Rest.Controllers
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
                     response.ReasonPhrase = string.Format("The specified action '{0}' is invalid.", action);
                 }
+            }
+            else
+            {
+                response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                response.ReasonPhrase = "The specified request was not found for the current user. Please try again later.";
             }
 
             return response;

@@ -190,7 +190,7 @@ namespace ByoBaby.Rest.Controllers
                 }
                 else
                 {
-                    existingProfile.Children.Add(new Child() { ParentId = existingProfile.Id, Name = child.Name, Age = child.Age.Value, Gender = child.Gender });
+                    existingProfile.Children.Add(new Child() { Parent = existingProfile, Name = child.Name, Age = child.Age.Value, Gender = child.Gender });
                 }
             }
 

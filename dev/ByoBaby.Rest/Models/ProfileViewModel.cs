@@ -91,7 +91,10 @@ namespace ByoBaby.Rest.Models
                 MemberSince = person.MemberSince,
                 LastUpdated = person.LastUpdated
             };
-
+            if (profile.ProfilePictureUrl == null)
+            {
+                profile.ProfilePictureUrl = "http://maplaze.com/jpg/empty-profile.jpg";
+            }
             if (person.Children != null)
             {
                 profile.Children = new List<ChildViewModel>(

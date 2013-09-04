@@ -19,5 +19,18 @@ namespace ByoBaby.Model.Repositories
         public DbSet<Notification> Notifications { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Child>().HasRequired(e => e.Parent).WithMany(e => e.Children);
+
+            modelBuilder.Entity<Person>().HasMany(e => e.Friends).WithMany();
+            modelBuilder.Entity<Person>().HasMany(e => e.MemberOf);
+            modelBuilder.Entity<Person>().HasMany(e => e.Notifications);
+            modelBuilder.Entity<Person>().HasMany(e => e.PendingRequests);
+
+            modelBuilder.Entity<Notification>().HasRequired(e => e.Originator);
+
+        }
     }
 }
