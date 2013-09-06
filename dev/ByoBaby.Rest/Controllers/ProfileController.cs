@@ -53,7 +53,7 @@ namespace ByoBaby.Rest.Controllers
             if (Request.Content.IsMimeMultipartContent())
             {
                 string folderName = "uploads";
-                string serverPath = HttpContext.Current.Server.MapPath(string.Format("~/{0}", folderName));
+                string serverPath = HttpContext.Current.Server.MapPath(string.Format(System.Globalization.CultureInfo.InvariantCulture, "~/{0}", folderName));
                 string rootUrl = Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.AbsolutePath, String.Empty);
 
                 var streamProvider = new CustomMultipartFormDataStreamProvider(serverPath);
@@ -66,7 +66,7 @@ namespace ByoBaby.Rest.Controllers
 
                         var fileInfo = streamProvider.FileData.Select(i =>
                         {
-                            return string.Format("{0}/{1}/{2}", rootUrl, folderName, i.LocalFileName);
+                            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}/{1}/{2}", rootUrl, folderName, i.LocalFileName);
                         });
                         //TODO - assign the new Url to the user's profile object and save it.
                         return fileInfo;

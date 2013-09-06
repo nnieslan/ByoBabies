@@ -105,7 +105,10 @@ namespace ByoBaby.Rest.Controllers
             else if (status != System.Web.Security.MembershipCreateStatus.Success)
             {
                 response.StatusCode = System.Net.HttpStatusCode.Forbidden;
-                response.ReasonPhrase = string.Format("The user could not be created. Error : {0}", status.ToString());
+                response.ReasonPhrase = string.Format(
+                    System.Globalization.CultureInfo.InvariantCulture, 
+                    "The user could not be created. Error : {0}", 
+                    status.ToString());
             }
             else
             {

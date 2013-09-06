@@ -1,6 +1,7 @@
 ﻿/// <reference path="..//_references.js" />
 
-/*globals ko*/
+/*global ko: false */
+/*jslint regexp: true */
 
 function Helpers() {
     /// <summary>
@@ -10,12 +11,8 @@ function Helpers() {
     var self = this;
 
     self.urlParams = {};
-
-    /// <summary>
-    /// Notifies the user of any error messages or alerts.
-    /// </summary>
     self.notifyUser = function (message, title) {
-        if (navigator != undefined && navigator.notification != undefined) {
+        if (navigator !== undefined && navigator.notification !== undefined) {
             navigator.notification.alert(message, function () { }, title);
         } else {
             alert(message);
@@ -28,11 +25,12 @@ function Helpers() {
     /// Ensures the application has a data connection.
     /// </summary>
     self.checkConnection = function () {
-        if (navigator.network != undefined) { //check for network object existence to ensure we are on a device
+         //check for network object existence to ensure we are on a device
+        if (navigator.network !== undefined) {
 
             var networkState = navigator.network.connection.type;
 
-            if (networkState == undefined || networkState == Connection.NONE || networkState == Connection.UNKNOWN) {
+            if (networkState === undefined || networkState === Connection.NONE || networkState === Connection.UNKNOWN) {
                 return false;
             }
         }
@@ -50,14 +48,16 @@ function Helpers() {
                 }
             });
         });
-    }
+    };
+
     self.parseUrlQueryString = function () {
         var match,
-           pl = /\+/g,  // Regex for replacing addition symbol with a space
-           search = /([^&=]+)=?([^&]*)/g,
-           decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-           query = window.location.search.substring(1);
-        while (match = search.exec(query))
+            pl = /\+/g,  // Regex for replacing addition symbol with a space
+            search = /([^&=]+)=?([^&]*)/g,
+            decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+            query = window.location.search.substring(1);
+        while (match = search.exec(query)) {
             self.urlParams[decode(match[1])] = decode(match[2]);
+        }
     };
-};
+}

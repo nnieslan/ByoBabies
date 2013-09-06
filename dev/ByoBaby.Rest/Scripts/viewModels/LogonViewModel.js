@@ -76,21 +76,20 @@ function LogonViewModel(svcUrl, id) {
         var jqxhr = $.post(url, input, function (data) {
             self.loggedIn(true);
         })
-        .error(function (jqxHR, exception) {
-            application.isProcessing(false);
-            if (jqxHR.responseText != '') {
-                utilities.notifyUser(jqxHR.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to login.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            self.password(null);
-        });
+            .error(function (jqxHR, exception) {
+                application.isProcessing(false);
+                if (jqxHR.responseText !== '') {
+                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to login.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                self.password(null);
+            });
 
     };
 
-   
     /// <summary>
     /// A function that logs out the current user via REST api.
     /// </summary>
@@ -106,19 +105,19 @@ function LogonViewModel(svcUrl, id) {
             self.loggedIn(false);
             application.viewModelBackStack([]);
         })
-        .error(function (jqxhr, exception) {
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('An unknown error occurred while logging out.', 'Error');
-            }
-        })
-        .complete(function () { 
-            application.isProcessing(false); 
-            application.isComplete(false); 
-            if (self.remember()[0] == 'no') {
-                self.user(null);
-            }
-        });
+            .error(function (jqxhr, exception) {
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('An unknown error occurred while logging out.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
+                application.isComplete(false);
+                if (self.remember()[0] === 'no') {
+                    self.user(null);
+                }
+            });
     };
-};
+}

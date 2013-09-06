@@ -23,4 +23,4 @@ function TasksViewModel(svcUrl) {
         self.tasks.push({ DisplayName: 'Conversations', value: new ConversationsViewModel(self.baseUrl) });
     };
 
-};
+}

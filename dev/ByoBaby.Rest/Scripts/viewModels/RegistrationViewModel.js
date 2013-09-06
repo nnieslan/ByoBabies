@@ -71,19 +71,19 @@ function RegistrationViewModel(svcUrl) {
         var jqxhr = $.post(url, input, function (data) {
             self.registered(true);
         })
-        .error(function (jqxHR, exception) {
-            application.isProcessing(false);
-            if (jqxHR.responseText != '') {
-                utilities.notifyUser(jqxHR.responseText, 'Error');
-                //TODO - we probably need an error case for 'Account exists'
-            } else {
-                utilities.notifyUser('Unable to register.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            self.password(null); //clear the pw post-register-login
-            self.confirmPassword(null);
-        });
+            .error(function (jqxHR, exception) {
+                application.isProcessing(false);
+                if (jqxHR.responseText !== '') {
+                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                    //TODO - we probably need an error case for 'Account exists'
+                } else {
+                    utilities.notifyUser('Unable to register.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                self.password(null); //clear the pw post-register-login
+                self.confirmPassword(null);
+            });
     };
 
     self.afterViewRender = function (elements) {
@@ -104,5 +104,5 @@ function RegistrationViewModel(svcUrl) {
         //refreshing the ui-content div size after the header appears post-login.
         $('#ui-content').trigger('resize');
 
-    }
-};
+    };
+}

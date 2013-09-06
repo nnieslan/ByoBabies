@@ -9,7 +9,7 @@ function Country(name, code) {
 
     this.DisplayName = name;
     this.Code = code;
-};
+}
 
 function NotificationsViewModel(data) {
     NavViewModel.apply(this, [data.baseUrl]);
@@ -26,32 +26,31 @@ function NotificationsViewModel(data) {
     };
 
     self.navigateToOrigin = function (selected) {
-        if (selected !== null && selected.OriginatorType == 'FriendRequest') {
+        if (selected !== null && selected.OriginatorType === 'FriendRequest') {
             var url = self.baseUrl + 'api/requests/' + selected.OriginatorId;
             var jqxhr = $.get(url, function (data) {
                 console.log("NotificationsViewModel.navigateToOrigin() - ajax call for origin request is complete");
                 application.navigateTo(new RequestViewModel(self.baseUrl, data));
             })
-            .error(function (jqxhr, exception) {
-                if (jqxhr.status == '401') {
-                    application.clear();
-                    return;
-                }
+                .error(function (jqxhr, exception) {
+                    if (jqxhr.status === '401') {
+                        application.clear();
+                        return;
+                    }
 
-                if (jqxhr.responseText != '') {
-                    utilities.notifyUser(jqxhr.responseText, 'Error');
-                } else {
-                    utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
-                }
-            })
-            .complete(function () {
-                application.isProcessing(false);
+                    if (jqxhr.responseText !== '') {
+                        utilities.notifyUser(jqxhr.responseText, 'Error');
+                    } else {
+                        utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
+                    }
+                })
+                .complete(function () {
+                    application.isProcessing(false);
 
-            });
-            
+                });
         }
     };
-};
+}
 
 function RequestViewModel(svcUrl, data) {
     NavViewModel.apply(this, [svcUrl]);
@@ -88,44 +87,41 @@ function RequestViewModel(svcUrl, data) {
         application.isProcessing(true);
 
         var url = self.baseUrl + 'api/requests/' + self.Id();
-
-        
         var jqxhr = $.post(url, '=' + actionValue, function (data) {
             console.log("RequestViewModel.postResponse() - ajax call complete");
-            
             application.back();
             application.loggedInUserProfile().refreshNotifications();
         })
-        .error(function (jqxhr, exception) {
-            console.log("RequestViewModel.postResponse() - ajax POST errored : " + jqxhr.repsonseText);
+            .error(function (jqxhr, exception) {
+                console.log("RequestViewModel.postResponse() - ajax POST errored : " + jqxhr.repsonseText);
 
-            if (jqxhr.status == '401') {
-                application.clear();
-                return;
-            }
+                if (jqxhr.status === '401') {
+                    application.clear();
+                    return;
+                }
 
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to respond to request.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            application.isProcessing(false);
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to respond to request.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
 
-        });
+            });
     };
 }
 
 function ChildViewModel(data) {
     var self = this;
     ko.mapping.fromJS(data, {}, self);
-};
+}
 
 function GroupViewModel(data) {
     var self = this;
     ko.mapping.fromJS(data, {}, self);
-};
+}
 
 function FriendsViewModel(data) {
     NavViewModel.apply(this, [data.baseUrl]);
@@ -140,7 +136,7 @@ function FriendsViewModel(data) {
         $(view).trigger('create');
         self.afterAdd();
     };
-};
+}
 
 function PersonViewModel(svcUrl, data) {
 
@@ -151,7 +147,6 @@ function PersonViewModel(svcUrl, data) {
     self.template = "personView";
     self.profile = data;
     //view model properties
-    
     var mapping = {
         'Children': {
             create: function (options) {
@@ -177,24 +172,22 @@ function PersonViewModel(svcUrl, data) {
                 return ko.utils.unwrapObservable(data.Id);
             }
         }
-    }
+    };
 
     self.update = function (data) {
         if (data !== undefined && data !== null) {
             ko.mapping.fromJS(data, mapping, self);
         }
-    }
+    };
     self.update(data);
-    
     self.ProfilePictureUrl = ko.observable('http://communications.iu.edu/img/photos/people/placeholder.jpg');
     self.Friends = ko.observableArray([]);
     //todo - make this a comprehensive and 
     self.availableStates = [new Country('California', 'CA'), new Country('Colorado', 'CO')];
     self.selectedState = ko.observable();
-    
     self.viewDetails = function () {
-        self.getProfile(function () { application.navigateTo(self);});
-    }
+        self.getProfile(function () { application.navigateTo(self); });
+    };
 
     /// <summary>
     /// A function that fetches the profile of the current user.
@@ -210,24 +203,24 @@ function PersonViewModel(svcUrl, data) {
         var url = self.baseUrl + 'api/' + application.loggedInUserProfileId() + '/profile/' + self.Id();
         var jqxhr = $.get(url, function (data) {
             console.log("PersonViewModel.getProfile() - ajax call complete");
-            self.update(data);            
+            self.update(data);
             if (navigateDelegate !== undefined) { navigateDelegate(); }
         })
-        .error(function (jqxhr, exception) {
-            if (jqxhr.status == '401') {
-                application.clear();
-                return;
-            }
+            .error(function (jqxhr, exception) {
+                if (jqxhr.status === '401') {
+                    application.clear();
+                    return;
+                }
 
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            application.isProcessing(false);
-        });
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
+            });
     };
 
     self.viewFriends = function () {
@@ -247,23 +240,24 @@ function PersonViewModel(svcUrl, data) {
             }
             application.navigateTo(new FriendsViewModel(self));
         })
-        .error(function (jqxhr, exception) {
-            if (jqxhr.status == '401') {
-                application.clear();
-                return;
-            }
+            .error(function (jqxhr, exception) {
+                if (jqxhr.status === '401') {
+                    application.clear();
+                    return;
+                }
 
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to the friends of the currently selected person. Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            application.isProcessing(false);
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    var errorMsg = 'Unable to the friends of the currently selected person. Please try again later.';
+                    utilities.notifyUser(errorMsg, 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
 
-        });
-    }
+            });
+    };
 
     self.afterViewRender = function (elements) {
         var view = '#' + self.template + '-content';
@@ -275,7 +269,7 @@ function PersonViewModel(svcUrl, data) {
 
         self.afterAdd();
     };
-};
+}
 
 function FriendViewModel(data) {
 
@@ -285,17 +279,16 @@ function FriendViewModel(data) {
     var retval = new F();
 
     return retval;
-};
+}
 
 function ProfileViewModel(data) {
     /// <summary>
     /// The view model that manages the user's profile
     /// </summary>
-    
     function P() { }
     P.prototype = data;
     P.prototype.template = "profileView";
-    
+
     var self = new P();
     self.button(new MenuButtonModel());
     self.ShowUploader = ko.observable(false);
@@ -332,7 +325,7 @@ function ProfileViewModel(data) {
             //ko.mapping.fromJS(data, self.mapping, self.prototype);
             if (self.State !== undefined && self.State() !== '') {
                 ko.utils.arrayForEach(self.availableStates, function (value) {
-                    if (value.Code == self.State()) {
+                    if (value.Code === self.State()) {
                         self.selectedState(value);
                     }
                 });
@@ -345,22 +338,21 @@ function ProfileViewModel(data) {
 
             application.navigateHome();
         })
-        .error(function (jqxhr, exception) {
-            if (jqxhr.status == '401') {
-                application.clear();
-                return;
-            }
+            .error(function (jqxhr, exception) {
+                if (jqxhr.status === '401') {
+                    application.clear();
+                    return;
+                }
 
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            application.isProcessing(false);
-
-        });
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
+            });
     };
 
     self.saveProfile = function () {
@@ -376,35 +368,34 @@ function ProfileViewModel(data) {
         var url = self.baseUrl + 'api/' + self.Id() + '/profile';
 
         var input = ko.mapping.toJS(self);
-        if (input.Children == null) { input.Children = []; }
-        if (input.MemberOf == null) { input.MemberOf = []; }
-        if (input.Interests == null) { input.Interests = []; }
+        if (input.Children === null) { input.Children = []; }
+        if (input.MemberOf === null) { input.MemberOf = []; }
+        if (input.Interests === null) { input.Interests = []; }
         //if (input.Friends == null) { input.Friends = []; }
         //if (input.Notifications == null) { input.Notifications = []; }
-
         var jqxhr = $.post(url, input, function (data) {
             console.log("ProfileViewModel.saveProfile() - ajax call complete");
             ko.mapping.fromJS(data, self);
 
         })
-        .error(function (jqxhr, exception) {
-            console.log("ProfileViewModel.saveProfile() - ajax POST errored : " + jqxhr.repsonseText);
+            .error(function (jqxhr, exception) {
+                console.log("ProfileViewModel.saveProfile() - ajax POST errored : " + jqxhr.repsonseText);
 
-            if (jqxhr.status == '401') {
-                application.clear();
-                return;
-            }
+                if (jqxhr.status === '401') {
+                    application.clear();
+                    return;
+                }
 
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            application.isProcessing(false);
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
 
-        });
+            });
     };
 
     self.afterViewRender = function (elements) {
@@ -433,11 +424,11 @@ function ProfileViewModel(data) {
         //    self.saveProfile();
         //    return false;
         //});
-    }
+    };
 
     self.toggleUploader = function () {
         self.ShowUploader(!self.ShowUploader());
-    }
+    };
 
     self.refreshNotifications = function (navigationActionCallback) {
         if (!utilities.checkConnection()) {
@@ -457,29 +448,29 @@ function ProfileViewModel(data) {
                 navigationActionCallback();
             }
         })
-        .error(function (jqxhr, exception) {
-            if (jqxhr.status == '401') {
-                application.clear();
-                return;
-            }
+            .error(function (jqxhr, exception) {
+                if (jqxhr.status === '401') {
+                    application.clear();
+                    return;
+                }
 
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            application.isProcessing(false);
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
 
-        });
+            });
     };
 
     self.viewNotifications = function () {
         self.refreshNotifications(function () {
             application.navigateTo(new NotificationsViewModel(self));
         });
-    }
+    };
 
     self.viewFriends = function () {
         if (!utilities.checkConnection()) {
@@ -492,39 +483,42 @@ function ProfileViewModel(data) {
             console.log("ProfileViewModel.viewFriends() - ajax call complete");
             self.Friends([]);
             var i, max = data.length;
-            for (i = 0; i < max; i++){
+            for (i = 0; i < max; i++) {
                 var current = new PersonViewModel(self.baseUrl, data[i]);
                 self.Friends.push(new FriendViewModel(current));
             }
             application.navigateTo(new FriendsViewModel(self));
         })
-        .error(function (jqxhr, exception) {
-            if (jqxhr.status == '401') {
-                application.clear();
-                return;
-            }
+            .error(function (jqxhr, exception) {
+                if (jqxhr.status === '401') {
+                    application.clear();
+                    return;
+                }
 
-            if (jqxhr.responseText != '') {
-                utilities.notifyUser(jqxhr.responseText, 'Error');
-            } else {
-                utilities.notifyUser('Unable to load your friends.  Please try again later.', 'Error');
-            }
-        })
-        .complete(function () {
-            application.isProcessing(false);
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to load your friends.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
 
-        });
-    }
+            });
+    };
 
     self.addChild = function () {
 
         console.log("Adding new child");
         var list = '#profileView-childrenlist';
         self.Children.push(new ChildViewModel({
-            'Id': null, 'Name': '', 'Age': '', 'Gender': ''
+            'Id': null,
+            'Name': '',
+            'Age': '',
+            'Gender': ''
         }));
         //redraw the list to show the new child correctly.
-        $(list).trigger('create')
+        $(list).trigger('create');
         $(list).listview("refresh");
 
     };
@@ -538,7 +532,7 @@ function ProfileViewModel(data) {
             var index = ko.utils.arrayIndexOf(self.Children(), value);
             self.Children.remove(self.Children()[index]);
         }
-    }
+    };
 
     return self;
-};
+}

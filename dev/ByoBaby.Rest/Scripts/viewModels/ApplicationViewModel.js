@@ -29,17 +29,17 @@ function BackButtonModel() {
     self.icon('back');
     self.clickAction = function () {
         application.back();
-    }
+    };
 }
 
 function NavViewModel(svcUrl) {
     var self = this;
-    self.baseUrl = (svcUrl == undefined ? '' : svcUrl);
+    self.baseUrl = (svcUrl === undefined ? '' : svcUrl);
     self.button = ko.observable(new MenuButtonModel());
 
     self.afterAdd = function () {
         $("#navButton").buttonMarkup("refresh");
-    }
+    };
 }
 
 
@@ -93,20 +93,20 @@ function ApplicationViewModel(svcUrl) {
     /// The computed current view model to display in the UI.
     /// </summary>
     self.currentViewModel = ko.computed(function () {
-        var stacklength = self.viewModelBackStack().length;
+        var model, stacklength = self.viewModelBackStack().length;
         if (stacklength > 0) {
-            return self.viewModelBackStack()[stacklength - 1];
+            model = self.viewModelBackStack()[stacklength - 1];
         } else {
-            return this;
+            model = this;
         }
-
+        return model;
     }, self);
 
     /// <summary> 
     /// The computed indicator denoting if a back button should be shown.
     /// </summary>
-    self.backButtonRequired = ko.dependentObservable(function () {  
-        return (self.viewModelBackStack().length > 0 && self.currentViewModel().template != 'profileView' && !self.isProcessing() && !self.isComplete());
+    self.backButtonRequired = ko.dependentObservable(function () {
+        return (self.viewModelBackStack().length > 0 && self.currentViewModel().template !== 'profileView' && !self.isProcessing() && !self.isComplete());
     }, self);
 
 
@@ -114,22 +114,23 @@ function ApplicationViewModel(svcUrl) {
     /// The computed indicator denoting if a logout button should be shown.
     /// </summary>
     self.logoutButtonRequired = ko.dependentObservable(function () {
-        return (self.logonViewModel() != null && self.logonViewModel().loggedIn() && !self.isProcessing() && !self.isComplete());
+        return (self.logonViewModel() !== null && self.logonViewModel().loggedIn() && !self.isProcessing() && !self.isComplete());
     }, self);
 
 
     self.loggedInUserProfile = function () {
-        if (self.logonViewModel() != null && self.logonViewModel().loggedIn()) {
-            for (var i = 0; i < self.tasksViewModel().tasks().length; i++) {
-                var task = self.tasksViewModel().tasks()[i];
-                if (task.DisplayName == 'Profile' && task.value.Id !== undefined) {
+        var i, task;
+        if (self.logonViewModel() !== null && self.logonViewModel().loggedIn()) {
+            for (i = 0; i < self.tasksViewModel().tasks().length; i++) {
+                task = self.tasksViewModel().tasks()[i];
+                if (task.DisplayName === 'Profile' && task.value.Id !== undefined) {
                     return task.value;
                 }
             }
         }
         return null;
 
-    }
+    };
 
     /// <summary> 
     /// The currently logged in user's profile Id if possible.
@@ -138,7 +139,7 @@ function ApplicationViewModel(svcUrl) {
         var profile = self.loggedInUserProfile();
         if (profile !== null) { return profile.Id(); }
         return null;
-    }
+    };
 
     //functions
 
@@ -146,19 +147,20 @@ function ApplicationViewModel(svcUrl) {
         if (self.loggedInUserProfile() !== null) {
             self.loggedInUserProfile().viewNotifications();
         }
-    }
+    };
 
     /// <summary> 
     /// Initializes the LogonViewModel for the application.
     /// </summary>
     self.loadLogin = function (viewModel) {
+        var i, task;
         self.logonViewModel(viewModel);
         self.logonViewModel().loggedIn.subscribe(function (newValue) {
             if (newValue) {
                 console.log("logonViewModel().loggedIn().subscribe - user is logged in");
-                for (var i = 0; i < self.tasksViewModel().tasks().length; i++) {
-                    var task = self.tasksViewModel().tasks()[i];
-                    if (task.DisplayName == 'Profile') {
+                for (i = 0; i < self.tasksViewModel().tasks().length; i++) {
+                    task = self.tasksViewModel().tasks()[i];
+                    if (task.DisplayName === 'Profile') {
                         console.log("logonViewModel().loggedIn().subscribe - fetching user profile");
                         task.value.getProfile();
                     }
@@ -185,7 +187,7 @@ function ApplicationViewModel(svcUrl) {
     /// </summary>
     self.navigateTo = function (viewModel, clear) {
         console.log("application.navigateTo - Navigating to : " + viewModel.template);
-        if (clear != undefined && clear == true) {
+        if (clear !== undefined && clear === true) {
             self.viewModelBackStack([]);
         }
         self.viewModelBackStack.push(viewModel);
@@ -228,7 +230,7 @@ function ApplicationViewModel(svcUrl) {
     /// </summary>
     self.back = function () {
         self.viewModelBackStack.pop();
-        if (self.viewModelBackStack().length == 0 && self.logonViewModel().loggedIn()) {
+        if (self.viewModelBackStack().length === 0 && self.logonViewModel().loggedIn()) {
             self.viewModelBackStack.push(new TasksViewModel());
         }
     };
@@ -257,7 +259,7 @@ function ApplicationViewModel(svcUrl) {
         //template is themed.
         var view = '#' + application.currentViewModel().template + '-content';
         $(view).trigger('create');
-        if (view == '#welcomeView-content') {
+        if (view === '#welcomeView-content') {
             $("#logonForm").submit(function () {
                 application.logonViewModel().login();
                 return false;
@@ -268,6 +270,5 @@ function ApplicationViewModel(svcUrl) {
         if (self.logonViewModel().loggedIn()) {
             self.afterAdd();
         }
-
-    }
+    };
 }

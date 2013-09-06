@@ -81,7 +81,7 @@ namespace ByoBaby.Rest.Controllers
                 else
                 {
                     response.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                    response.ReasonPhrase = string.Format("The specified action '{0}' is invalid.", action);
+                    response.ReasonPhrase = string.Format(System.Globalization.CultureInfo.InvariantCulture, "The specified action '{0}' is invalid.", action);
                 }
             }
             else

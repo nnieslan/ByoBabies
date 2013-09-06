@@ -57,6 +57,7 @@ namespace ByoBaby.Model
         {
             using (ByoBabyRepository entityContext = new ByoBabyRepository())
             {
+                entityContext.Requests.Attach(this);
                 entityContext.Requests.Remove(this);
 
                 var associatedNotifications = entityContext.Notifications

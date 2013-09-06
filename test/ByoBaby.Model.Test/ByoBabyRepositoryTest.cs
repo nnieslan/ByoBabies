@@ -15,11 +15,14 @@ namespace ByoBaby.Model.Test
         [ClassInitialize()]
         public static void Initialize(TestContext context)
         {
+            using(var oldDb = new ByoBabyRepository()) {
+                oldDb.Database.Delete();
+            }
             Database.SetInitializer<ByoBabyRepository>(
                 new Test_ByoBabyRepositoryInitializer());
-
+            
             var db = new ByoBabyRepository();
-
+            
             Person nickProfile = null;
             Person tiffanyProfile = null;
             Person willProfile = null;
@@ -72,23 +75,6 @@ namespace ByoBaby.Model.Test
                     };
             db.SaveChanges();
 
-            if (willProfile != null && nickProfile != null)
-            {
-
-                var fr = new FriendRequest()
-                {
-                    Title = "Wait a minute.... You have a kid too?",
-                    Description = "Hi Guy! I'd like to hang-out, play-date and stuff.",
-                    Requestor = willProfile,
-                    Audience = nickProfile
-                };
-
-                nickProfile.PendingRequests = new Collection<Request>() { fr };
-                nickProfile.Notifications = new Collection<Notification>() { new Notification() { Originator = fr } };
-
-                db.SaveChanges();
-            }
-
 
             tiffanyProfile = new Person()
             {
@@ -137,8 +123,6 @@ namespace ByoBaby.Model.Test
                 Assert.AreEqual(SeededPeople.Count, profiles.Count());
             }
         }
-
-
 
     }
 }

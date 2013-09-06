@@ -12,6 +12,7 @@ namespace ByoBaby.Model.Test
     [TestClass]
     public class FriendRequestTests
     {
+        #region init
 
         [ClassInitialize()]
         public static void Initialize(TestContext context)
@@ -99,6 +100,9 @@ namespace ByoBaby.Model.Test
 
         private static Collection<Person> SeededPeople { get; set; }
 
+        #endregion
+
+        #region tests
 
         [TestMethod]
         public void FriendRequestTest_CreateTest()
@@ -217,5 +221,81 @@ namespace ByoBaby.Model.Test
             }
 
         }
+
+        [TestMethod]
+        public void FriendRequestTest_DenyTest()
+        {
+            long requestorId = SeededPeople[1].Id;
+            long audienceId = SeededPeople[2].Id;
+            long requestId;
+            using (var repo = new ByoBabyRepository())
+            {
+                Assert.IsNotNull(repo);
+
+                var requestor = repo.People
+                    .Include(u => u.Friends)
+                    .FirstOrDefault(u => u.Id == requestorId);
+
+                var audience = repo.People
+                    .Include(u => u.Friends)
+                    .Include(u => u.PendingRequests)
+                    .FirstOrDefault(u => u.Id == audienceId);
+                var fr = new FriendRequest()
+                {
+                    Title = "Wait a minute.... You have a kid too?",
+                    Description = "Hi Guy! I'd like to hang-out, play-date and stuff.",
+                    Requestor = requestor,
+                    Audience = audience
+                };
+                audience.PendingRequests.Add(fr);
+
+                repo.SaveChanges();
+                requestId = fr.Id;
+            }
+
+            using (var repo = new ByoBabyRepository())
+            {
+                Assert.IsNotNull(repo);
+
+                var request = repo.Requests
+                    .Include("Requestor")
+                    .Include("Requestor.Friends")
+                    .Include("Audience")
+                    .Include("Audience.Friends")
+                    .FirstOrDefault(u => u.Id == requestId);
+
+                Assert.IsTrue(request.Audience != null);
+                Assert.IsTrue(request.Requestor != null);
+
+                request.Deny();
+            }
+            using (var repo = new ByoBabyRepository())
+            {
+                Assert.IsNotNull(repo);
+                var request = repo.Requests
+                   .Include("Requestor")
+                   .Include("Requestor.Friends")
+                   .Include("Audience")
+                   .Include("Audience.Friends")
+                   .FirstOrDefault(u => u.Id == requestId);
+
+                Assert.IsNull(request);
+
+                var requestor = repo.People
+                   .Include(u => u.Friends)
+                   .FirstOrDefault(u => u.Id == requestorId);
+
+                var audience = repo.People
+                    .Include(u => u.Friends)
+                    .Include(u => u.PendingRequests)
+                    .FirstOrDefault(u => u.Id == audienceId);
+
+                Assert.IsFalse(requestor.Friends.Any(f => f.Id == audienceId));
+                Assert.IsFalse(audience.Friends.Any(f => f.Id == requestorId));
+            }
+
+        }
+
+        #endregion
     }
 }

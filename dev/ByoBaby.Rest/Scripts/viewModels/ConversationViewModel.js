@@ -13,4 +13,4 @@ function ConversationViewModel(svcUrl, id) {
     this.template = "conversationView";
 
 
-};
+}

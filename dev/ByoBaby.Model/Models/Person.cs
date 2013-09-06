@@ -219,7 +219,8 @@ namespace ByoBaby.Model
                 return firstName;
             }
 
-            return String.Format("{0} {1}", firstName, lastName);
+            return String.Format(
+                System.Globalization.CultureInfo.InvariantCulture, "{0} {1}", firstName, lastName);
         }
 
         /// <summary>
