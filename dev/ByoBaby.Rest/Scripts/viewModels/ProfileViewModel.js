@@ -33,7 +33,7 @@ function NotificationsViewModel(data) {
                 application.navigateTo(new RequestViewModel(self.baseUrl, data));
             })
                 .error(function (jqxhr, exception) {
-                    if (jqxhr.status === '401') {
+                    if (jqxhr.status === 401) {
                         application.clear();
                         return;
                     }
@@ -95,7 +95,7 @@ function RequestViewModel(svcUrl, data) {
             .error(function (jqxhr, exception) {
                 console.log("RequestViewModel.postResponse() - ajax POST errored : " + jqxhr.repsonseText);
 
-                if (jqxhr.status === '401') {
+                if (jqxhr.status === 401) {
                     application.clear();
                     return;
                 }
@@ -207,7 +207,7 @@ function PersonViewModel(svcUrl, data) {
             if (navigateDelegate !== undefined) { navigateDelegate(); }
         })
             .error(function (jqxhr, exception) {
-                if (jqxhr.status === '401') {
+                if (jqxhr.status === 401) {
                     application.clear();
                     return;
                 }
@@ -241,7 +241,7 @@ function PersonViewModel(svcUrl, data) {
             application.navigateTo(new FriendsViewModel(self));
         })
             .error(function (jqxhr, exception) {
-                if (jqxhr.status === '401') {
+                if (jqxhr.status === 401) {
                     application.clear();
                     return;
                 }
@@ -339,7 +339,7 @@ function ProfileViewModel(data) {
             application.navigateHome();
         })
             .error(function (jqxhr, exception) {
-                if (jqxhr.status === '401') {
+                if (jqxhr.status === 401) {
                     application.clear();
                     return;
                 }
@@ -381,7 +381,7 @@ function ProfileViewModel(data) {
             .error(function (jqxhr, exception) {
                 console.log("ProfileViewModel.saveProfile() - ajax POST errored : " + jqxhr.repsonseText);
 
-                if (jqxhr.status === '401') {
+                if (jqxhr.status === 401) {
                     application.clear();
                     return;
                 }
@@ -449,7 +449,7 @@ function ProfileViewModel(data) {
             }
         })
             .error(function (jqxhr, exception) {
-                if (jqxhr.status === '401') {
+                if (jqxhr.status === 401) {
                     application.clear();
                     return;
                 }
@@ -490,7 +490,7 @@ function ProfileViewModel(data) {
             application.navigateTo(new FriendsViewModel(self));
         })
             .error(function (jqxhr, exception) {
-                if (jqxhr.status === '401') {
+                if (jqxhr.status === 401) {
                     application.clear();
                     return;
                 }

@@ -106,7 +106,11 @@ function ApplicationViewModel(svcUrl) {
     /// The computed indicator denoting if a back button should be shown.
     /// </summary>
     self.backButtonRequired = ko.dependentObservable(function () {
-        return (self.viewModelBackStack().length > 0 && self.currentViewModel().template !== 'profileView' && !self.isProcessing() && !self.isComplete());
+        var validStack = (self.viewModelBackStack().length > 0),
+            validTemplate = (self.currentViewModel().template !== 'profileView'),
+            validStatus = (!self.isProcessing() && !self.isComplete());
+
+        return (validStack && validTemplate && validStatus);
     }, self);
 
 
@@ -114,7 +118,9 @@ function ApplicationViewModel(svcUrl) {
     /// The computed indicator denoting if a logout button should be shown.
     /// </summary>
     self.logoutButtonRequired = ko.dependentObservable(function () {
-        return (self.logonViewModel() !== null && self.logonViewModel().loggedIn() && !self.isProcessing() && !self.isComplete());
+        var validLogin = (self.logonViewModel() !== undefined && self.logonViewModel() !== null && self.logonViewModel().loggedIn()),
+            validStatus = (!self.isProcessing() && !self.isComplete());
+        return (validLogin && validStatus);
     }, self);
 
 
