@@ -1,22 +1,29 @@
 ﻿<div id="requestView-content">
+
     <div data-role="ui-grid-a">
         <div class="ui-block-a">
-            <div class="ui-bar ui-bar-a">
-                <img style="max-height: 75px; max-width: 75px" data-bind="attr: { src: Requestor.ProfilePictureUrl }" />
+
+            <div data-role="controlgroup" data-type="vertical">
+                <div>
+                    <img style="max-height: 75px; max-width: 75px" data-bind="attr: { src: Requestor.ProfilePictureUrl }" />
+                </div>
+                <div>
+                    <h3><span data-bind="text: Requestor.FirstName"></span>&nbsp;<span data-bind="    text: Requestor.LastName"></span></h3>
+                </div>
             </div>
         </div>
-        <div class="ui-block-b">
-            <div class="ui-bar ui-bar-b">
-                <h3 style="padding-left: 2em;"><span data-bind="text: Requestor.FirstName"></span>&nbsp;<span data-bind="    text: Requestor.LastName"></span></h3>
+        <div class="ui-block-b" style="padding-left: 1em;">
+            <div>
+                <div class="ui-bar ui-bar-a">
+                    <h3 data-bind="text: Title"></h3>
+                </div>
+                <p data-bind="text: Body"></p>
+            </div>
+            <div data-role="controlgroup" data-type="horizontal" style="text-align: right">
+                <a id="acceptRequest" href="#" data-role="button" data-bind="click: accept" data-theme="a" data-iconpos="left" data-icon="check" data-inline="true">Accept</a>
+                <a id="denyRequest" href="#" data-role="button" data-bind="click: deny" data-theme="a" data-iconpos="left" data-icon="delete" data-inline="true">Deny</a>
             </div>
         </div>
-    </div><br />
-    <div>
-        <h3 data-bind="text: Title"></h3>
-        <p data-bind="text: Body"></p>
     </div>
-    <div data-role="controlgroup" data-type="horizontal">
-        <a id="acceptRequest" href="#" data-role="button" data-bind="click: accept" data-theme="a" data-iconpos="left" data-icon="check" data-inline="true">Accept</a>
-        <a id="denyRequest" href="#" data-role="button" data-bind="click: deny" data-theme="a" data-iconpos="left" data-icon="delete" data-inline="true">Deny</a>
-    </div>
+
 </div>
