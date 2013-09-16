@@ -1,5 +1,11 @@
 ﻿<div id="nearByView-content">
-
-    <div id="nearbyMap" style="width:100%;height:92%; position:absolute;left:0px; top:55px"></div>
+    <div id='divSearch' data-role="controlgroup" data-type="vertical" data-theme="a">
+        <form id="searchForm" action="">
+            <input id="searchTerm" type="text" data-bind="value: searchTerm" />
+            <a id="searchButton" href="#" data-role="button" data-bind="click: search"
+                data-theme="a" data-iconpos="right" data-icon="search" >Search</a>
+        </form>
+        <div id="nearbyMap" style="width: 100%; position: absolute; height: 60%; top: 180px"></div>
+    </div>
 
 </div>
