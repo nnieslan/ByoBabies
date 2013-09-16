@@ -333,6 +333,7 @@
     <Content Include="Scripts\viewModels\ApplicationViewModel.js" />
     <Content Include="Scripts\viewModels\ConversationViewModel.js" />
     <Content Include="Scripts\viewModels\LogonViewModel.js" />
+    <Content Include="Scripts\viewModels\NearByViewModel.js" />
     <Content Include="Scripts\viewModels\ProfileViewModel.js" />
     <Content Include="Scripts\viewModels\RegistrationViewModel.js" />
     <Content Include="Scripts\viewModels\TasksViewModel.js" />
@@ -340,6 +341,7 @@
     <Content Include="Templates\conversationView.html" />
     <Content Include="Templates\friendDetailView.html" />
     <Content Include="Templates\friendsListView.html" />
+    <Content Include="Templates\nearByView.html" />
     <Content Include="Templates\notificationsView.html" />
     <Content Include="Templates\profileView.html" />
     <Content Include="Templates\registerView.html" />
