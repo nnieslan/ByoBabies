@@ -101,6 +101,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Controllers\ControllerTestHelper.cs" />
+    <Compile Include="Controllers\LocationsControllerTest.cs" />
     <Compile Include="Controllers\ProfileControllerTest.cs" />
     <Compile Include="Test_ByoBabyRepositoryInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

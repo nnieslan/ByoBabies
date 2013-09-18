@@ -35,6 +35,12 @@ namespace ByoBaby.Rest
                defaults: new { controller = "requests", id = RouteParameter.Optional },
                constraints: new { controller = "requests" });
 
+            config.Routes.MapHttpRoute(
+               name: "LocationsApi",
+               routeTemplate: "api/{controller}/{id}",
+               defaults: new { controller = "locations", id = RouteParameter.Optional },
+               constraints: new { controller = "locations" });
+
 
             config.Routes.MapHttpRoute(
                 name: "ConversationsApi",
