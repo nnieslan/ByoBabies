@@ -17,6 +17,9 @@ namespace ByoBaby.Rest.Models
         public string YelpId { get; set; }
 
         [DataMember(IsRequired = true)]
+        public string ImageUrl { get; set; }
+
+        [DataMember(IsRequired = true)]
         public double? Latitude { get; set; }
 
         [DataMember(IsRequired = true)]

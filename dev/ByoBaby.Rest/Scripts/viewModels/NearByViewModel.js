@@ -1,29 +1,38 @@
-﻿
-function NearByViewModel(baseUrl) {
+﻿/// <reference path="NearByViewModel.js" />
+
+function LocationViewModel(data) {
+    var self = this;
+    ko.mapping.fromJS(data, {}, self);
+}
+
+function CheckinViewModel(baseUrl) {
     NavViewModel.apply(this, [baseUrl]);
 
     var self = this;
     self.button(new MenuButtonModel());
-    self.template = "nearByView";
+    self.template = "checkinView";
     self.latitude = ko.observable(39.7561387);
     self.longitude = ko.observable(-104.9272044);
-    self.map = null;
-    self.searchManager = null;
-    self.currentBox = null;
-    self.searchTerm = ko.observable('');
     self.locations = ko.observableArray([]);
+    self.selected = ko.observable();
+    //self.auth = {
+    //    bingKey: "AuBiDC9YFcYJr09uJZnkeKb_bflX5EbLUNU7wVJ7E0P414Ptj4kIMq3GqLOQQEB6",
+    //    consumerKey: "urh0CQQyRtrG7Li6ro-faA",
+    //    consumerSecret: "o1Yb0CipArdBmqhCs1Fq_OGVSMM",
+    //    accessToken: "2CJWkwJFmh1vksIVoVL9XtAQZv7VSNZM",
+    //    // This example is a proof of concept, for how to use the Yelp v2 API with javascript.
+    //    // You wouldn't actually want to expose your access token secret like this in a real application.
+    //    accessTokenSecret: "ZjVjpt2A_3dhNEC4GmB-UyfWZMs",
+    //    serviceProvider: {
+    //        signatureMethod: "HMAC-SHA1"
+    //    }
+    //};
 
-    self.auth = {
-        bingKey: "AuBiDC9YFcYJr09uJZnkeKb_bflX5EbLUNU7wVJ7E0P414Ptj4kIMq3GqLOQQEB6",
-        consumerKey: "urh0CQQyRtrG7Li6ro-faA",
-        consumerSecret: "o1Yb0CipArdBmqhCs1Fq_OGVSMM",
-        accessToken: "2CJWkwJFmh1vksIVoVL9XtAQZv7VSNZM",
-        // This example is a proof of concept, for how to use the Yelp v2 API with javascript.
-        // You wouldn't actually want to expose your access token secret like this in a real application.
-        accessTokenSecret: "ZjVjpt2A_3dhNEC4GmB-UyfWZMs",
-        serviceProvider: {
-            signatureMethod: "HMAC-SHA1"
-        }
+    self.afterViewRender = function (elements) {
+        var view = '#' + self.template + '-content';
+        $(view).trigger('create');
+        self.afterAdd();
+        self.getNearByLocations();
     };
 
     self.getNearByLocations = function () {
@@ -33,15 +42,15 @@ function NearByViewModel(baseUrl) {
             return false;
         }
 
-        var url = self.baseUrl + 'api/locations?lat=' + self.latitude() + '&lon=' + self.longitude();
+        var url = self.baseUrl + 'api/nearby/getlocations?lat=' + self.latitude() + '&lon=' + self.longitude();
         var jqxhr = $.get(url, function (data) {
             console.log("NearByViewModel.getNearByLocations() - ajax call complete");
             self.locations([]);
             var i, max = data.length;
             for (i = 0; i < max; i++) {
-                self.locations.push(data[i]);
-                self.createMapPin(data[i]);
+                self.locations.push(new LocationViewModel(data[i]));
             }
+            $('ul').listview('refresh');
         })
             .error(function (jqxhr, exception) {
                 if (jqxhr.status === 401) {
@@ -105,13 +114,45 @@ function NearByViewModel(baseUrl) {
         //    }
         //});
     };
- 
+
+    self.setSelected = function (location) {
+        self.selected(location);
+        $('#popupCheckin').popup('open');
+        $('#popupCheckin-popup').trigger('create');
+    };
+
+    self.checkin = function (location) {
+
+        $('#popupCheckin').popup('close');
+
+    };
+
+}
+
+function NearByViewModel(baseUrl) {
+    NavViewModel.apply(this, [baseUrl]);
+
+    var self = this;
+    self.button(new MenuButtonModel());
+    self.template = "nearByView";
+    self.latitude = ko.observable(39.7561387);
+    self.longitude = ko.observable(-104.9272044);
+    self.map = null;
+    self.searchManager = null;
+    self.currentBox = null;
+    self.searchTerm = ko.observable('');
+    self.locations = ko.observableArray([]);
+
+    self.auth = {
+        bingKey: "AuBiDC9YFcYJr09uJZnkeKb_bflX5EbLUNU7wVJ7E0P414Ptj4kIMq3GqLOQQEB6"
+    };
+
     self.initializeMap = function () {
         Microsoft.Maps.loadModule('Microsoft.Maps.Themes.BingTheme', {
             callback: function () {
                 self.map = new Microsoft.Maps.Map($('#nearbyMap')[0],
                 {
-                    credentials: 'AuBiDC9YFcYJr09uJZnkeKb_bflX5EbLUNU7wVJ7E0P414Ptj4kIMq3GqLOQQEB6',
+                    credentials: self.auth.bingKey,
                     mapTypeId: Microsoft.Maps.MapTypeId.road,
                     enableClickableLogo: false,
                     enableSearchLogo: false,
@@ -124,12 +165,7 @@ function NearByViewModel(baseUrl) {
     };
 
     self.createMapPin = function (result) {
-        if (result) { 
-            //var geocode = 'http://dev.virtualearth.net/REST/v1/Locations?key=' + self.auth.bingKey + '&query=' + encodeURIComponent(result.location.display_address.join(','))
-            //console.log(geocode);
-            //$.get(geocode, function (data) {
-            //        console.log(data);
-            //});
+        if (result) {
             var loc = new Microsoft.Maps.Location(result.Latitude, result.Longitude);
             var pin = new Microsoft.Maps.Pushpin(loc, null);
             Microsoft.Maps.Events.addHandler(pin, 'click', function () {

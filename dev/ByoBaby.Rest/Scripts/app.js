@@ -16,7 +16,8 @@ var views = [
         "friendDetailView",
         "notificationsView",
         "requestView",
-        "nearByView"
+        "nearByView",
+        "checkinView"
     ];
 function initializeViewModel() {
     utilities = new Helpers();

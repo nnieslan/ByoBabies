@@ -23,7 +23,7 @@ using YelpSharp.Data.Options;
 
 namespace ByoBaby.Rest.Controllers
 {
-    public class LocationsController : ApiController
+    public class NearByController : ApiController
     {
         #region consts
 
@@ -54,7 +54,7 @@ namespace ByoBaby.Rest.Controllers
         #region api controller actions
 
         [Authorize()]
-        public IEnumerable<LocationModel> GetNearByBusinesses(double lat, double lon)
+        public IEnumerable<LocationModel> GetLocations(double lat, double lon)
         {
             List<LocationModel> locations = new List<LocationModel>();
             var y = new Yelp(yelpOptions);
@@ -65,7 +65,7 @@ namespace ByoBaby.Rest.Controllers
             };
 
             var task = y.Search(searchOptions).ContinueWith((results) => {
-                foreach (var business in results.Result.businesses.OrderByDescending(b => b.distance))
+                foreach (var business in results.Result.businesses.OrderBy(b => b.distance))
                 {
                     StringBuilder builder = new StringBuilder(business.location.address[0]);
                     for(int i = 1; i < business.location.address.Length; i++)
@@ -79,6 +79,7 @@ namespace ByoBaby.Rest.Controllers
                     var loc = new LocationModel()
                     {
                         YelpId = business.id,
+                        ImageUrl = business.image_url,
                         PhoneNumber = business.phone,
                         Name = business.name,
                         Address = builder.ToString()
@@ -95,7 +96,7 @@ namespace ByoBaby.Rest.Controllers
         }
 
         [Authorize()]
-        public IEnumerable<object> GetNearByPeople(double lat, double lon)
+        public IEnumerable<object> GetPeople(double lat, double lon)
         {
             throw new NotImplementedException();
         }

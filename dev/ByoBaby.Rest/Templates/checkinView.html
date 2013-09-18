@@ -1,0 +1,30 @@
+﻿<div id="checkinView-content">
+    <ul data-role="listview"
+        data-autodividers="false"
+        data-filter="true"
+        data-bind="foreach: locations">
+        <li>
+            <a  href="#popupCheckin" data-rel="popup" data-bind="click: function () { $parent.setSelected($data); $('#popupCheckin').popup('open');}" data-position-to="window" data-transition="pop">
+                <img data-bind="attr: { src: ImageUrl }" />
+                <h2 data-bind="text: Name"></h2>
+                <p data-bind="text: $data.Address() + ',' + $data.PhoneNumber()"></p>
+            </a>
+        </li>
+    </ul>
+    <div data-role="popup" id="popupCheckin" data-theme="a" class="ui-corner-all">
+                <form>
+                    <div style="padding: 10px 20px;">
+                        <h3>Check in</h3>
+                        <select id="duration" name="duration" data-theme="b">
+                            <option value="30">30 min</option>
+                            <option value="60">1 hour</option>
+                            <option value="90">1.5 hours</option>
+                            <option value="120">2 hours</option>
+                        </select>
+                        <label for="note" class="ui-hidden-accessible">Note</label>
+                        <input type="text" id="note" value="" placeholder="leave a note for everyone" data-theme="b" />
+                        <a data-role="button" data-theme="b" data-icon="check" data-bind="click: function () { checkin(selected()); }" >Check in</a>
+                    </div>
+                </form>
+            </div>
+</div>

@@ -208,7 +208,7 @@
     <Compile Include="Controllers\FriendsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JasmineController.cs" />
-    <Compile Include="Controllers\LocationsController.cs" />
+    <Compile Include="Controllers\NearByController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
@@ -350,6 +350,7 @@
     <Content Include="Templates\conversationView.html" />
     <Content Include="Templates\friendDetailView.html" />
     <Content Include="Templates\friendsListView.html" />
+    <Content Include="Templates\checkinView.html" />
     <Content Include="Templates\nearByView.html" />
     <Content Include="Templates\notificationsView.html" />
     <Content Include="Templates\profileView.html" />
