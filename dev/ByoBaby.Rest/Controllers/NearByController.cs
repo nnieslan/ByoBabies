@@ -144,7 +144,28 @@ namespace ByoBaby.Rest.Controllers
         [Authorize()]
         public HttpResponseMessage CheckOut(long id)
         {
-            throw new NotImplementedException();
+            ByoBabiesUserPrincipal currentUser =
+                   HttpContext.Current.User as ByoBabiesUserPrincipal;
+
+            var userId = currentUser.GetPersonId();
+            var checkin = db.CheckIns.Include(c => c.Owner).FirstOrDefault(c => c.Id == id);
+            if (checkin != null)
+            {
+                if (checkin.Owner.Id == userId)
+                {
+                    db.CheckIns.Remove(checkin);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.Unauthorized);
+                }
+            }
+            else
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
 
