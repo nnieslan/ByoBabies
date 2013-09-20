@@ -20,12 +20,12 @@ namespace ByoBaby.Rest.Test.Controllers
     [TestClass]
     public class LocationsControllerTest
     {
-        private static LocationsController InitializeController(HttpMethod verb, string url)
+        private static NearByController InitializeController(HttpMethod verb, string url)
         {
             var values = new HttpRouteValueDictionary() { 
                     { "controller", "locations" } 
                 };
-            return ControllerTestHelper.InitializeController<LocationsController>(
+            return ControllerTestHelper.InitializeController<NearByController>(
                 verb, url,
                 "application",
                 "DefaultApi",
@@ -34,21 +34,21 @@ namespace ByoBaby.Rest.Test.Controllers
         }
 
         [TestMethod]
-        public void LocationsController_ConstructorTest()
+        public void NearByController_ConstructorTest()
         {
-            var controller = new LocationsController();
+            var controller = new NearByController();
             Assert.IsNotNull(controller);
         }
 
         [TestMethod]
-        public void LocationsController_GetTest()
+        public void NearByController_GetTest()
         {
             double lat = 39.7561387;
             double lon = -104.9272044;
             var controller = InitializeController(HttpMethod.Get,
                "http://localhost/byobabies/api/locations");
 
-            var locations = controller.GetNearBy(lat, lon);
+            var locations = controller.GetLocations(lat, lon);
 
             Assert.IsNotNull(locations);
             Assert.IsTrue(locations.Count() > 0);
