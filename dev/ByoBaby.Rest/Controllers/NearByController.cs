@@ -49,6 +49,8 @@ namespace ByoBaby.Rest.Controllers
             ConsumerSecret = YelpV2ConsumerSecret
         };
 
+        private ByoBabyRepository db = new ByoBabyRepository();
+
         #endregion
 
         #region api controller actions
@@ -102,13 +104,45 @@ namespace ByoBaby.Rest.Controllers
         }
 
         [Authorize()]
-        public HttpResponseMessage PostCheckIn()
+        public HttpResponseMessage CheckIn([FromBody] CheckInModel checkin)
         {
-            throw new NotImplementedException();
+             ByoBabiesUserPrincipal currentUser =
+                    HttpContext.Current.User as ByoBabiesUserPrincipal;
+
+            var id = currentUser.GetPersonId();
+            if (ModelState.IsValid)
+            {
+                Person person = db.People.FirstOrDefault(u => u.Id == id);
+                
+                var ci = new CheckIn()
+                {
+                    Owner = person,
+                    Duration = checkin.Duration,
+                    LocationId = checkin.Location.YelpId,
+                    Latitude = checkin.Location.Latitude.Value,
+                    Longitude = checkin.Location.Longitude.Value,
+                    Note = checkin.Note,
+                    StartTime = DateTime.Now
+                };
+
+                db.CheckIns.Add(ci);
+
+                db.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, ci.Id);
+            }
+            else
+            {
+                throw new HttpResponseException(
+                         new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest)
+                         {
+                             ReasonPhrase = "Check-in failed, invalid information."
+                         });
+            }
         }
 
         [Authorize()]
-        public HttpResponseMessage PostCheckOut()
+        public HttpResponseMessage CheckOut(long id)
         {
             throw new NotImplementedException();
         }

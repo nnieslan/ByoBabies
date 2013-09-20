@@ -15,14 +15,13 @@
                 <form>
                     <div style="padding: 10px 20px;">
                         <h3>Check in</h3>
-                        <select id="duration" name="duration" data-theme="b">
+                        <select id="duration" name="duration" data-theme="b" data-bind="value: duration">
                             <option value="30">30 min</option>
                             <option value="60">1 hour</option>
                             <option value="90">1.5 hours</option>
                             <option value="120">2 hours</option>
                         </select>
-                        <label for="note" class="ui-hidden-accessible">Note</label>
-                        <input type="text" id="note" value="" placeholder="leave a note for everyone" data-theme="b" />
+                        <input type="text" id="note" placeholder="leave a note" data-theme="b" data-bind="value: note" />
                         <a data-role="button" data-theme="b" data-icon="check" data-bind="click: function () { checkin(selected()); }" >Check in</a>
                     </div>
                 </form>

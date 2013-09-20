@@ -17,6 +17,7 @@ namespace ByoBaby.Model.Repositories
         public DbSet<Blurb> Blurbs { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<CheckIn> CheckIns { get; set; }
 
         public DbSet<Setting> Settings { get; set; }
 
@@ -28,9 +29,8 @@ namespace ByoBaby.Model.Repositories
             modelBuilder.Entity<Person>().HasMany(e => e.MemberOf);
             modelBuilder.Entity<Person>().HasMany(e => e.Notifications);
             modelBuilder.Entity<Person>().HasMany(e => e.PendingRequests);
-
             modelBuilder.Entity<Notification>().HasRequired(e => e.Originator);
-
+            modelBuilder.Entity<CheckIn>().HasRequired(e => e.Owner);
         }
     }
 }

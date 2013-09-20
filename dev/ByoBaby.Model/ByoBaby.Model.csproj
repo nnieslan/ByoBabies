@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Models\CheckIn.cs" />
     <Compile Include="Models\FriendRequest.cs" />
     <Compile Include="Models\NotificationOriginator.cs" />
     <Compile Include="Models\Notification.cs" />

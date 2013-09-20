@@ -13,6 +13,8 @@ function CheckinViewModel(baseUrl) {
     self.template = "checkinView";
     self.latitude = ko.observable(39.7561387);
     self.longitude = ko.observable(-104.9272044);
+    self.note = ko.observable();
+    self.duration = ko.observable();
     self.locations = ko.observableArray([]);
     self.selected = ko.observable();
     //self.auth = {
@@ -123,7 +125,42 @@ function CheckinViewModel(baseUrl) {
 
     self.checkin = function (location) {
 
-        $('#popupCheckin').popup('close');
+        //validate the form before processing.
+        //self.valid(!self.selected.hasError() && !self.password.hasError() && !self.confirmPassword.hasError());
+        //if (!self.valid()) {
+        //    return false;
+        //}
+
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', 'Error');
+            return false;
+        }
+
+        application.isProcessing(true);
+        var url = self.baseUrl + 'api/nearby/checkin';
+        var input = {
+            Location: self.selected(),
+            Duration: self.duration(),
+            Note: self.note(),
+        };
+
+        var jqxhr = $.post(url, input, function (data) {
+            application.back();
+        })
+            .error(function (jqxHR, exception) {
+                application.isProcessing(false);
+                if (jqxHR.responseText !== '') {
+                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                    //TODO - we probably need an error case for 'Account exists'
+                } else {
+                    utilities.notifyUser('Unable to check-in.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                $('#popupCheckin').popup('close');
+                application.isProcessing(false);
+            });
+
 
     };
 
