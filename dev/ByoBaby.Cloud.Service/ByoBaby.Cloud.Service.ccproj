@@ -45,6 +45,14 @@
       <RoleName>ByoBaby.Rest</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
+    <ProjectReference Include="..\ByoBaby.Worker\ByoBaby.Worker.csproj">
+      <Name>ByoBaby.Worker</Name>
+      <Project>{d82ab763-743d-401a-92dc-d1011b126dce}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>ByoBaby.Worker</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

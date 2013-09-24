@@ -14,6 +14,7 @@ using System.Web.Http;
 using System.Xml;
 using System.Xml.Linq;
 using ByoBaby.Rest.Models;
+using ByoBaby.Rest.Helpers;
 using ByoBaby.Model;
 using ByoBaby.Model.Repositories;
 using ByoBaby.Security;
@@ -98,9 +99,20 @@ namespace ByoBaby.Rest.Controllers
         }
 
         [Authorize()]
-        public IEnumerable<object> GetPeople(double lat, double lon)
+        public IEnumerable<NearByCheckInModel> GetCheckIns(double lat, double lon, double radius)
         {
-            throw new NotImplementedException();
+            ByoBabiesUserPrincipal currentUser =
+                    HttpContext.Current.User as ByoBabiesUserPrincipal;
+
+            var id = currentUser.GetPersonId();
+
+            var checkins = db.CheckIns.Include(c => c.Owner)
+                .ToList()
+                .Select(c => new NearByCheckInModel() { Checkin = CheckInModel.FromCheckIn(c), Distance = LocationCalculationHelper.CalcHaversineDistance(lat, lon, c.Latitude, c.Longitude) })
+                //.Where(c => c.Distance <= radius)
+                //.OrderBy(c => c.Distance);
+                ;
+            return checkins;
         }
 
         [Authorize()]
@@ -173,7 +185,7 @@ namespace ByoBaby.Rest.Controllers
 
         #region methods
 
-        private void GeocodeAddress(LocationModel model)
+        private static void GeocodeAddress(LocationModel model)
         {
             UriBuilder b = new UriBuilder(GeoCodeURLBase);
             b.Query = string.Format(
@@ -222,7 +234,7 @@ namespace ByoBaby.Rest.Controllers
             }
         }  
 
-        private HttpWebRequest CreateWebRequest(string endPoint)
+        private static HttpWebRequest CreateWebRequest(string endPoint)
         {
             var request = (HttpWebRequest)WebRequest.Create(endPoint);
 
@@ -233,6 +245,7 @@ namespace ByoBaby.Rest.Controllers
             return request;
         }
     
+        
         #endregion
 
     }

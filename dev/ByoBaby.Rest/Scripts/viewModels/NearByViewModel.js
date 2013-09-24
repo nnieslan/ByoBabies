@@ -117,6 +117,7 @@ function CheckinViewModel(baseUrl) {
         //});
     };
 
+    
     self.setSelected = function (location) {
         self.selected(location);
         $('#popupCheckin').popup('open');
@@ -178,11 +179,50 @@ function NearByViewModel(baseUrl) {
     self.searchManager = null;
     self.currentBox = null;
     self.searchTerm = ko.observable('');
-    self.locations = ko.observableArray([]);
+    self.checkins = ko.observableArray([]);
 
     self.auth = {
         bingKey: "AuBiDC9YFcYJr09uJZnkeKb_bflX5EbLUNU7wVJ7E0P414Ptj4kIMq3GqLOQQEB6"
     };
+
+    self.getNearByCheckins = function (callback) {
+        if (!utilities.checkConnection()) {
+            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+            return false;
+        }
+
+        application.isProcessing(true);
+
+        var url = self.baseUrl + 'api/nearby/getcheckins?lat=' + self.latitude() + '&lon=' + self.longitude() + '&radius=4000';
+        var jqxhr = $.get(url, function (data) {
+            console.log("NearByViewModel.getNearByCheckins() - ajax call complete");
+            self.checkins([]);
+            var i, max = data.length;
+            for (i = 0; i < max; i++) {
+                self.checkins.push(new LocationViewModel(data[i]));
+            }
+            if (callback !== undefined) {
+                callback();
+            }
+        })
+            .error(function (jqxhr, exception) {
+                if (jqxhr.status === 401) {
+                    application.clear();
+                    return;
+                }
+
+                if (jqxhr.responseText !== '') {
+                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to load near-by check-ins.  Please try again later.', 'Error');
+                }
+            })
+            .complete(function () {
+                application.isProcessing(false);
+            });
+
+    };
+
 
     self.initializeMap = function () {
         Microsoft.Maps.loadModule('Microsoft.Maps.Themes.BingTheme', {
@@ -203,7 +243,7 @@ function NearByViewModel(baseUrl) {
 
     self.createMapPin = function (result) {
         if (result) {
-            var loc = new Microsoft.Maps.Location(result.Latitude, result.Longitude);
+            var loc = new Microsoft.Maps.Location(result.Checkin.Location.Latitude(), result.Checkin.Location.Longitude());
             var pin = new Microsoft.Maps.Pushpin(loc, null);
             Microsoft.Maps.Events.addHandler(pin, 'click', function () {
                 self.showPinInfo(result)
@@ -218,10 +258,10 @@ function NearByViewModel(baseUrl) {
             self.map.entities.remove(self.currentBox);
         }
         self.currentBox = new Microsoft.Maps.Infobox(
-            result.location,
+            new Microsoft.Maps.Location(result.Checkin.Location.Latitude(), result.Checkin.Location.Longitude()),
             {
-                title: result.Name,
-                description: [result.PhoneNumber, result.Address].join(','),
+                title: [result.Checkin.Owner.FirstName(), result.Checkin.Owner.LastName()].join(' '),
+                description: [result.Checkin.Duration(), result.Checkin.Note()].join(','),
                 showPointer: true,
                 titleAction: null,
                 titleClickHandler: null
@@ -230,47 +270,57 @@ function NearByViewModel(baseUrl) {
         self.map.entities.push(self.currentBox);
     }
 
-    self.createSearchManager = function () {
-        self.map.addComponent('searchManager', new Microsoft.Maps.Search.SearchManager(self.map));
-        self.searchManager = self.map.getComponent('searchManager');
-    };
+    //self.createSearchManager = function () {
+    //    self.map.addComponent('searchManager', new Microsoft.Maps.Search.SearchManager(self.map));
+    //    self.searchManager = self.map.getComponent('searchManager');
+    //};
 
-    self.search = function () {
-        Microsoft.Maps.loadModule('Microsoft.Maps.Search', { callback: self.searchRequest })
-    };
+    //self.search = function () {
+    //    Microsoft.Maps.loadModule('Microsoft.Maps.Search', { callback: self.searchRequest })
+    //};
 
-    self.searchRequest = function () {
-        self.createSearchManager();
-        var request =
-            {
-                query: self.searchTerm(),
-                count: 20,
-                startIndex: 0,
-                bounds: self.map.getBounds(),
-                callback: self.search_onSearchSuccess,
-                errorCallback: self.search_onSearchFailure
-            };
-        self.searchManager.search(request);
-    };
+    //self.searchRequest = function () {
+    //    self.createSearchManager();
+    //    var request =
+    //        {
+    //            query: self.searchTerm(),
+    //            count: 20,
+    //            startIndex: 0,
+    //            bounds: self.map.getBounds(),
+    //            callback: self.search_onSearchSuccess,
+    //            errorCallback: self.search_onSearchFailure
+    //        };
+    //    self.searchManager.search(request);
+    //};
 
-    self.search_onSearchSuccess = function (result, userData) {
+    //self.search_onSearchSuccess = function (result, userData) {
+    //    self.map.entities.clear();
+    //    var searchResults = result && result.searchResults;
+    //    if (searchResults) {
+    //        for (var i = 0; i < searchResults.length; i++) {
+    //            self.createMapPin(searchResults[i]);
+    //        }
+    //        if (result.searchRegion && result.searchRegion.mapBounds) {
+    //            self.map.setView({ bounds: result.searchRegion.mapBounds.locationRect });
+    //        }
+    //        else {
+    //            alert('No near-by businesses found');
+    //        }
+    //    }
+    //}
+
+    //self.search_onSearchFailure = function (result, userData) {
+    //    alert('Unable to search near-by locations');
+    //};
+
+    //TODO - create a KNOCKOUT binding for this
+    self.renderPins = function () {
         self.map.entities.clear();
-        var searchResults = result && result.searchResults;
-        if (searchResults) {
-            for (var i = 0; i < searchResults.length; i++) {
-                self.createMapPin(searchResults[i]);
-            }
-            if (result.searchRegion && result.searchRegion.mapBounds) {
-                self.map.setView({ bounds: result.searchRegion.mapBounds.locationRect });
-            }
-            else {
-                alert('No near-by businesses found');
+        if (self.checkins().length > 0) {
+            for (var i = 0; i < self.checkins().length; i++) {
+                self.createMapPin(self.checkins()[i]);
             }
         }
-    }
-
-    self.search_onSearchFailure = function (result, userData) {
-        alert('Unable to search near-by locations');
     };
 
     self.afterViewRender = function (elements) {
@@ -279,6 +329,7 @@ function NearByViewModel(baseUrl) {
         $(view).trigger('create');
         self.afterAdd();
         self.initializeMap();
+        self.getNearByCheckins(self.renderPins);
     };
 
 

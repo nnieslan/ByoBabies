@@ -11,6 +11,16 @@ using ByoBaby.Model;
 namespace ByoBaby.Rest.Models
 {
     [DataContract]
+    public class NearByCheckInModel
+    {
+        [DataMember(IsRequired = true)]
+        public CheckInModel Checkin { get; set; }
+        
+        [DataMember(IsRequired = true)]
+        public double Distance { get; set; }
+    }
+
+    [DataContract]
     public class CheckInModel
     {
         [DataMember(IsRequired = true)]
@@ -21,5 +31,19 @@ namespace ByoBaby.Rest.Models
 
         [DataMember(IsRequired = true)]
         public string Note { get; set; }
+
+        [DataMember]
+        public ProfileViewModel Owner { get; set; }
+
+        public static CheckInModel FromCheckIn(CheckIn ci)
+        {
+            return new CheckInModel()
+            {
+                Location = new LocationModel() { YelpId = ci.LocationId, Latitude = ci.Latitude, Longitude = ci.Longitude },
+                Note = ci.Note,
+                Duration = ci.Duration,
+                Owner = ProfileViewModel.FromPerson(ci.Owner)
+            };
+        }
     }
 }

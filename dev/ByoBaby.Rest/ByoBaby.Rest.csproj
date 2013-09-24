@@ -217,6 +217,7 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\CustomMultiPartFormDataStreamProvider.cs" />
+    <Compile Include="Helpers\LocationCalculationHelper.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Models\CheckInModel.cs" />
     <Compile Include="Models\ChildViewModel.cs" />

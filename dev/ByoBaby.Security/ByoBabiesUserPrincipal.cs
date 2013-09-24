@@ -10,7 +10,7 @@ using ByoBaby.Model.Repositories;
 namespace ByoBaby.Security
 {
     /// <summary>
-    /// Represents a custom principal for the FlowPay web application.
+    /// Represents a custom principal for the web application.
     /// </summary>
     public class ByoBabiesUserPrincipal : IPrincipal
     {
