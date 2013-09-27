@@ -33,19 +33,28 @@ namespace ByoBaby.Rest.Models
         public string Note { get; set; }
 
         [DataMember]
-        public string StartTime { get; set; }
+        public string DisplayStartTime { get; set; }
+
+        [DataMember]
+        public DateTime StartTime { get; set; }
+
+        [DataMember]
+        public int EstimatedTimeRemaining { get; set; }
 
         [DataMember]
         public ProfileViewModel Owner { get; set; }
 
         public static CheckInModel FromCheckIn(CheckIn ci)
         {
+            var remaining = ci.Duration - (DateTime.Now.Subtract(ci.StartTime).Minutes);
             return new CheckInModel()
             {
                 Location = new LocationModel() { YelpId = ci.LocationId, Latitude = ci.Latitude, Longitude = ci.Longitude },
                 Note = ci.Note,
                 Duration = ci.Duration,
-                StartTime = ci.StartTime.ToShortTimeString(),
+                StartTime = ci.StartTime,
+                DisplayStartTime = ci.StartTime.ToShortTimeString(),
+                EstimatedTimeRemaining = remaining,
                 Owner = ProfileViewModel.FromPerson(ci.Owner)
             };
         }

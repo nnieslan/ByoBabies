@@ -17,7 +17,8 @@ var views = [
         "notificationsView",
         "requestView",
         "nearByView",
-        "checkinView"
+        "checkinView",
+        "mapPinInfoView"
     ];
 function initializeViewModel() {
     utilities = new Helpers();

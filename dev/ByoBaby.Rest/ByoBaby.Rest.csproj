@@ -242,6 +242,9 @@
     <Content Include="Content\images\icons-36-white.png" />
     <Content Include="Content\jasmine\jasmine.css" />
     <Content Include="Content\jasmine\jasmine_favicon.png" />
+    <Content Include="Content\jquery-countdown-1.6.3\countdownGlowing.gif" />
+    <Content Include="Content\jquery-countdown-1.6.3\countdownLED.png" />
+    <Content Include="Content\jquery-countdown-1.6.3\jquery.countdown.css" />
     <Content Include="Content\jquery.mobile-1.3.0.css" />
     <Content Include="Content\jquery.mobile-1.3.0.min.css" />
     <Content Include="Content\jquery.mobile.structure-1.3.0.css" />
@@ -317,6 +320,8 @@
     <Content Include="Scripts\jasmine-samples\SpecHelper.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery-countdown-1.6.3\jquery.countdown.js" />
+    <Content Include="Scripts\jquery-countdown-1.6.3\jquery.countdown.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
     <Content Include="Scripts\jquery.mobile-1.3.0.js" />
@@ -353,6 +358,7 @@
     <Content Include="Templates\friendDetailView.html" />
     <Content Include="Templates\friendsListView.html" />
     <Content Include="Templates\checkinView.html" />
+    <Content Include="Templates\mapPinInfoView.html" />
     <Content Include="Templates\nearByView.html" />
     <Content Include="Templates\notificationsView.html" />
     <Content Include="Templates\profileView.html" />

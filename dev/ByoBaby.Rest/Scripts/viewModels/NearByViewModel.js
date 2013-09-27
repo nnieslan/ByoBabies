@@ -118,6 +118,7 @@ function NearByViewModel(baseUrl) {
     self.map = null;
     self.searchManager = null;
     self.currentBox = null;
+    self.currentPin = ko.observable('');
     self.searchTerm = ko.observable('');
     self.checkins = ko.observableArray([]);
 
@@ -196,17 +197,27 @@ function NearByViewModel(baseUrl) {
             self.currentBox.setOptions({ visible: true });
             self.map.entities.remove(self.currentBox);
         }
+        self.currentPin(result);
+        var infoBoxHtml = '<div id="selectedMapPin" data-bind="template: { name: &quot;mapPinInfoView&quot;, data: $data }"></div>';
+        //'<div id="selectedMapPin" class="pushpin-infobox"><b id="infoboxTitle" data-bind="text: Checkin.Owner.FirstName()">'
+            //+ '</b><a id="infoboxDescription">Checked in at <span data-bind="text: Checkin.DisplayStartTime()"></span>'
+            //+ "Checked in at " + result.Checkin.DisplayStartTime() + " for an estimated " +  result.Checkin.Duration() + " minutes."
+            //+'</a></div>'
         self.currentBox = new Microsoft.Maps.Infobox(
             new Microsoft.Maps.Location(result.Checkin.Location.Latitude(), result.Checkin.Location.Longitude()),
             {
-                title: [result.Checkin.Owner.FirstName(), result.Checkin.Owner.LastName()].join(' '),
-                description: "Checked in at " + result.Checkin.StartTime() + " for an estimated " +  result.Checkin.Duration() + " minutes.",
+                //title: [result.Checkin.Owner.FirstName(), result.Checkin.Owner.LastName()].join(' '),
+                //description: "Checked in at " + result.Checkin.DisplayStartTime() + " for an estimated " +  result.Checkin.Duration() + " minutes.",
                 showPointer: true,
                 titleAction: null,
-                titleClickHandler: null
+                titleClickHandler: null,
+                htmlContent:infoBoxHtml
             });
+
         self.currentBox.setOptions({ visible: true });
         self.map.entities.push(self.currentBox);
+        ko.applyBindings(result, $('#selectedMapPin')[0]);
+        $('#mapPinInfoView-content').trigger('create');
     }
 
     //TODO - create a KNOCKOUT binding for this

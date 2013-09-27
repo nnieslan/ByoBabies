@@ -1,0 +1,14 @@
+﻿<div id="mapPinInfoView-content" class="pushpin-infobox">
+    <a href="#popupInfoDetail" data-rel="popup" data-bind="click: function () { $('#popupInfoDetail').popup('open'); }" data-position-to="window" data-transition="pop">
+        <h3 data-bind="text: Checkin.Owner.FirstName() + ' ' + Checkin.Owner.LastName()"></h3>
+        <p data-bind="text: Checkin.Note()"></p>
+    </a>
+    <div data-role="popup" id="popupInfoDetail" data-theme="a" class="ui-corner-all">
+        <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-left">Close</a>
+        <ul data-role="listview" data-inset="true">
+            <li data-bind="text: Checkin.Owner.FirstName() + ' ' + Checkin.Owner.LastName()"></li>
+            <li data-bind="text: 'Checked in at ' + Checkin.DisplayStartTime()"></li>
+            <li data-bind="text: 'Plans to be there for another ' + Checkin.EstimatedTimeRemaining() + ' minutes'"></li>
+        </ul>
+    </div>
+</div>
