@@ -33,6 +33,9 @@ namespace ByoBaby.Rest.Models
         public string Note { get; set; }
 
         [DataMember]
+        public string StartTime { get; set; }
+
+        [DataMember]
         public ProfileViewModel Owner { get; set; }
 
         public static CheckInModel FromCheckIn(CheckIn ci)
@@ -42,6 +45,7 @@ namespace ByoBaby.Rest.Models
                 Location = new LocationModel() { YelpId = ci.LocationId, Latitude = ci.Latitude, Longitude = ci.Longitude },
                 Note = ci.Note,
                 Duration = ci.Duration,
+                StartTime = ci.StartTime.ToShortTimeString(),
                 Owner = ProfileViewModel.FromPerson(ci.Owner)
             };
         }
