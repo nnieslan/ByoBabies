@@ -12,14 +12,14 @@ namespace ByoBaby.Model.Repositories
     {
         protected override void Seed(ByoBabyRepository context)
         {
-            var appId = new Guid("48809099-2A86-4DB1-A6A1-CB7BA1244653");
+            var appId = new Guid("B5771FB6-A3BD-447C-8390-1985AEDF6D9C");
 
             //create a stubbed in profile for the newly logged in user
             using (aspnet_fbaEntities1 entityContext = new aspnet_fbaEntities1())
             {
-                if (entityContext.aspnet_Applications.FirstOrDefault() == null)
+                if (entityContext.aspnet_Applications.FirstOrDefault(a => a.LoweredApplicationName == "byobabies") == null)
                 {
-                    entityContext.aspnet_Applications.Add(new aspnet_Applications() { ApplicationId = new Guid("48809099-2A86-4DB1-A6A1-CB7BA1244653"), ApplicationName = "/", LoweredApplicationName = "/" });
+                    entityContext.aspnet_Applications.Add(new aspnet_Applications() { ApplicationId = new Guid("B5771FB6-A3BD-447C-8390-1985AEDF6D9C"), ApplicationName = "ByoBabies", LoweredApplicationName = "byobabies" });
                     entityContext.SaveChanges();
                 }
 

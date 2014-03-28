@@ -173,6 +173,10 @@ function NearByViewModel(baseUrl) {
                     mapTypeId: Microsoft.Maps.MapTypeId.road,
                     enableClickableLogo: false,
                     enableSearchLogo: false,
+                    showMapTypeSelector: false,
+                    showScaleBar: false,
+                    showDashboard: false,
+                    tileBuffer: 2,
                     center: new Microsoft.Maps.Location(self.latitude(), self.longitude()),
                     zoom: 14,
                     theme: new Microsoft.Maps.Themes.BingTheme()

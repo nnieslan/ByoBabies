@@ -72,11 +72,11 @@
         <div data-role="panel" id="left-panel" data-theme="a">
             <div class="ui-grid-a">
                 <div class="ui-block-a">
-                    <a data-role="button" data-theme="a" data-icon="back" data-rel="close"
+                    <a data-role="button" data-theme="a" data-rel="close"
                         data-bind="click: logonViewModel().logout, fadeVisible: logoutButtonRequired">Sign out</a>
                 </div>
                 <div class="ui-block-b">
-                    <a data-role="button" data-theme="a" data-icon="star" data-rel="close"
+                    <a data-role="button" data-theme="a" data-rel="close"
                         data-bind="click: viewNotifications, fadeVisible: logoutButtonRequired, enable: (loggedInUserProfile() !== null)">Notifications</a>
                 </div>
             </div>
@@ -87,6 +87,8 @@
                 data-content-theme="a"
                 data-dividertheme="a"
                 data-corners="false"
+                data-swipe-close="true"
+                data-dismissible="true"
                 class=""
                 data-bind="foreach: tasksViewModel().tasks">
                 <li>

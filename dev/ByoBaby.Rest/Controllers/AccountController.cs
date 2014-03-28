@@ -73,6 +73,11 @@ namespace ByoBaby.Rest.Controllers
                         .Include("Children")
                         .Include("MemberOf")
                         .FirstOrDefault(p => p.UserId == id);
+                    if (person == null)
+                    {
+                        this.Logout();
+                        return (ProfileViewModel)null;
+                    }
                     return ProfileViewModel.FromPerson(person);
                 }
             }
