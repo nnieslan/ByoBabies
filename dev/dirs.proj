@@ -11,11 +11,12 @@
     <ProjectFiles Include="ByoBaby.Model\ByoBaby.Model.csproj"/>
     <ProjectFiles Include="ByoBaby.Security\ByoBaby.Security.csproj"/>
     <ProjectFiles Include="ByoBaby.Rest\ByoBaby.Rest.csproj"/>
+    <ProjectFiles Include="ByoBaby.Worker\ByoBaby.Worker.csproj"/>
     <ProjectFiles Include="ByoBaby.Cloud.Service\ByoBaby.Cloud.Service.ccproj"/>
 
   </ItemGroup>
 
-  <Import Project="$(ConstructFolder)\CWS.Build.Traversal.targets"/>
+  <Import Project="$(ConstructFolder)\Construct.Build.Traversal.targets"/>
 
   <!-- Insert any customizations for targets here -->
 
