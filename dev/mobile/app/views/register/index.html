@@ -1,0 +1,24 @@
+<div class="content-padded ui-content" data-role="content">
+  <div id="registerView-content" data-bind="visible: !registered()" style="vertical-align: middle;">
+    <form id="registerForm" action="">
+        <p data-bind="css: { error: !valid() && user.hasError() }">
+            <input type="text" id="new-username" placeholder="username" data-bind="value: user, valueUpdate: 'afterkeydown'"></input>
+            <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'></span>
+        </p>
+        <p>
+            <input type="text" id="displayname" placeholder="your name" data-bind="value: displayName, valueUpdate: 'afterkeydown'"></input>
+        </p>
+        <p data-bind="css: { error: !valid() && password.hasError() }">
+            <input type="password" id="new-pw" placeholder="password" data-bind="value: password, valueUpdate: 'afterkeydown'"></input>
+            <span data-bind='visible: !valid() && password.hasError(), text: password.validationMessage'></span>
+        </p>
+        <p data-bind="css: { error: !valid() && confirmPassword.hasError() }">
+            <input type="password" id="confirm-pw" placeholder="confirm" data-bind="value: confirmPassword, valueUpdate: 'afterkeydown'"></input>
+            <span data-bind='visible: !valid() && confirmPassword.hasError(), text: confirmPassword.validationMessage'></span>
+        </p>
+        <br />
+        <a id="registerUser" data-bind="click: register" data-role="button" data-theme="a">Create my profile</a>
+    </form>
+</div>
+
+</div>

@@ -1,0 +1,17 @@
+{
+  "name": "byobabies",
+  "version": "0.0.1",
+  "authors": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "www/components",
+    "www/spec",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "steroids-js": "3.1.x",
+    "steroids-addons": "https://9098:GAWAEFBGE623TX9UCY47XV4VWDJHQ7AVHXBQNXQCCR7ZFNLENEXTASA789UXJX4B3JU5JLF94A@addons.appgyver.com/steroids-addons.js?version=3.1.0"
+  }
+}

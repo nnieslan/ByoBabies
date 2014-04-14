@@ -1,0 +1,113 @@
+<div class="content-padded">
+  <div id="profileView-content">
+    <ul data-role="listview">
+        <li data-role="fieldcontain">
+            <div data-role="ui-grid-a">
+                <div class="ui-block-a">
+                    <img style="max-height: 75px; max-width: 75px" data-bind="attr: { src: ProfilePictureUrl }" /><br />
+                    <a style="font-size: smaller" data-bind="click: toggleUploader">change...</a>
+                </div>
+                <div class="ui-block-b">
+                    <h3 style="padding-left: 2em;"><span data-bind="text: FirstName"></span>&nbsp;<span data-bind="    text: LastName"></span></h3>
+                    <h3 style="padding-left: 2em;"><span data-bind="text: Email"></span></h3>
+                    <!-- TODO - Replace with Phone specific func later -->
+                    <input style="margin-left: 2em;" type="file" data-mini="true" data-bind="visible: ShowUploader" />
+                </div>
+            </div>
+        </li>
+        <li data-role="fieldcontain">
+            <div data-role="collapsible-set" data-theme="a" data-content-theme="b">
+                <div data-role="collapsible" data-theme="a" data-content-theme="b">
+                    <h4>Contact Info</h4>
+                    <ul id="profileView-contactinfolist" data-role="listview" data-inset="true">
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <input type="text" name="mobilePhone" id="mobilePhone" data-bind="value: MobilePhone" data-clear-btn="true">
+                            </div>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <input type="text" name="city" id="city" data-bind="value: City" data-clear-btn="true">
+                            </div>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <select name="state" id="state" data-mini="true"
+                                    data-bind="options: availableStates, value: selectedState, optionsText: 'Code', optionsCaption: 'State'">
+                                </select>
+                            </div>
+                        </li>
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <input type="text" name="neighborhood" id="neighborhood" data-bind="value: Neighborhood" data-clear-btn="true">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div data-role="collapsible">
+                    <h4>Children</h4>
+                    <ul id="profileView-childrenlist" data-role="listview" data-split-icon="delete" data-theme="a" data-split-theme="b" data-inset="true">
+                          <li data-role="list-divider">
+                            <div class="ui-grid-b">
+                                <div class="ui-block-a">
+                                    <h6>Name</h6>
+                                </div>
+                                <div class="ui-block-b">
+                                    <h6>Age</h6>
+                                </div>
+                                <div class="ui-block-c">
+                                    <h6>Gender</h6>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- ko foreach: Children -->
+                        <li data-role="fieldcontain">
+                            <a href="#">
+                                <div class="ui-grid-b">
+                                    <div class="ui-block-a">
+                                        <input name="childName" type="text" data-bind="value: Name">
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <input name="childAge" type="text" data-bind="value: Age">
+                                    </div>
+                                    <div class="ui-block-c">
+                                        <select name="childGender" data-mini="true" data-bind="value: Gender">
+                                            <option value="">Boy/Girl</option>
+                                            <option value="M">Boy</option>
+                                            <option value="F">Girl</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </a>
+                            <a data-bind="click: $parent.removeChild"></a>
+
+                        </li>
+                        <!-- /ko -->
+                        <li data-role="fieldcontain">
+                            <div class="ui-grid-solo">
+                                <button id="addChild" type="submit" data-bind="click: addChild" data-theme="a">Add...</button>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+                <div data-role="collapsible">
+                    <h4>Groups</h4>
+                    <ul id="profileView-groupslist" data-role="listview" data-inset="true">
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li data-role="fieldcontain">
+            <a href="#" data-bind="click: viewFriends">Friends</a>
+        </li>
+        <li data-role="fieldcontain">
+            <div class="ui-grid-solo">
+                <a id="saveProfile" data-role="button" href="#" data-bind="click: saveProfile" data-theme="a">Save</a>
+            </div>
+        </li>
+    </ul>
+
+</div>
+
+</div>

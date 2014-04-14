@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.ntprime.ByoBabies" version="3.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>ByoBabies</name>
+    <description>
+        A place for parents.
+    </description>
+    <author email="nicknieslanik@gmail.com" href="http://www.ByoBabies.com/contact">
+        ByoBabies Team
+    </author>
+    <access origin="*" />
+
+</widget>

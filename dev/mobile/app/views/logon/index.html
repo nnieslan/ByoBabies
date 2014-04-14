@@ -1,0 +1,15 @@
+ <div class="content-padded ui-content" data-role="content">
+       <form id="logonForm" action="" data-bind="submit: login">
+        <p data-bind="css: { error: !valid() && user.hasError() }">
+            <input type="text" id="username" placeholder="username" data-bind="value: user, valueUpdate: 'afterkeydown'"></input>
+            <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'></span>
+        </p>
+        <p data-bind="css: { error: !valid() && password.hasError() }">
+          <input type="password" id="pw" placeholder="password" data-bind="value: password, valueUpdate: 'afterkeydown'"></input>
+          <span data-bind='visible: !valid() && password.hasError(), text: password.validationMessage'></span>
+        </p>
+        <br />
+        <a id="loginUser" class="topcoat-button--cta center full" data-role="button"  data-bind="event : {touchend : login}" >Log In</a>
+      </form>
+
+    </div>

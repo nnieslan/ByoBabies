@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width">
+  <title>ByoBabies</title>
+
+  <link rel="stylesheet" href="/vendor/topcoat/css/topcoat-mobile-light.css" />
+  <link rel="stylesheet" href="/stylesheets/application.css" />
+
+  <script src="/javascripts/onerror.js"></script>
+  <script src="/javascripts/console.log.js"></script>
+
+
+  <!-- cordova.js is served from localhost to ensure the correct version -->
+  <script src="http://localhost/cordova.js"></script>
+  <script src="/components/steroids-js/steroids.js"></script>
+  <script src="/components/steroids-addons/index.js"></script>
+  <script src="/components/jquery/jquery-2.1.0.min.js"></script>
+  <script src="/components/knockout/knockout-3.0.0.js"></script>
+  <script src="/javascripts/knockout.extensions.js"></script>
+  <script src="/javascripts/helpers.js"></script>
+  <script src="/javascripts/logonvm.js"></script>
+  <script src="/javascripts/application.js"></script>
+</head>
+<body>
+  <div class="content-padded">
+     <h2 id="login-text">Please log in.</h2>
+      <form id="logonForm" action="">
+        <p data-bind="css: { error: !valid() && user.hasError() }">
+            <input type="text" id="username" data-bind="value: user, valueUpdate: 'afterkeydown'"></input>
+            <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'></span>
+        </p>
+        <p data-bind="css: { error: !valid() && password.hasError() }">
+          <input type="password" id="pw" data-bind="value: password, valueUpdate: 'afterkeydown'"></input>
+          <span data-bind='visible: !valid() && password.hasError(), text: password.validationMessage'></span>
+        </p>
+        <br />
+        <a id="loginUser" class="topcoat-button--cta center full"  data-bind="click : login" >Log In</a>
+      </form>
+
+    </div>
+</body>
+</html>
