@@ -31,7 +31,7 @@ function initializeViewModel() {
         application.logonViewModel().loggedIn(true);
         ko.applyBindings(application);
 
-        if (navigator.network === undefined) {
+        if (navigator.network === undefined) { 
             application.isProcessing(false);
         }
     });

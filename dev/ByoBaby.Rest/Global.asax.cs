@@ -4,13 +4,16 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using ByoBaby.Model.Repositories;
+using ByoBaby.Rest.Windsor;
 using ByoBaby.Security;
-
+using Castle.Windsor;
 
 namespace ByoBaby.Rest
 {
@@ -22,14 +25,10 @@ namespace ByoBaby.Rest
         #region properties
 
         /// <summary>
-        /// Gets or sets the <see cref="IFormsAuthenticationService"/> for the controller.
+        /// Gets a globally available internal instance of the IoC container for dependency resolution.
         /// </summary>
-        public IFormsAuthenticationService FormsService { get; set; }
+        internal static IWindsorContainer Container { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="IMembershipService"/> for the controller.
-        /// </summary>
-        public IMembershipService MembershipService { get; set; }
 
         #endregion
 
@@ -43,26 +42,26 @@ namespace ByoBaby.Rest
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Database.SetInitializer<ByoBabyRepository>(new ByoBabyDataContextInitializer());
+            WebApiApplication.Container = WindsorConfig.CreateContainer();
 
-            //[nick] -  This code would be leveraged by the WCF Authentication Service if we chose to go that route.  
-            //          Leaving until I consult with Matt.
-            if (FormsService == null) { FormsService = new FormsAuthenticationService(); }
-            if (MembershipService == null) { MembershipService = new AccountMembershipService(); }
-
-            //System.Web.ApplicationServices.AuthenticationService.Authenticating +=
-            //    new EventHandler<System.Web.ApplicationServices.AuthenticatingEventArgs>(AuthenticationService_Authenticating);
+            AuthConfig.RegisterOpenAuth();
         }
 
-        //private void AuthenticationService_Authenticating(object sender, System.Web.ApplicationServices.AuthenticatingEventArgs e)
-        //{
-        //    if (MembershipService.ValidateUser(e.UserName, e.Password))
-        //    {
-        //        FormsService.SignIn(e.UserName, false);
-        //        e.Authenticated = true;
-        //    }
-        //    e.AuthenticationIsComplete = true;
-
-        //}
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception exception = Server.GetLastError();
+           
+            if (exception is HttpException)
+            {
+                //Logger.Log404(HttpContext.Current.Request.Url.ToString());
+                //Logger.Error(string.Format("Unable to navigate to {0}", HttpContext.Current.Request.Url.ToString()), exception);
+            }
+            else
+            {
+                //Logger.Fatal("Uncaught exception", exception);
+            }
+            HttpContext.Current.Response.TrySkipIisCustomErrors = true;
+        }
 
         /// <summary>
         /// Handles the PostAuthenticateRequest event for the application.
