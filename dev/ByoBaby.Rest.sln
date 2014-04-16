@@ -1,16 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Rest", "ByoBaby.Rest\ByoBaby.Rest.csproj", "{28B1E4DF-7EC9-458A-85F9-AA50B06D940E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Model", "ByoBaby.Model\ByoBaby.Model.csproj", "{4E9088E6-88D1-4165-8EDE-0A8D3E2FF512}"
-EndProject
-Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "ByoBaby.Modeling", "ByoBaby.Modeling\ByoBaby.Modeling.modelproj", "{01A260BA-478F-4727-8297-535C6E18A4C6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Model.Test", "..\test\ByoBaby.Model.Test\ByoBaby.Model.Test.csproj", "{DDFCDA5A-076C-4ED2-9A57-880652223C41}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Security", "ByoBaby.Security\ByoBaby.Security.csproj", "{D5AE1119-6295-48C0-9941-405200790636}"
-EndProject
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{58BA007F-EBD2-4916-9BF5-FBFA32FE2AB7}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -20,21 +12,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{58BA00
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{292A544B-BA48-4266-BEE4-65EDC877EB74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Rest.Test", "..\test\ByoBaby.Rest.Test\ByoBaby.Rest.Test.csproj", "{7FE930A3-7436-4E1C-8C2B-13FD71C52689}"
-EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "ByoBaby.Cloud.Service", "ByoBaby.Cloud.Service\ByoBaby.Cloud.Service.ccproj", "{8D4E6EBE-74FE-4EE1-9A26-01C1EA515E4D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BE86209E-7395-4B3E-9774-6189C515B825}"
 	ProjectSection(SolutionItems) = preProject
 		JSLintOptions.xml = JSLintOptions.xml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Rest", "ByoBaby.Rest\ByoBaby.Rest.csproj", "{28B1E4DF-7EC9-458A-85F9-AA50B06D940E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Model", "ByoBaby.Model\ByoBaby.Model.csproj", "{4E9088E6-88D1-4165-8EDE-0A8D3E2FF512}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Model.Test", "..\test\ByoBaby.Model.Test\ByoBaby.Model.Test.csproj", "{DDFCDA5A-076C-4ED2-9A57-880652223C41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Security", "ByoBaby.Security\ByoBaby.Security.csproj", "{D5AE1119-6295-48C0-9941-405200790636}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Rest.Test", "..\test\ByoBaby.Rest.Test\ByoBaby.Rest.Test.csproj", "{7FE930A3-7436-4E1C-8C2B-13FD71C52689}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "ByoBaby.Cloud.Service", "ByoBaby.Cloud.Service\ByoBaby.Cloud.Service.ccproj", "{8D4E6EBE-74FE-4EE1-9A26-01C1EA515E4D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByoBaby.Worker", "ByoBaby.Worker\ByoBaby.Worker.csproj", "{D82AB763-743D-401A-92DC-D1011B126DCE}"
 EndProject
 Global
-	GlobalSection(JSLint) = preSolution
-		SolutionConfigurationLocation = JSLintOptions.xml
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -48,10 +45,6 @@ Global
 		{4E9088E6-88D1-4165-8EDE-0A8D3E2FF512}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E9088E6-88D1-4165-8EDE-0A8D3E2FF512}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E9088E6-88D1-4165-8EDE-0A8D3E2FF512}.Release|Any CPU.Build.0 = Release|Any CPU
-		{01A260BA-478F-4727-8297-535C6E18A4C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01A260BA-478F-4727-8297-535C6E18A4C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{01A260BA-478F-4727-8297-535C6E18A4C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{01A260BA-478F-4727-8297-535C6E18A4C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DDFCDA5A-076C-4ED2-9A57-880652223C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDFCDA5A-076C-4ED2-9A57-880652223C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDFCDA5A-076C-4ED2-9A57-880652223C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,5 +72,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DDFCDA5A-076C-4ED2-9A57-880652223C41} = {292A544B-BA48-4266-BEE4-65EDC877EB74}
 		{7FE930A3-7436-4E1C-8C2B-13FD71C52689} = {292A544B-BA48-4266-BEE4-65EDC877EB74}
+	EndGlobalSection
+	GlobalSection(JSLint) = preSolution
+		SolutionConfigurationLocation = JSLintOptions.xml
 	EndGlobalSection
 EndGlobal

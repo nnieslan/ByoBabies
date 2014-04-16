@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="ByoBaby.Cloud.Service" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2012-10.1.8">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="ByoBaby.Cloud.Service" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2014-01.2.3">
   <Role name="ByoBaby.Rest">
     <Instances count="1" />
     <ConfigurationSettings>
