@@ -20,6 +20,7 @@ function LogonViewModel(svcUrl, id) {
     /// </summary>
     self.password = ko.observable("").extend({ required: "Please enter your password" });
 
+    self.providers = ko.observableArray([]);
 
     /// <summary>
     /// An observable array containing the rememberMe options.
@@ -49,6 +50,58 @@ function LogonViewModel(svcUrl, id) {
     self.loggedOut = ko.computed(function () {
         return !self.loggedIn();
     }, self);
+
+    self.getLoginProviders = function () {
+        application.isProcessing(true);
+        var url = self.baseUrl + 'api/account/externallogins?generateState=true';
+        var jqxhr = $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            crossDomain: true,
+            success: function (data) {
+                if (data !== undefined) {
+                    ko.utils.arrayForEach(data, function (item) {
+                        self.providers.push(item);
+                    });
+                }
+                $('#' + self.template + '-content').trigger('create');
+            },
+            error: function (jqxHR, exception) {
+                application.isProcessing(false);
+                if (jqxHR.responseText !== '') {
+                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to get the list of providers.  Please try again later.', 'Error');
+                }
+            }
+        });
+
+    };
+
+    self.loginExternal = function (selected) {
+        application.isProcessing(true);
+
+        var url = self.baseUrl + selected.Url;
+        var jqxhr = $.ajax({
+            url: url,
+            type: 'GET',
+            dataType:'jsonp',
+            cache: false,
+            crossDomain: true,
+            success: function (data) {
+                application.isProcessing(false);
+            },
+            error: function (jqxHR, exception) {
+                application.isProcessing(false);
+                if (jqxHR.responseText !== '') {
+                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                } else {
+                    utilities.notifyUser('Unable to login.  Please try again later.', 'Error');
+                }
+            }
+        });
+    };
 
     /// <summary>
     /// A function that logs in the current user via REST api.

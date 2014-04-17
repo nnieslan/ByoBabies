@@ -18,6 +18,10 @@
         </div>
         <br />
         <a id="loginUser" data-bind="click: login" data-role="button" data-theme="a">Login</a>
+        <!-- ko foreach: providers -->
+        <a data-bind="click: function() {$parent.loginExternal($data);}, text: Name" data-role="button" data-theme="a"></a>
+
+        <!-- /ko -->
         <a id="goToRegistration" data-bind="click: $parent.navigateRegister" data-role="button" data-theme="a">Create a profile</a>
     </form>
 </div>

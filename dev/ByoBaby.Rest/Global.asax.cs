@@ -35,16 +35,16 @@ namespace ByoBaby.Rest
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-
-            WebApiConfig.Register(GlobalConfiguration.Configuration);
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            //WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             Database.SetInitializer<ByoBabyRepository>(new ByoBabyDataContextInitializer());
-            WebApiApplication.Container = WindsorConfig.CreateContainer();
+            //WebApiApplication.Container = WindsorConfig.CreateContainer();
 
-            AuthConfig.RegisterOpenAuth();
+            //AuthConfig.RegisterOpenAuth();
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -74,15 +74,15 @@ namespace ByoBaby.Rest
         /// </param>
         protected void Application_PostAuthenticateRequest(object sender, EventArgs args)
         {                                       
-            var user = HttpContext.Current.User;
-            if (user.Identity.IsAuthenticated && user.Identity.AuthenticationType == "Forms")
-            {
-                var formsIdentity = (FormsIdentity)user.Identity;
-                var userIdentity = new WebUserIdentity(formsIdentity.Ticket);
-                var principal = new ByoBabiesUserPrincipal(userIdentity);
+            //var user = HttpContext.Current.User;
+            //if (user.Identity.IsAuthenticated && user.Identity.AuthenticationType == "Forms")
+            //{
+            //    var formsIdentity = (FormsIdentity)user.Identity;
+            //    var userIdentity = new WebUserIdentity(formsIdentity.Ticket);
+            //    var principal = new ByoBabiesUserPrincipal(userIdentity);
 
-                ByoBabiesUserPrincipal.Current = principal;
-            }
+            //    ByoBabiesUserPrincipal.Current = principal;
+            //}
         }
     }
 }

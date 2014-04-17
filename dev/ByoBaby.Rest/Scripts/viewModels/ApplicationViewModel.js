@@ -161,6 +161,7 @@ function ApplicationViewModel(svcUrl) {
     self.loadLogin = function (viewModel) {
         var i, task;
         self.logonViewModel(viewModel);
+        self.logonViewModel().getLoginProviders();
         self.logonViewModel().loggedIn.subscribe(function (newValue) {
             if (newValue) {
                 console.log("logonViewModel().loggedIn().subscribe - user is logged in");

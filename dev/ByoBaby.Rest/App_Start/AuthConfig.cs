@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Microsoft.AspNet.Membership.OpenAuth;
-using DotNetOpenAuth.AspNet.Clients;
 
 namespace ByoBaby.Rest
 {
@@ -20,11 +18,11 @@ namespace ByoBaby.Rest
             //    TwitterApiSecret, 
             //    ThirdPartyIdentityProviders.twitter)));
 
-            OpenAuth.AuthenticationClients.Add("Facebook", 
-                () => new DotNetOpenAuth.AspNet.Clients.FacebookClient(
-                "",//TODO GET API KEYS
-                "",
-                new string[] { "user_about_me", "user_birthday", "email" }));
+            //OpenAuth.AuthenticationClients.Add("Facebook", 
+            //    () => new DotNetOpenAuth.AspNet.Clients.FacebookClient(
+            //    "",//TODO GET API KEYS
+            //    "",
+            //    new string[] { "user_about_me", "user_birthday", "email" }));
 
             //OpenAuth.AuthenticationClients.AddMicrosoft(
             //    clientId: MicrosoftApiKey,
@@ -33,7 +31,7 @@ namespace ByoBaby.Rest
             //OpenAuth.AuthenticationClients.AddGoogle();
 
             //TODO - Add the DotNetOpenAuth Tables to DB
-            OpenAuth.ConnectionString = "AuthenticationRepository";
+            //OpenAuth.ConnectionString = "AuthenticationRepository";
         }
     }
 }

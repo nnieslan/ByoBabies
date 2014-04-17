@@ -26,9 +26,9 @@ function initializeViewModel() {
     utilities.ensureTemplates(views, function () {
         console.log("ensureTemplates().Callback - inititalizing ApplicationViewModel");
         //param is placeholder for web services REST Url (blank when hosted ) 
-        application = new ApplicationViewModel('');
+        application = new ApplicationViewModel('http://dev.byobabies.com:8080/');
         application.loadLogin(new LogonViewModel(application.baseUrl));
-        application.logonViewModel().loggedIn(true);
+        //application.logonViewModel().loggedIn(true);
         ko.applyBindings(application);
 
         if (navigator.network === undefined) { 

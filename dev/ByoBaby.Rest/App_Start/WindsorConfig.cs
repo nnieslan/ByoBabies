@@ -18,14 +18,14 @@ namespace ByoBaby.Rest
         public static IWindsorContainer CreateContainer()
         {
             var container = new WindsorContainer();
-            // Add installers here
-            container.Install(
-                new ControllersWindsorInstaller(), 
-                new ServicesWindsorInstaller());
+            //// Add installers here
+            //container.Install(
+            //    new ControllersWindsorInstaller(), 
+            //    new ServicesWindsorInstaller());
 
-            GlobalConfiguration.Configuration.Services.Replace(
-                typeof(IHttpControllerActivator),
-                new WindsorCompositionRoot(container));
+            //GlobalConfiguration.Configuration.Services.Replace(
+            //    typeof(IHttpControllerActivator),
+            //    new WindsorCompositionRoot(container));
 
             return container;
         }
