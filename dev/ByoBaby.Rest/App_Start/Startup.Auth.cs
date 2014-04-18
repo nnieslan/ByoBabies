@@ -1,4 +1,5 @@
 ﻿using ByoBaby.Rest.Providers;
+using ByoBaby.Model.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin;
@@ -25,7 +26,9 @@ namespace ByoBaby.Rest
         {
             PublicClientId = "self";
 
-            UserManagerFactory = () => new UserManager<IdentityUser>(new UserStore<IdentityUser>());
+            
+
+            UserManagerFactory = () => new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ByoBabyRepository()));
             CookieOptions = new CookieAuthenticationOptions(); 
             //{ 
             //    AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

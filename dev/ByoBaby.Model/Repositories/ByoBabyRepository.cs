@@ -4,11 +4,26 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace ByoBaby.Model.Repositories
 {
-    public class ByoBabyRepository : DbContext
+    public class ByoBabyRepository : IdentityDbContext
     {
+        #region ctor
+        public ByoBabyRepository()
+            : base("ByoBabyRepository")
+        {
+
+        }
+
+        public ByoBabyRepository(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        {
+
+        }
+        #endregion
+
         public DbSet<Person> People { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Event> Events { get; set; }
@@ -31,6 +46,9 @@ namespace ByoBaby.Model.Repositories
             modelBuilder.Entity<Person>().HasMany(e => e.PendingRequests);
             modelBuilder.Entity<Notification>().HasRequired(e => e.Originator);
             modelBuilder.Entity<CheckIn>().HasRequired(e => e.Owner);
+
+            base.OnModelCreating(modelBuilder);
+            
         }
     }
 }

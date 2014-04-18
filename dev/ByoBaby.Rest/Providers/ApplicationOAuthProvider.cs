@@ -16,7 +16,9 @@ namespace ByoBaby.Rest.Providers
         private readonly string _publicClientId;
         private readonly Func<UserManager<IdentityUser>> _userManagerFactory;
 
-        public ApplicationOAuthProvider(string publicClientId, Func<UserManager<IdentityUser>> userManagerFactory)
+        public ApplicationOAuthProvider(
+            string publicClientId,
+            Func<UserManager<IdentityUser>> userManagerFactory)
         {
             if (publicClientId == null)
             {
@@ -32,10 +34,12 @@ namespace ByoBaby.Rest.Providers
             _userManagerFactory = userManagerFactory;
         }
 
-        public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
+        public override async Task GrantResourceOwnerCredentials(
+            OAuthGrantResourceOwnerCredentialsContext context)
         {
             using (UserManager<IdentityUser> userManager = _userManagerFactory())
             {
+                
                 IdentityUser user = await userManager.FindAsync(context.UserName, context.Password);
 
                 if (user == null)
@@ -82,7 +86,8 @@ namespace ByoBaby.Rest.Providers
             {
                 Uri expectedRootUri = new Uri(context.Request.Uri, "/");
 
-                if (expectedRootUri.AbsoluteUri == context.RedirectUri)
+
+                if (expectedRootUri.IsBaseOf(new Uri(context.RedirectUri)))
                 {
                     context.Validated();
                 }

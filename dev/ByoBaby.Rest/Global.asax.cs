@@ -41,8 +41,8 @@ namespace ByoBaby.Rest
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            Database.SetInitializer<ByoBabyRepository>(new ByoBabyDataContextInitializer());
-            //WebApiApplication.Container = WindsorConfig.CreateContainer();
+           // Database.SetInitializer<ByoBabyRepository>(new ByoBabyDataContextInitializer());
+            WebApiApplication.Container = WindsorConfig.CreateContainer();
 
             //AuthConfig.RegisterOpenAuth();
         }
