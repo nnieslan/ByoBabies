@@ -16,7 +16,7 @@ document.addEventListener("visibilitychange", function() {
     if(document.visibilityState == 'visible'){
       steroids.view.navigationBar.show("log in");
     }
-
+    console.log(JSON.stringify(vm.loginProviders()));
 }, false);
 
   //var signupButton = new steroids.buttons.NavigationBarButton();

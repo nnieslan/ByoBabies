@@ -1,5 +1,5 @@
  <div class="content-padded ui-content" data-role="content">
-       <form id="logonForm" action="" data-bind="submit: login">
+       <form id="logonForm" data-bind="submit: login">
         <p data-bind="css: { error: !valid() && user.hasError() }">
             <input type="text" id="username" placeholder="username" data-bind="value: user, valueUpdate: 'afterkeydown'"></input>
             <span data-bind='visible: !valid() && user.hasError(), text: user.validationMessage'></span>
@@ -12,4 +12,8 @@
         <a id="loginUser" class="topcoat-button--cta center full" data-role="button"  data-bind="event : {touchend : login}" >Log In</a>
       </form>
 
+       <!-- ko foreach: loginProviders -->
+        <a data-bind="event : {touchend: function() {$parent.loginExternal($data);} }, text: Name" data-role="button" data-theme="a"></a>
+
+        <!-- /ko -->
     </div>

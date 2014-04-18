@@ -7,6 +7,8 @@ function LogonViewModel() {
   var self = this;
   self.template = "welcomeView";
 
+  self.loginProviders = ko.observableArray();
+
   self.user = ko.observable("").extend({
     required: "Please enter your username"
   });
@@ -60,12 +62,31 @@ function LogonViewModel() {
 
   };
 
+  self.loginExternal = function(data) {
+    var msg = {
+      src: 'logon',
+      action: 'login',
+      provider: data
+    };
+    //TODO - handle loading UI open
+    console.log('notifying background to attempt logon.')
+    window.postMessage(msg, '*');
+  };
+
   self.handleMessage = function(msg) {
     console.log("LogonViewModel - received msg.");
     //TODO - handle loading UI close
+    var source = msg.data.src || '',
+      action = msg.data.action || '';
+
+    if (source === 'logon' && action === 'providersloaded') {
+      var providers = window.localStorage.getItem('loginProviders');
+      ko.utils.arrayForEach(JSON.parse(providers), function(item) {
+        self.loginProviders.push(item);
+      });
+    }
   };
-
-
+  window.addEventListener("message", self.handleMessage);
   //  var signupButton = new steroids.buttons.NavigationBarButton();
   //  signupButton.title = "sign up";
   //  signupButton.onTap = function() {

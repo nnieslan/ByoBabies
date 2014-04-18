@@ -25,7 +25,7 @@ function BackgroundViewModel() {
     if (self.baseUrl === undefined || self.baseUrl === null) {
 
     }
-    self.baseUrl = "http://192.168.1.130:8080/"
+    self.baseUrl = "http://dev.byobabies.com:8080/"
     window.localStorage.setItem("svcUrl", self.baseUrl);
 
     logonWebView.preload();
@@ -38,6 +38,8 @@ function BackgroundViewModel() {
     self.preloadedViews.push(logonWebView);
     self.preloadedViews.push(registerWebView);
     self.preloadedViews.push(leftDrawerWebView);
+
+    self.getLoginProviders();
 
     window.addEventListener("message", self.handleMessage);
   };
@@ -54,8 +56,13 @@ function BackgroundViewModel() {
   };
 
   self.handleAuthentication = function(msg) {
-    if (msg.data.action === 'login') {
-      self.login(msg.data.credentials);
+    var action = msg.data.action || '';
+    if (action === 'login') {
+      if (msg.data.credentials !== undefined) {
+        self.login(msg.data.credentials);
+      } else if (msg.data.provider !== undefined) {
+        self.loginExternal(msg.data.provider);
+      }
     } else if (msg.data.action === 'logout') {
       self.logout();
     }
@@ -87,6 +94,63 @@ function BackgroundViewModel() {
       })
     }
   }
+
+  self.getLoginProviders = function() {
+    console.log(
+      "BackgroundViewModel - fetching list of supported login providers");
+    var url = self.baseUrl + 'api/account/externallogins?generateState=true';
+    var jqxhr = $.ajax({
+      url: url,
+      type: 'GET',
+      cache: false,
+      crossDomain: true,
+      success: function(data) {
+        console.log(
+          "BackgroundViewModel - fetched list of supported login providers - " +
+          JSON.stringify(data));
+
+        if (data !== undefined) {
+        window.localStorage.setItem('loginProviders',JSON.stringify(data));
+        var msg = {
+            src: 'logon',
+            action: 'providersloaded'
+          };
+          console.log('notifying UI of logon providers.')
+          window.postMessage(msg, '*');
+        }
+      },
+      error: function(jqxHR, exception) {
+        if (jqxHR.responseText !== '') {
+          utilities.notifyUser(jqxHR.responseText, 'Error');
+        } else {
+          utilities.notifyUser(
+            'Unable to get the list of providers.  Please try again later.',
+            'Error');
+        }
+      }
+    });
+
+  };
+
+  self.loginExternal = function(provider) {
+    console.log('BackgroundViewModel - Attempting to auth via ' + provider.Name);
+    var authUrl = self.baseUrl + provider.Url;
+    var authView = new steroids.views.WebView({
+      location: authUrl
+    });
+    steroids.modal.show({
+      view: authView
+    }, {
+      onSuccess: function() {
+        console.log(
+          'BackgroundViewModel - Successfully launched external auth view - ' +
+          provider.Name);
+      },
+      onFailure: function(error) {
+        notifyUser(error.errorDescription, function() {}, 'Error');
+      }
+    });
+  };
 
   self.login = function(creds) {
     console.log('BackgroundViewModel.login start');
@@ -121,7 +185,7 @@ function BackgroundViewModel() {
         };
         console.log('notifying UI of logon status.')
         window.postMessage(msg, '*');
-        //self.saveCredentials(creds);
+        self.saveCredentials(creds);
         self.getProfile();
         //self.handleNavigation({
         //  id: 'nearby',
@@ -202,9 +266,11 @@ function BackgroundViewModel() {
         window.postMessage(msg, '*');
       },
       error: function(jqxhr, exception) {
-        console.log('BackgroundViewModel.getProfile - ajax login unsuccessful - ' +
+        console.log(
+          'BackgroundViewModel.getProfile - ajax login unsuccessful - ' +
           jqxhr.responseText);
-        console.log('BackgroundViewModel.getProfile - ajax login unsuccessful - ' +
+        console.log(
+          'BackgroundViewModel.getProfile - ajax login unsuccessful - ' +
           exception);
         console.log(exception);
         console.log(jqxhr);
@@ -224,9 +290,9 @@ function BackgroundViewModel() {
   };
 
   self.saveCredentials = function(creds) {
-    var mode = 'ECB'; // ECB or CBC
-    var cipherPwText = byteArrayToHex(rijndaelEncrypt(creds.pw, creds.user,
-      mode));
+    var mode = 'ECB',
+      cipherPwText = byteArrayToHex(
+        rijndaelEncrypt(creds.pw, creds.user, mode));
 
     window.localStorage.setItem('credentials', JSON.stringify({
       user: creds.user,
@@ -235,10 +301,11 @@ function BackgroundViewModel() {
   };
 
   self.fetchCredentials = function() {
-    var credsJson, mode = 'ECB',
+    var credsJson,
+      mode = 'ECB',
       creds = window.localStorage.getItem('credentials');
     if (creds) {
-      var credsJson = JSON.parse(creds);
+      credsJson = JSON.parse(creds);
       var decryptedText = byteArrayToString(
         rijndaelDecrypt(hexToByteArray(credsJson.pw), credsJson.user, mode));
       credsJson.pw = decryptedText;
