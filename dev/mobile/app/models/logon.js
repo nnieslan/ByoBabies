@@ -63,14 +63,27 @@ function LogonViewModel() {
   };
 
   self.loginExternal = function(data) {
-    var msg = {
-      src: 'logon',
-      action: 'login',
-      provider: data
-    };
-    //TODO - handle loading UI open
-    console.log('notifying background to attempt logon.')
-    window.postMessage(msg, '*');
+    var authUrl = self.baseUrl + data.Url,
+      ref = window.open(authUrl, '_blank', 'location=yes');
+    console.log('Launching auth window with url - ' + authUrl);
+    ref.addEventListener('loadstop', function(event) {
+      console.log(event.url);
+      var query = utilities.parseUrlQueryString(event.url);
+      console.log(query);
+      if(query !== undefined && query['access_token'] !== undefined){
+        console.log('Access Token found : ' + query['access_token']);
+
+        var msg = {
+          src: 'logon',
+          action: 'externallogin',
+          data: query
+        };
+        //TODO - handle loading UI open
+        console.log('notifying background of external logon success.')
+        window.postMessage(msg, '*');
+        ref.close();
+      }
+    });
   };
 
   self.handleMessage = function(msg) {

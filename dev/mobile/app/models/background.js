@@ -5,6 +5,8 @@ function BackgroundViewModel() {
   //NavViewModel.apply(this);
 
   var self = this;
+  self.authView;
+  self.authTimer;
   self.preloadedViews = [];
   self.user = ko.observable();
 
@@ -23,12 +25,14 @@ function BackgroundViewModel() {
     });
 
     if (self.baseUrl === undefined || self.baseUrl === null) {
-
+      self.baseUrl = "http://dev.byobabies.com:8080/"
+      window.localStorage.setItem("svcUrl", self.baseUrl);
     }
-    self.baseUrl = "http://dev.byobabies.com:8080/"
-    window.localStorage.setItem("svcUrl", self.baseUrl);
-
-    logonWebView.preload();
+    logonWebView.preload({}, {
+      onSuccess: function() {
+        self.getLoginProviders();
+      }
+    });
     registerWebView.preload();
     leftDrawerWebView.preload({}, {
       onSuccess: function() {
@@ -38,8 +42,6 @@ function BackgroundViewModel() {
     self.preloadedViews.push(logonWebView);
     self.preloadedViews.push(registerWebView);
     self.preloadedViews.push(leftDrawerWebView);
-
-    self.getLoginProviders();
 
     window.addEventListener("message", self.handleMessage);
   };
@@ -60,9 +62,9 @@ function BackgroundViewModel() {
     if (action === 'login') {
       if (msg.data.credentials !== undefined) {
         self.login(msg.data.credentials);
-      } else if (msg.data.provider !== undefined) {
-        self.loginExternal(msg.data.provider);
       }
+    } else if (msg.data.action === 'externallogin') {
+      self.loginExternalComplete(msg.data.data);
     } else if (msg.data.action === 'logout') {
       self.logout();
     }
@@ -110,8 +112,8 @@ function BackgroundViewModel() {
           JSON.stringify(data));
 
         if (data !== undefined) {
-        window.localStorage.setItem('loginProviders',JSON.stringify(data));
-        var msg = {
+          window.localStorage.setItem('loginProviders', JSON.stringify(data));
+          var msg = {
             src: 'logon',
             action: 'providersloaded'
           };
@@ -132,25 +134,56 @@ function BackgroundViewModel() {
 
   };
 
-  self.loginExternal = function(provider) {
-    console.log('BackgroundViewModel - Attempting to auth via ' + provider.Name);
-    var authUrl = self.baseUrl + provider.Url;
-    var authView = new steroids.views.WebView({
-      location: authUrl
-    });
-    steroids.modal.show({
-      view: authView
-    }, {
-      onSuccess: function() {
-        console.log(
-          'BackgroundViewModel - Successfully launched external auth view - ' +
-          provider.Name);
-      },
-      onFailure: function(error) {
-        notifyUser(error.errorDescription, function() {}, 'Error');
-      }
-    });
+  self.loginExternalComplete = function(data) {
+    console.log('BackgroundViewModel - storing token data from external login - ' + data.provider);
+    window.localStorage.setItem('access_token', JSON.stringify(data));
+    //TODO Eval registration status
+    // self.getProfile();
+
+    // self.authView = new steroids.views.WebView({
+    //  location: authUrl,
+    //  id: "authView-" + provider.Name
+    // });
+
+    //if (self.authView !== undefined) {
+    //  self.authView.unload();
+    //}
+    //self.authView.preload({}, {
+    //  onSuccess: function() {
+    //    console.log(
+    //      'BackgroundViewModel - Successfully preloaded external auth view - ' +
+    //      provider.Name);
+    //    console.log(self.authView.location);
+    //    steroids.layers.push(self.authView);
+    //    self.authTimer = setInterval(self.checkModal, 1000);
+    //    //timeout the wait for 3rd party auth at 2 min for now
+    //    setTimeout(self.terminateModal, 24000);
+    //  },
+    //  onFailure: function(error) {
+    //    utilities.notifyUser(error.errorDescription, 'Error');
+    //  }
+    //});
   };
+
+  // self.checkModal = function() {
+  //   if (self.authView !== undefined) {
+  //     console.log(self.authView.location);
+  //     console.log(self.authView.params);
+  //     if (self.authView.params.authToken !== undefined) {
+  //
+  //     }
+  //   }
+  // };
+  //
+  // self.terminateModal = function() {
+  //   console.log("BackgroundViewModel - in terminateModal");
+  //   if (self.authView !== undefined) {
+  //     console.log("Terminating modal dialog...");
+  //     steroids.layers.pop();
+  //     self.authView.unload();
+  //   }
+  //   clearInterval(self.authTimer);
+  // };
 
   self.login = function(creds) {
     console.log('BackgroundViewModel.login start');
@@ -162,8 +195,7 @@ function BackgroundViewModel() {
       return false;
     }
 
-    var base = window.localStorage.getItem('svcUrl');
-    var url = base + 'api/account/login';
+    var url = self.baseUrl + 'api/account/login';
     console.log('LogonViewModel.login - POST URL - ' + url);
     var input = {
       UserName: creds.user,
@@ -187,7 +219,7 @@ function BackgroundViewModel() {
         window.postMessage(msg, '*');
         self.saveCredentials(creds);
         self.getProfile();
-        //self.handleNavigation({
+        // self.handleNavigation({
         //  id: 'nearby',
         //  url: '/views/nearby/index.html'
         //});
