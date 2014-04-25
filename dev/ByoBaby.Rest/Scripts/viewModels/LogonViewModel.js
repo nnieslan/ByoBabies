@@ -86,21 +86,41 @@ function LogonViewModel(svcUrl, id) {
         var jqxhr = $.ajax({
             url: url,
             type: 'GET',
-            dataType:'jsonp',
+            dataType:'json',
             cache: false,
+            callback: '?',
+            headers: { 'Access-Control-Allow-Origin': '*' },
             crossDomain: true,
+            dataFilter: function (data, dataType) {
+                return data;
+            },
             success: function (data) {
                 application.isProcessing(false);
             },
             error: function (jqxHR, exception) {
-                application.isProcessing(false);
-                if (jqxHR.responseText !== '') {
-                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                var authUrl = jqxHR.getResponseHeader('Location');
+                //var exCookieVal = $.cookie(".AspNet.ExternalCookie"),
+                //    cookieVal = $.cookie(".AspNet.Cookies");
+                //if (cookieVal === undefined && exCookieVal !== undefined) {
+                //    console.log('need to register');
+                //}
+                if (jqxHR.status === 401 && authUrl !== undefined) {
+                    console.log(authUrl);
+                    self.redirectLogin(authUrl);
                 } else {
-                    utilities.notifyUser('Unable to login.  Please try again later.', 'Error');
+                    if (jqxHR.responseText !== '') {
+                        utilities.notifyUser(jqxHR.responseText, 'Error');
+                    } else {
+                        utilities.notifyUser('Unable to login.  Please try again later.', 'Error');
+                    }
                 }
             }
         });
+    };
+
+
+    self.redirectLogin = function (url) {
+      var child = window.open(url, "_blank")
     };
 
     /// <summary>

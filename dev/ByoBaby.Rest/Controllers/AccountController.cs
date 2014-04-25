@@ -230,6 +230,56 @@ namespace ByoBaby.Rest.Controllers
             return Ok();
         }
 
+        // GET api/Account/ExternalLoginCallback
+        [OverrideAuthentication]
+        [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
+        [AllowAnonymous]
+        [Route("ExternalLoginCallback", Name = "ExternalLoginCallback")]
+        public async Task<IHttpActionResult> GetExternalLoginCallback(string provider)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new ChallengeResult(provider, this);
+            }
+
+            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+
+            if (externalLogin == null)
+            {
+                return InternalServerError();
+            }
+
+            if (externalLogin.LoginProvider != provider)
+            {
+                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                return new ChallengeResult(provider, this);
+            }
+
+            IdentityUser user = await UserManager.FindAsync(new UserLoginInfo(externalLogin.LoginProvider,
+                externalLogin.ProviderKey));
+
+            bool hasRegistered = user != null;
+
+            if (hasRegistered)
+            {
+                Authentication.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+                ClaimsIdentity oAuthIdentity = await UserManager.CreateIdentityAsync(user,
+                    OAuthDefaults.AuthenticationType);
+                ClaimsIdentity cookieIdentity = await UserManager.CreateIdentityAsync(user,
+                    CookieAuthenticationDefaults.AuthenticationType);
+                AuthenticationProperties properties = ApplicationOAuthProvider.CreateProperties(user.UserName);
+                Authentication.SignIn(properties, oAuthIdentity, cookieIdentity);
+            }
+            else
+            {
+                IEnumerable<Claim> claims = externalLogin.GetClaims();
+                ClaimsIdentity identity = new ClaimsIdentity(claims, OAuthDefaults.AuthenticationType);
+                Authentication.SignIn(identity);
+            }
+
+            return Ok(new { registered = hasRegistered});
+        }
+
         // GET api/Account/ExternalLogin
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
@@ -282,13 +332,47 @@ namespace ByoBaby.Rest.Controllers
                 Authentication.SignIn(identity);
             }
 
-            return Ok();
+            return Ok(new { registered = hasRegistered });
         }
+
+        //[AllowAnonymous]
+        //public async Task<IHttpActionResult> ExternalLoginCallback(string returnUrl)
+        //{
+        //    var result = await AuthenticationManager.AuthenticateAsync(DefaultAuthenticationTypes.ExternalCookie);
+        //    if (result == null || result.Identity == null)
+        //    {
+        //        return RedirectToAction("Login");
+        //    }
+
+        //    var idClaim = result.Identity.FindFirst(ClaimTypes.NameIdentifier);
+        //    if (idClaim == null)
+        //    {
+        //        return RedirectToAction("Login");
+        //    }
+
+        //    var login = new UserLoginInfo(idClaim.Issuer, idClaim.Value);
+        //    var name = result.Identity.Name == null ? "" : result.Identity.Name.Replace(" ", "");
+
+        //    // Sign in the user with this external login provider if the user already has a login
+        //    var user = await UserManager.FindAsync(login);
+        //    if (user != null)
+        //    {
+        //        await SignInAsync(user, isPersistent: false);
+        //        return RedirectToLocal(returnUrl);
+        //    }
+        //    else
+        //    {
+        //        // If the user does not have an account, then prompt the user to create an account
+        //        ViewBag.ReturnUrl = returnUrl;
+        //        ViewBag.LoginProvider = login.LoginProvider;
+        //        return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = name });
+        //    }
+        //}
 
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
         [AllowAnonymous]
         [Route("ExternalLogins")]
-        public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl = "/api/Account/ExternalLogin", bool generateState = false)
+        public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl = "/oauth/logincallback", bool generateState = false) 
         {
             IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
             List<ExternalLoginViewModel> logins = new List<ExternalLoginViewModel>();

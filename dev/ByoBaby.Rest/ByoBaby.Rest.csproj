@@ -220,6 +220,7 @@
     <Compile Include="Controllers\JasmineController.cs" />
     <Compile Include="Controllers\NearByController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
+    <Compile Include="Controllers\OAuthController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\RequestsController.cs" />
     <Compile Include="Global.asax.cs">
@@ -227,6 +228,7 @@
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\CustomMultiPartFormDataStreamProvider.cs" />
+    <Compile Include="Helpers\JsonpFormatter.cs" />
     <Compile Include="Helpers\LocationCalculationHelper.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="HttpsAttribute.cs" />
@@ -336,6 +338,7 @@
     <Content Include="Scripts\jasmine-samples\SpecHelper.js" />
     <Content Include="Scripts\jquery-1.8.3.js" />
     <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery.cookie-1.4.0\jquery.cookie.js" />
     <Content Include="Scripts\jquery-countdown-1.6.3\jquery.countdown.js" />
     <Content Include="Scripts\jquery-countdown-1.6.3\jquery.countdown.min.js" />
     <Content Include="Scripts\jquery-ui-1.8.20.js" />
@@ -411,6 +414,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Jasmine\SpecRunner.cshtml" />
+    <Content Include="Views\OAuth\Empty.cshtml" />
+    <Content Include="Views\OAuth\Redirect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

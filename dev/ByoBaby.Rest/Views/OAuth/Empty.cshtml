@@ -1,0 +1,38 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    
+    <script type="text/javascript">
+        function Redirector() {
+            var self = this;
+
+            self.urlParams = {};
+            self.parseUrlQueryString = function () {
+                var match,
+                    pl = /\+/g,  // Regex for replacing addition symbol with a space
+                    search = /([^&=]+)=?([^&]*)/g,
+                    decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+                    query = window.location.search.substring(1);
+                match = search.exec(query);
+                while (match) {
+                    self.urlParams[decode(match[1])] = decode(match[2]);
+                    match = search.exec(query);
+                }
+            };
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        Login Successful
+    </div>
+</body>
+</html>

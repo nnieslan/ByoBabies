@@ -36,7 +36,6 @@ namespace ByoBaby.Rest
         {
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            //WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
@@ -83,6 +82,19 @@ namespace ByoBaby.Rest
 
             //    ByoBabiesUserPrincipal.Current = principal;
             //}
+        }
+
+        protected void Application_EndRequest()
+        {
+            //var response = Context.Response;
+            //var location = response.Headers["Location"];
+            //if(response.StatusCode == 302 && !string.IsNullOrEmpty(location))
+            //{
+            //    Context.Response.StatusCode = 401;
+            //    Context.Response.ClearContent();
+
+            //}
+            
         }
     }
 }

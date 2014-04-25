@@ -34,6 +34,14 @@ namespace ByoBaby.Rest.Providers
             _userManagerFactory = userManagerFactory;
         }
 
+        public override Task GrantAuthorizationCode(OAuthGrantAuthorizationCodeContext context)
+        {
+            return base.GrantAuthorizationCode(context);
+        }
+        public override Task MatchEndpoint(OAuthMatchEndpointContext context)
+        {
+            return base.MatchEndpoint(context);
+        }
         public override async Task GrantResourceOwnerCredentials(
             OAuthGrantResourceOwnerCredentialsContext context)
         {

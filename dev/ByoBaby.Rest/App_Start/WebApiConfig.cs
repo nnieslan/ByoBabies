@@ -19,7 +19,7 @@ namespace ByoBaby.Rest
             //    routeTemplate: "api/{controller}/{id}",
             //    defaults: new { id = RouteParameter.Optional }
             //);
-             // Web API configuration and services
+            // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
@@ -63,6 +63,11 @@ namespace ByoBaby.Rest
                 name: "DefaultApi",
                 routeTemplate: "api/{userId}/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional });
+
+            GlobalConfiguration
+                .Configuration
+                .Formatters
+                .Insert(0, new ByoBaby.Rest.Helpers.JsonpFormatter());
 
         }
     }
