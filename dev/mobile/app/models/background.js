@@ -135,8 +135,11 @@ function BackgroundViewModel() {
   };
 
   self.loginExternalComplete = function(data) {
-    console.log('BackgroundViewModel - storing token data from external login - ' + data.provider);
+    console.log(
+      'BackgroundViewModel - storing token data from external login - ' + data.provider
+    );
     window.localStorage.setItem('access_token', JSON.stringify(data));
+    self.getUserInfo();
     //TODO Eval registration status
     // self.getProfile();
 
@@ -259,7 +262,7 @@ function BackgroundViewModel() {
       //window.localStorage.setItem('credentials', '');
     })
       .error(function(jqxhr, exception) {
-        if (jqxhr.responseText !== '') {
+        if (jqxHR.responseText && jqxhr.responseText !== '') {
           utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
           utilities.notifyUser(
@@ -268,6 +271,93 @@ function BackgroundViewModel() {
         }
       })
       .complete(function() {});
+  };
+
+  self.getUserInfo = function() {
+    console.log(
+      "BackgroundViewModel - fetching userInfo to verify registration");
+    var url = self.baseUrl + 'api/account/userinfo',
+      jqxhr = $.ajax({
+        url: url,
+        type: 'GET',
+        cache: false,
+        crossDomain: true,
+        withCredentials: true,
+        beforeSend: addHeaders,
+
+        success: function(data) {
+          console.log(
+            "BackgroundViewModel - fetched authenticated user info - " +
+            JSON.stringify(data));
+
+          if (data !== undefined && data.HasRegistered != true) {
+            console.log('User has not registered');
+            self.register(data.UserName);
+          } else if (data) {
+            var msg = {
+              src: 'logon',
+              action: 'loggedin'
+            };
+            console.log('notifying UI of login status.')
+            window.postMessage(msg, '*');
+          }
+
+        },
+        error: function(jqxHR, exception) {
+          if (jqxHR.responseText && jqxHR.responseText !== '') {
+            utilities.notifyUser(jqxHR.responseText, 'Error');
+          } else {
+            utilities.notifyUser(
+              'Unable to get your registration status. Please try again later.',
+              'Error');
+          }
+        }
+      });
+
+  };
+
+  var addHeaders = function(xhr) {
+    var authData = JSON.parse(window.localStorage.getItem('access_token'));
+    if (authData && authData !== null) {
+      xhr.setRequestHeader("Authorization", "Bearer " + authData['access_token']);
+    }
+  };
+
+  self.register = function(userName) {
+    console.log(
+      "BackgroundViewModel - registering user " + userName);
+    var url = self.baseUrl + 'api/account/registerexternal',
+      jqxhr = $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        crossDomain: true,
+        withCredentials: true,
+        beforeSend: addHeaders,
+        data: {
+          'UserName': userName
+        },
+        success: function(data) {
+          console.log(
+            "BackgroundViewModel - successfully registered user");
+
+          var msg = {
+            src: 'logon',
+            action: 'registered'
+          };
+          console.log('notifying UI of register status.');
+          window.postMessage(msg, '*');
+        },
+        error: function(jqxHR, exception) {
+          if (jqxHR.responseText && jqxHR.responseText !== '') {
+            utilities.notifyUser(jqxHR.responseText, 'Error');
+          } else {
+            utilities.notifyUser(
+              'Unable to register you at this time. Please try again later.',
+              'Error');
+          }
+        }
+      });
   };
 
   self.getProfile = function() {
@@ -314,7 +404,8 @@ function BackgroundViewModel() {
           utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
           utilities.notifyUser(
-            'Unable to load your profile.  Please try again later.', 'Error');
+            'Unable to load your profile.  Please try again later.',
+            'Error');
         }
       },
       complete: function() {}
