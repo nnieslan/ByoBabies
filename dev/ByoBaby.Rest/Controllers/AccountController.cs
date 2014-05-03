@@ -56,6 +56,7 @@ namespace ByoBaby.Rest.Controllers
         #region actions
 
         // GET api/Account/UserInfo
+        [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
