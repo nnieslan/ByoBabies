@@ -1,11 +1,11 @@
-(function($) {
+(function() {
 
 
   if (!ByoBabies) ByoBabies = {};
   if (ByoBabies.API !== undefined) return;
 
-  var api = function(ajax) {
-
+  ByoBabies.ApiFactory = function(ajax) {
+    console.log("ByoBabies.Api - creating Api with baseUrl : " + ajax.baseApiUrl);
     var self = $.extend(this, {
       ajaxFactory: ajax,
       ajax: function(options, useAuth) {
@@ -134,5 +134,4 @@
     });
   };
 
-  ByoBabies.ApiFactory = api;
-})($);
+})();

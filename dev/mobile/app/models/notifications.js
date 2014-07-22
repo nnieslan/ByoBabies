@@ -27,9 +27,9 @@ function NotificationsViewModel(data) {
                     }
 
                     if (jqxhr.responseText !== '') {
-                        utilities.notifyUser(jqxhr.responseText, 'Error');
+                        ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
                     } else {
-                        utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
+                        ByoBabies.Utilities.notifyUser('Unable to load notifications.  Please try again later.', 'Error');
                     }
                 })
                 .complete(function () {

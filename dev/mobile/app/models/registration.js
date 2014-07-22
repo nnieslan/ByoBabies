@@ -26,8 +26,8 @@ function RegistrationViewModel() {
       return false;
     }
 
-    if (!utilities.checkConnection()) {
-      utilities.notifyUser(
+    if (!ByoBabies.Utilities.checkConnection()) {
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', 'Error');
       return false;
     }
@@ -46,10 +46,10 @@ function RegistrationViewModel() {
       .error(function(jqxHR, exception) {
         application.isProcessing(false);
         if (jqxHR.responseText !== '') {
-          utilities.notifyUser(jqxHR.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
           //TODO - we probably need an error case for 'Account exists'
         } else {
-          utilities.notifyUser('Unable to register.  Please try again later.',
+          ByoBabies.Utilities.notifyUser('Unable to register.  Please try again later.',
             'Error');
         }
       })

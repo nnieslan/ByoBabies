@@ -110,7 +110,6 @@ function BackgroundViewModel() {
         console.log(
           "BackgroundViewModel - fetched list of supported login providers - " +
           JSON.stringify(data));
-
         if (data !== undefined) {
           window.localStorage.setItem('loginProviders', JSON.stringify(data));
           var msg = {
@@ -123,9 +122,9 @@ function BackgroundViewModel() {
       },
       error: function(jqxHR, exception) {
         if (jqxHR.responseText !== '') {
-          utilities.notifyUser(jqxHR.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
         } else {
-          utilities.notifyUser(
+        ByoBabies.Utilities.notifyUser(
             'Unable to get the list of providers.  Please try again later.',
             'Error');
         }
@@ -191,9 +190,9 @@ function BackgroundViewModel() {
   self.login = function(creds) {
     console.log('BackgroundViewModel.login start');
 
-    if (!utilities.checkConnection()) {
+    if (!ByoBabies.Utilities.checkConnection()) {
       console.log('LogonViewModel.login - no network connection');
-      utilities.notifyUser(
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', 'Error');
       return false;
     }
@@ -236,9 +235,9 @@ function BackgroundViewModel() {
         console.log(jqxHR);
 
         if (jqxHR.responseText !== '') {
-          utilities.notifyUser(jqxHR.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
         } else {
-          utilities.notifyUser('Unable to login.  Please try again later.',
+          ByoBabies.Utilities.notifyUser('Unable to login.  Please try again later.',
             'Error');
         }
       }
@@ -247,8 +246,8 @@ function BackgroundViewModel() {
 
   self.logout = function() {
 
-    if (!utilities.checkConnection()) {
-      utilities.notifyUser(
+    if (!ByoBabies.Utilities.checkConnection()) {
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', 'Error');
       return false;
     }
@@ -263,9 +262,9 @@ function BackgroundViewModel() {
     })
       .error(function(jqxhr, exception) {
         if (jqxHR.responseText && jqxhr.responseText !== '') {
-          utilities.notifyUser(jqxhr.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
-          utilities.notifyUser(
+          ByoBabies.Utilities.notifyUser(
             'An unknown error occurred while logging out.',
             'Error');
         }
@@ -305,9 +304,9 @@ function BackgroundViewModel() {
         },
         error: function(jqxHR, exception) {
           if (jqxHR.responseText && jqxHR.responseText !== '') {
-            utilities.notifyUser(jqxHR.responseText, 'Error');
+            ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
           } else {
-            utilities.notifyUser(
+            ByoBabies.Utilities.notifyUser(
               'Unable to get your registration status. Please try again later.',
               'Error');
           }
@@ -350,9 +349,9 @@ function BackgroundViewModel() {
         },
         error: function(jqxHR, exception) {
           if (jqxHR.responseText && jqxHR.responseText !== '') {
-            utilities.notifyUser(jqxHR.responseText, 'Error');
+            ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
           } else {
-            utilities.notifyUser(
+            ByoBabies.Utilities.notifyUser(
               'Unable to register you at this time. Please try again later.',
               'Error');
           }
@@ -362,8 +361,8 @@ function BackgroundViewModel() {
 
   self.getProfile = function() {
     console.log('BackgroundViewModel.getProfile start');
-    if (!utilities.checkConnection()) {
-      utilities.notifyUser(
+    if (!ByoBabies.Utilities.checkConnection()) {
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', function() {},
         'Error');
       return false;
@@ -401,9 +400,9 @@ function BackgroundViewModel() {
         }
 
         if (jqxhr.responseText !== '') {
-          utilities.notifyUser(jqxhr.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
-          utilities.notifyUser(
+          ByoBabies.Utilities.notifyUser(
             'Unable to load your profile.  Please try again later.',
             'Error');
         }

@@ -19,8 +19,8 @@ function NearByViewModel() {
 
   self.getNearByCheckins = function(callback) {
     console.log("NearByViewModel.getNearByCheckins() - beginning ajax call");
-    if (!utilities.checkConnection()) {
-      utilities.notifyUser(
+    if (!ByoBabies.Utilities.checkConnection()) {
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', function() {},
         'Error');
       return false;
@@ -46,9 +46,9 @@ function NearByViewModel() {
         }
 
         if (jqxhr.responseText !== '') {
-          utilities.notifyUser(jqxhr.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
-          utilities.notifyUser(
+          ByoBabies.Utilities.notifyUser(
             'Unable to load near-by check-ins.  Please try again later.',
             'Error');
         }

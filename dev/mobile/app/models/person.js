@@ -54,8 +54,8 @@ function PersonViewModel(svcUrl, data) {
     /// </summary>
     self.getProfile = function (navigateDelegate) {
 
-        if (!utilities.checkConnection()) {
-            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+        if (!ByoBabies.Utilities.checkConnection()) {
+            ByoBabies.Utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
             return false;
         }
 
@@ -73,9 +73,9 @@ function PersonViewModel(svcUrl, data) {
                 }
 
                 if (jqxhr.responseText !== '') {
-                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                    ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
                 } else {
-                    utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
+                    ByoBabies.Utilities.notifyUser('Unable to load your profile.  Please try again later.', 'Error');
                 }
             })
             .complete(function () {
@@ -84,8 +84,8 @@ function PersonViewModel(svcUrl, data) {
     };
 
     self.viewFriends = function () {
-        if (!utilities.checkConnection()) {
-            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+        if (!ByoBabies.Utilities.checkConnection()) {
+            ByoBabies.Utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
             return false;
         }
 
@@ -107,10 +107,10 @@ function PersonViewModel(svcUrl, data) {
                 }
 
                 if (jqxhr.responseText !== '') {
-                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                    ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
                 } else {
                     var errorMsg = 'Unable to the friends of the currently selected person. Please try again later.';
-                    utilities.notifyUser(errorMsg, 'Error');
+                    ByoBabies.Utilities.notifyUser(errorMsg, 'Error');
                 }
             })
             .complete(function () {

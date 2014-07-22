@@ -68,7 +68,7 @@ function LogonViewModel() {
     console.log('Launching auth window with url - ' + authUrl);
     ref.addEventListener('loadstop', function(event) {
       console.log(event.url);
-      var query = utilities.parseUrlQueryString(event.url);
+      var query = ByoBabies.Utilities.parseUrlQueryString(event.url);
       console.log(query);
       if(query !== undefined && query['access_token'] !== undefined){
         console.log('Access Token found : ' + query['access_token']);

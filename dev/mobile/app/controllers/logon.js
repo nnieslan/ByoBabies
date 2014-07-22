@@ -3,8 +3,6 @@ $.support.cors = true;
 
 console.log("Executing the logon view controller");
 
-var utilities = new Helpers();
-
 var vm = new LogonViewModel();
 
 document.addEventListener("DOMContentLoaded", function() {

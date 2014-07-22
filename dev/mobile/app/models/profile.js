@@ -47,8 +47,8 @@ function ProfileViewModel(data) {
 
     console.log("ProfileViewModel.saveProfile() called");
 
-    if (!utilities.checkConnection()) {
-      utilities.notifyUser(
+    if (!ByoBabies.Utilities.checkConnection()) {
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', function() {},
         'Error');
       return false;
@@ -84,9 +84,9 @@ function ProfileViewModel(data) {
         }
 
         if (jqxhr.responseText !== '') {
-          utilities.notifyUser(jqxhr.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
-          utilities.notifyUser(
+          ByoBabies.Utilities.notifyUser(
             'Unable to load your profile.  Please try again later.', 'Error');
         }
       })
@@ -129,8 +129,8 @@ function ProfileViewModel(data) {
   };
 
   self.refreshNotifications = function(navigationActionCallback) {
-    if (!utilities.checkConnection()) {
-      utilities.notifyUser(
+    if (!ByoBabies.Utilities.checkConnection()) {
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', function() {},
         'Error');
       return false;
@@ -156,9 +156,9 @@ function ProfileViewModel(data) {
         }
 
         if (jqxhr.responseText !== '') {
-          utilities.notifyUser(jqxhr.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
-          utilities.notifyUser(
+          ByoBabies.Utilities.notifyUser(
             'Unable to load notifications.  Please try again later.', 'Error'
           );
         }
@@ -176,8 +176,8 @@ function ProfileViewModel(data) {
   };
 
   self.viewFriends = function() {
-    if (!utilities.checkConnection()) {
-      utilities.notifyUser(
+    if (!ByoBabies.Utilities.checkConnection()) {
+      ByoBabies.Utilities.notifyUser(
         'No data connection is available. Please try again later.', function() {},
         'Error');
       return false;
@@ -201,9 +201,9 @@ function ProfileViewModel(data) {
         }
 
         if (jqxhr.responseText !== '') {
-          utilities.notifyUser(jqxhr.responseText, 'Error');
+          ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
         } else {
-          utilities.notifyUser(
+          ByoBabies.Utilities.notifyUser(
             'Unable to load your friends.  Please try again later.', 'Error');
         }
       })

@@ -19,8 +19,8 @@ function CheckinViewModel(baseUrl) {
 
     self.getNearByLocations = function () {
 
-        if (!utilities.checkConnection()) {
-            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+        if (!ByoBabies.Utilities.checkConnection()) {
+            ByoBabies.Utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
             return false;
         }
         application.isProcessing(true);
@@ -42,9 +42,9 @@ function CheckinViewModel(baseUrl) {
                 }
 
                 if (jqxhr.responseText !== '') {
-                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                    ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
                 } else {
-                    utilities.notifyUser('Unable to load near-by locations.  Please try again later.', 'Error');
+                    ByoBabies.Utilities.notifyUser('Unable to load near-by locations.  Please try again later.', 'Error');
                 }
             })
             .complete(function () {
@@ -67,8 +67,8 @@ function CheckinViewModel(baseUrl) {
         //    return false;
         //}
 
-        if (!utilities.checkConnection()) {
-            utilities.notifyUser('No data connection is available. Please try again later.', 'Error');
+        if (!ByoBabies.Utilities.checkConnection()) {
+            ByoBabies.Utilities.notifyUser('No data connection is available. Please try again later.', 'Error');
             return false;
         }
 
@@ -86,10 +86,10 @@ function CheckinViewModel(baseUrl) {
             .error(function (jqxHR, exception) {
                 application.isProcessing(false);
                 if (jqxHR.responseText !== '') {
-                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                    ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
                     //TODO - we probably need an error case for 'Account exists'
                 } else {
-                    utilities.notifyUser('Unable to check-in.  Please try again later.', 'Error');
+                    ByoBabies.Utilities.notifyUser('Unable to check-in.  Please try again later.', 'Error');
                 }
             })
             .complete(function () {

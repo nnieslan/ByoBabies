@@ -1,9 +1,11 @@
- (function($) {
+ (function() {
 
    if (!window.ByoBabies) window.ByoBabies = {};
    if (ByoBabies.Ajax !== undefined) return;
 
    ByoBabies.Ajax = function(baseUrl, errorHandler) {
+
+     console.log("ByoBabies.Ajax - Initializing an Ajax instance with baseUrl : " + baseUrl);
 
      $.extend(this, {
        baseApiUrl: baseUrl || '',
@@ -41,4 +43,4 @@
      return $.ajax($.extend({}, this.defaultAjaxOptions, options));
    };
 
- })($);
+ })();

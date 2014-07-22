@@ -24,9 +24,9 @@ function ConversationsViewModel(svcUrl) {
             .error(function (jqxHR, exception) {
                 application.isProcessing(false);
                 if (jqxHR.responseText !== '') {
-                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                    ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
                 } else {
-                    utilities.notifyUser('Unable to fetch conversations.  Please try again later.', 'Error');
+                    ByoBabies.Utilities.notifyUser('Unable to fetch conversations.  Please try again later.', 'Error');
                 }
             })
             .complete(function () {
@@ -45,9 +45,9 @@ function ConversationsViewModel(svcUrl) {
             .error(function (jqxHR, exception) {
                 application.isProcessing(false);
                 if (jqxHR.responseText !== '') {
-                    utilities.notifyUser(jqxHR.responseText, 'Error');
+                    ByoBabies.Utilities.notifyUser(jqxHR.responseText, 'Error');
                 } else {
-                    utilities.notifyUser('Unable to fetch conversations.  Please try again later.', 'Error');
+                    ByoBabies.Utilities.notifyUser('Unable to fetch conversations.  Please try again later.', 'Error');
                 }
             })
             .complete(function () {

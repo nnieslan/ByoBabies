@@ -26,8 +26,8 @@ function RequestViewModel(svcUrl, data) {
     self.postResponse = function (actionValue) {
         console.log("RequestViewModel.postResponse() called");
 
-        if (!utilities.checkConnection()) {
-            utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
+        if (!ByoBabies.Utilities.checkConnection()) {
+            ByoBabies.Utilities.notifyUser('No data connection is available. Please try again later.', function () { }, 'Error');
             return false;
         }
         application.isProcessing(true);
@@ -47,9 +47,9 @@ function RequestViewModel(svcUrl, data) {
                 }
 
                 if (jqxhr.responseText !== '') {
-                    utilities.notifyUser(jqxhr.responseText, 'Error');
+                    ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
                 } else {
-                    utilities.notifyUser('Unable to respond to request.  Please try again later.', 'Error');
+                    ByoBabies.Utilities.notifyUser('Unable to respond to request.  Please try again later.', 'Error');
                 }
             })
             .complete(function () {

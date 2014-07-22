@@ -1,67 +1,72 @@
 $.support.cors = true;
 
-function Helpers() {
 
-  console.log('initializing helpers');
-  var self = this;
+(function($) {
+  if (!window.ByoBabies) window.ByoBabies = {};
 
-  self.notifyUser = function(message, title) {
-    console.log('notifying user : ' + message);
-    if (navigator !== undefined && navigator.notification !== undefined) {
-      navigator.notification.alert(message, function() {}, title);
-    } else {
-      alert(message);
-    }
-  };
+  function Helpers() {
 
-  self.checkConnection = function() {
-    console.log('verifying network connection in phoneGap');
-    //check for network object existence to ensure we are on a device
-    if (navigator.network !== undefined) {
+    console.log('ByoBabies.Utilities - initializing helpers');
+    var self = this;
 
-      var networkState = navigator.network.connection.type;
-
-      if (networkState === undefined || networkState === Connection.NONE ||
-        networkState === Connection.UNKNOWN) {
-        return false;
+    self.notifyUser = function(message, title) {
+      console.log('notifying user : ' + message);
+      if (navigator !== undefined && navigator.notification !== undefined) {
+        navigator.notification.alert(message, function() {}, title);
+      } else {
+        alert(message);
       }
-    }
-    return true;
-  };
+    };
 
-  self.ensureTemplates = function(list, loaded) {
-    var loadedTemplates = [];
-    ko.utils.arrayForEach(list, function(name) {
-      $.get("Templates/" + name + ".html", function(template) {
-        $("body").append("<script id=\"" + name +
-          "\" type=\"text/x-jquery-tmpl\">" + template + "<\/script>");
-        loadedTemplates.push(name);
-        if (list.length === loadedTemplates.length) {
-          loaded();
+    self.checkConnection = function() {
+      console.log('verifying network connection in phoneGap');
+      //check for network object existence to ensure we are on a device
+      if (navigator.network !== undefined) {
+
+        var networkState = navigator.network.connection.type;
+
+        if (networkState === undefined || networkState === Connection.NONE ||
+          networkState === Connection.UNKNOWN) {
+          return false;
         }
+      }
+      return true;
+    };
+
+    self.ensureTemplates = function(list, loaded) {
+      var loadedTemplates = [];
+      ko.utils.arrayForEach(list, function(name) {
+        $.get("Templates/" + name + ".html", function(template) {
+          $("body").append("<script id=\"" + name +
+            "\" type=\"text/x-jquery-tmpl\">" + template + "<\/script>");
+          loadedTemplates.push(name);
+          if (list.length === loadedTemplates.length) {
+            loaded();
+          }
+        });
       });
-    });
-  };
+    };
 
-  self.parseUrlQueryString = function(url) {
+    self.parseUrlQueryString = function(url) {
 
-    var match,
-      queryParams = {},
-      pl = /\+/g, // Regex for replacing addition symbol with a space
-      search = /([^&#=]+)=?([^&#]*)/g,
-      decode = function(s) {
-        return decodeURIComponent(s.replace(pl, " "));
-      },
-      query = url.split(/\?/)[1];
-    match = search.exec(query);
-    while (match) {
-      queryParams[decode(match[1])] = decode(match[2]);
+      var match,
+        queryParams = {},
+        pl = /\+/g, // Regex for replacing addition symbol with a space
+        search = /([^&#=]+)=?([^&#]*)/g,
+        decode = function(s) {
+          return decodeURIComponent(s.replace(pl, " "));
+        },
+        query = url.split(/\?/)[1];
       match = search.exec(query);
-    }
-    return queryParams;
+      while (match) {
+        queryParams[decode(match[1])] = decode(match[2]);
+        match = search.exec(query);
+      }
+      return queryParams;
+    };
   };
-}
-
+  window.ByoBabies.Utilities = new Helpers();
+})(jQuery);
 
 
 (function($) {
