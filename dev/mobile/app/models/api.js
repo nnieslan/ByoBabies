@@ -9,7 +9,7 @@
     var self = $.extend(this, {
       ajaxFactory: ajax,
       ajax: function(options, useAuth) {
-        return this.ajaxFactory.request(option, useAuth);
+        return this.ajaxFactory.request(options, useAuth);
       },
       saveCredentials: function(creds) {
         var mode = 'ECB',
@@ -62,27 +62,36 @@
         );
       };
     },
-      constructGetPromise = function(url, successAction, publishTo) {
+      constructGetPromise = function(url, useAuth, successAction, publishTo) {
         return function() {
-          self.ajax({
+          console.log('constructGetPromise - url : ' + url);
+          console.log('constructGetPromise - useAuth : ' + useAuth);
+
+          return self.ajax({
             url: url,
             type: 'GET',
-            error: function(jqxHR, exception) {
-              if (jqxHR.responseText && jqxHR.responseText !== '') {
-                utilities.notifyUser(jqxHR.responseText, 'Error');
+            error: function(jqxhr, exception) {
+              console.log('ByoBabies.API - GET - ERROR - ' + url + ' : ' +
+                JSON.stringify(jqxhr));
+              if (exception) {
+                console.log('ByoBabies.API - GET - ERROR - ' + url + ' : ' +
+                  JSON.stringify(exception));
+              }
+              if (jqxhr.responseText && jqxhr.responseText !== '') {
+                ByoBabies.Utilities.notifyUser(jqxhr.responseText, 'Error');
               } else {
-                utilities.notifyUser(
-                  'Unable to get your registration status. Please try again later.',
+                ByoBabies.Utilities.notifyUser(
+                  'Unable to perform the requested action at this time. Please try again later.',
                   'Error');
               }
             }
-          }).then(function(data) {
+          }, useAuth).then(function(data) {
             console.log("ByoBabies.API - GET - " + url + ' : ' + JSON.stringify(
               data));
             if (successAction && $.isFunction(successAction)) {
               successAction(data);
             }
-            if (data) {
+            if (data && publishTo) {
               var msg = {
                 src: publishTo.src,
                 action: publishTo.action
@@ -96,29 +105,53 @@
 
     //build the API actions
     $.extend(self, {
-      registerUser: constructPostAction('account/registerexternal', true,
+      promiseLoginProviders: constructGetPromise(
+        'account/externallogins?generateState=true',
+        false,
+        function(data) {
+          if (data !== undefined) {
+            window.localStorage.setItem('loginProviders', JSON.stringify(
+              data));
+          }
+        }, {
+          src: 'logon',
+          action: 'providersloaded'
+        }),
+      registerUser: constructPostAction(
+        'account/registerexternal',
+        true,
         null, {
           src: 'logon',
           action: 'registered'
         }),
-      login: constructPostAction('account/login', false, function(data) {
-        self.saveCredentials(creds);
-        self.getProfile();
-      }, {
-        src: 'logon',
-        action: 'loggedin'
-      }),
-      logout: constructPostAction('account/logout', false, null, null),
-      promiseProfile: constructGetPromise('account/get', true, function(
-        data) {
-        window.localStorage.setItem("profile", JSON.stringify(data));
-      }, {
-        src: 'profile',
-        action: 'loaded'
-      }),
-      promiseUserInfo: constructGetPromise('account/userinfo', true,
-        function(
-          data) {
+      login: constructPostAction(
+        'account/login',
+        false,
+        function(data) {
+          self.saveCredentials(creds);
+          self.getProfile();
+        }, {
+          src: 'logon',
+          action: 'loggedin'
+        }),
+      logout: constructPostAction(
+        'account/logout',
+        false,
+        null,
+        null),
+      promiseProfile: constructGetPromise(
+        'account/get',
+        true,
+        function(data) {
+          window.localStorage.setItem("profile", JSON.stringify(data));
+        }, {
+          src: 'profile',
+          action: 'loaded'
+        }),
+      promiseUserInfo: constructGetPromise(
+        'account/userinfo',
+        true,
+        function(data) {
           if (data !== undefined && data.HasRegistered != true) {
             console.log('User has not registered');
             self.registerUser(data.UserName);
@@ -132,6 +165,8 @@
           }
         }, null)
     });
+
+    return self;
   };
 
 })();

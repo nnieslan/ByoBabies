@@ -5,7 +5,9 @@
 
    ByoBabies.Ajax = function(baseUrl, errorHandler) {
 
-     console.log("ByoBabies.Ajax - Initializing an Ajax instance with baseUrl : " + baseUrl);
+     console.log(
+       "ByoBabies.Ajax - Initializing an Ajax instance with baseUrl : " +
+       baseUrl);
 
      $.extend(this, {
        baseApiUrl: baseUrl || '',
@@ -21,13 +23,21 @@
          cancelGlobalError: false,
          processData: false,
          dataType: 'json',
-         contentType: 'application/json',
          crossDomain: true,
+         cache: false,
          withCredentials: true,
-         xhrFields: {
-           withCredentials: true
-         },
-         error: errorHandler || $.noop()
+         error: errorHandler || $.noop(),
+         statusCode: {
+           '404': function() {
+             console.log('404 occured');
+           },
+           '401': function() {
+             console.log('401 occured');
+           },
+           '500': function() {
+             console.log('500 occured');
+           }
+         }
        }
      });
    };
@@ -38,9 +48,16 @@
      }
      if (useAuth) {
        options.beforeSend = this.addAuthHeader;
+     } else {
+       options.withCredentials = null;
+       options.xhrFields = null;
      }
+     console.log('ByoBabies.Ajax - url : ' + options.url);
 
-     return $.ajax($.extend({}, this.defaultAjaxOptions, options));
+     var optionsResolved = $.extend({}, this.defaultAjaxOptions, options);
+     console.log('ByoBabies.Ajax - options : ' + JSON.stringify(
+       optionsResolved));
+     return $.ajax(optionsResolved);
    };
 
  })();

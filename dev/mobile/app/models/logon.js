@@ -38,10 +38,6 @@ function LogonViewModel() {
       console.log('LogonViewModel.login - username - ' + self.user());
       return false;
     }
-
-    var base = window.localStorage.getItem('svcUrl');
-    var url = base + 'api/account/login';
-    console.log('LogonViewModel.login - POST URL - ' + url);
     var input = {
       UserName: self.user(),
       Password: self.password(),
