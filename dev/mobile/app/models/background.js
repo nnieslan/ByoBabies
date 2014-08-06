@@ -223,10 +223,12 @@ function BackgroundViewModel() {
   self.register = function(userName) {
     console.log(
       "BackgroundViewModel - registering user " + userName);
-    var data = {
-      'UserName': userName
+    var input = {
+      'UserName': ko.observable(userName),
+      'DisplayName': ko.observable(userName)
     };
-    $.when(ByoBabies.Api.registerUser(data))
+
+    $.when(ByoBabies.Api.registerUser(input))
       .then(function() {
 
       });

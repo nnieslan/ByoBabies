@@ -36,21 +36,27 @@
       }
     });
     var constructPostAction = function(url, useAuth, successAction, publishTo) {
-      return function(data) {
-        var unwrapped = ko.wrap.toJS(data);
+      return function(inputModel) {
+        var unwrapped = ko.wrap.toJS(inputModel);
+        console.log('POST - unwrapped model : ' + JSON.stringify(unwrapped));
         return self.ajax({
           url: url,
           type: 'POST',
-          data: JSON.stringify(unwrapped)
+          processData: true,
+          data: unwrapped,
         }, useAuth).then(
-          function(data) {
-            //TODO -mapping of data
-            console.log('ByoBabies.API - POST - ' + url + ' : ' + JSON.stringify(
-              data));
-            if (successAction && $.isFunction(successAction)) {
-              successAction(data);
+          function(returnData) {
+            var wrapped = {};
+            if (returnData) {
+              $.extend(wrapped, ko.wrap.fromJS(returnData));
             }
-            if (data && publishTo) {
+            console.log('ByoBabies.API - POST - ' + url + ' : ' + JSON.stringify(
+              wrapped));
+            if (successAction && $.isFunction(successAction)) {
+              successAction(wrapped);
+            }
+
+            if (publishTo) {
               var msg = {
                 src: publishTo.src,
                 action: publishTo.action
@@ -154,7 +160,11 @@
         function(data) {
           if (data !== undefined && data.HasRegistered != true) {
             console.log('User has not registered');
-            self.registerUser(data.UserName);
+            var input = {
+              //'UserName': ko.observable(data.UserName),
+              'DisplayName': ko.observable(data.UserName)
+            };
+            self.registerUser(input);
           } else if (data) {
             var msg = {
               src: 'logon',
