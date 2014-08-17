@@ -52,9 +52,11 @@ namespace ByoBaby.Rest.Models
 
     public class RegisterExternalBindingModel
     {
-        [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
+		//[Required]
+		//public string UserName { get; set; }
+
+		[Required]
+		public string DisplayName { get; set; }
     }
 
     public class RemoveLoginBindingModel

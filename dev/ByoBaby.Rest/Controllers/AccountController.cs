@@ -455,23 +455,46 @@ namespace ByoBaby.Rest.Controllers
                 return InternalServerError();
             }
 
+			var userId = Guid.NewGuid(); 
             IdentityUser user = new IdentityUser
             {
-                UserName = model.UserName
+				UserName = userId.ToString().Replace("-", "")
             };
             user.Logins.Add(new IdentityUserLogin
             {
                 LoginProvider = externalLogin.LoginProvider,
-                ProviderKey = externalLogin.ProviderKey
+                ProviderKey = externalLogin.ProviderKey,
+				UserId = externalLogin.UserName
             });
-            IdentityResult result = await UserManager.CreateAsync(user);
-            IHttpActionResult errorResult = GetErrorResult(result);
+			IdentityResult result = null;
+			try
+			{
+				result = await UserManager.CreateAsync(user);
+			}
+			catch(Exception ex)
+			{
+				if(ex is System.Data.Entity.Validation.DbEntityValidationException)
+				{
+					foreach(var validationError in ((System.Data.Entity.Validation.DbEntityValidationException)ex).EntityValidationErrors)
+					{
 
-            if (errorResult != null)
-            {
-                return errorResult;
-            }
+					}
 
+					return InternalServerError(ex);
+					
+				}
+				//TODO - 
+				throw;
+			}
+			if (result != null)
+			{
+				IHttpActionResult errorResult = GetErrorResult(result);
+
+				if (errorResult != null)
+				{
+					return errorResult;
+				}
+			}
             return Ok();
         }
 

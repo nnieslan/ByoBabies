@@ -40,6 +40,8 @@ namespace ByoBaby.Rest
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+			GlobalConfiguration.Configuration.MessageHandlers.Add(new ByoBaby.Rest.MessageHandlers.LoggingMessageHandler());
+
            // Database.SetInitializer<ByoBabyRepository>(new ByoBabyDataContextInitializer());
             WebApiApplication.Container = WindsorConfig.CreateContainer();
 
